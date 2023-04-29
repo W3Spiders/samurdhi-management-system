@@ -1,6 +1,7 @@
 {
     "private": true,
     "scripts": {
+        "start": "npm run dev",
         "dev": "vite",
         "build": "vite build"
     },
@@ -10,5 +11,9 @@
         "lodash": "^4.17.19",
         "postcss": "^8.1.14",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "bootstrap": "^5.2.3",
+        "sass": "^1.62.0"
     }
 }
