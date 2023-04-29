@@ -24,7 +24,7 @@ class AdminController extends Controller
         $user = User::where('username', $request->username)->first();
 
         if (!($user && $user->user_type == 'admin')) {
-            return Redirect::back()->withErrors(['message' => 'Invalid user'])->withInput();
+            return Redirect::back()->withErrors(['message' => 'Admin username doesn\'t exist'])->withInput();
         }
 
         if (Auth::attempt($credentials)) {
@@ -32,7 +32,7 @@ class AdminController extends Controller
             return Redirect::intended(route('admin.dashboard'));
         }
 
-        return Redirect::back()->withErrors(['message' => 'Invalid credentials']);
+        return Redirect::back()->withErrors(['message' => "Wrong password"]);
     }
 
     public function showDashboard()
