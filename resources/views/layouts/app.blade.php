@@ -17,27 +17,30 @@
 
 <body class="antialiased">
 
-    <div class="app-layout">
+    <div class="app-layout @yield('layoutClass')">
 
         <div class="app-layout-column-1">
+
+            {{-- @hasSection('sidebar') --}}
             <div class="app-layout-sidebar">
                 @section('sidebar')
-                    <ul>
-                        <li>Link 1</li>
-                        <li>Link 2</li>
-                        <li>Link 3</li>
-                    </ul>
+                    @include('components.navigation')
                 @show
             </div>
+            {{-- @endif --}}
+
         </div>
 
         <div class="app-layout-column-2">
-            <div class="app-layout-header">
-                @section('header')
-                    <p>This is the app header</p>
-                @show
-            </div>
-    
+
+            @hasSection('sidebar')
+                <div class="app-layout-header">
+                    @section('header')
+                        <p>This is the app header</p>
+                    @show
+                </div>
+            @endif
+
             <div class="app-layout-content">
                 @yield('content')
             </div>
@@ -50,4 +53,3 @@
 </body>
 
 </html>
-

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\WardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,9 @@ Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.logi
 Route::middleware('auth.admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
 
+    Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
+    
+    Route::get('/admin/settings/wards', [AdminController::class, 'showWardManage'])->name(('admin.settings.ward.manage'));
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });

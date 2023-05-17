@@ -6,12 +6,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Ward;
 
 class AdminController extends Controller
 {
     public function showLogin()
     {
         return view('admin.login');
+    }
+
+    public function showWardManage() {
+
+        $wards = Ward::all();
+
+        return view('admin.settings.wardManage', ['wards' => $wards]);
     }
 
     public function login(Request $request)

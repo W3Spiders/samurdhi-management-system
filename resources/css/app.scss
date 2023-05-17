@@ -1,9 +1,9 @@
-$theme-colors: (
-    "primary": #064789,
-    "light": #ebf2fa,
-    "secondary": #427aa1,
-    "danger": #d63230,
-);
+// $theme-colors: (
+//     "primary": #064789,
+//     "light": #ebf2fa,
+//     "secondary": #427aa1,
+//     "danger": #d63230,
+// );
 
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
@@ -34,8 +34,8 @@ body {
 }
 
 .app-layout-sidebar {
-    background-color: #427aa1;
     position: relative;
+    height: 100%;
 }
 
 .app-layout-header {
@@ -57,4 +57,8 @@ body {
     background-color: #ffffff;
     border-radius: 5px;
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.05);
+}
+
+.app-layout.login-page .app-layout-column-1 {
+    display: none;
 }
