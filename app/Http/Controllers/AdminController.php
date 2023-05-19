@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GnDivision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,13 @@ class AdminController extends Controller
         $wards = Ward::all();
 
         return view('admin.settings.wardManage', ['wards' => $wards]);
+    }
+
+    public function showGnDivisionManage() {
+
+        $gnDivisions = GnDivision::all();
+
+        return view('admin.settings.gnDivisionManage', ['gnDivisions' => $gnDivisions]);
     }
 
     public function login(Request $request)

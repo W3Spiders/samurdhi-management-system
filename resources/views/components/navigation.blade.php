@@ -9,6 +9,9 @@
                 <li>
                     <a href="{{ route('admin.settings.ward.manage') }}">Wards</a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.settings.gn-division.manage') }}">GN Divisions</a>
+                </li>
             </ul>
         </li>
     </ul>

@@ -179,6 +179,10 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'ward_no' => 'Ward No',
+        'gn_division_no' => 'GN No',
+        'gn_division_name' => 'GN Name'
+    ],
 
 ];

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GnDivisionController;
 use App\Http\Controllers\WardController;
 
 /*
@@ -28,8 +29,12 @@ Route::middleware('auth.admin')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
+
+    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gn-division'));
     
     Route::get('/admin/settings/wards', [AdminController::class, 'showWardManage'])->name(('admin.settings.ward.manage'));
+
+    Route::get('/admin/settings/gn-divisions', [AdminController::class, 'showGnDivisionManage'])->name(('admin.settings.gn-division.manage'));
 
     Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 });
