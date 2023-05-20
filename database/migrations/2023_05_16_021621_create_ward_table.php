@@ -14,7 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('wards', function (Blueprint $table) {
-            $table->integer('ward_no')->primary()->unique();
+            $table->id();
+            $table->integer('ward_no')->unique();
             $table->string('ward_name');
             $table->timestamps();
         });

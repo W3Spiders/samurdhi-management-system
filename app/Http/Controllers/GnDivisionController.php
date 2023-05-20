@@ -16,10 +16,6 @@ class GnDivisionController extends Controller
             'ward_no' => 'required',
             'gn_division_no' => 'required|max:5',
             'gn_division_name' => 'required'
-        ], [], [
-            'ward_no' => 'Ward No',
-            'gn_division_no' => 'GN No',
-            'gn_division_name' => 'GN Name'
         ]);
 
         if ($validator->fails()) {

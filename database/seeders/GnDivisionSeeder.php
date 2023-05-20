@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\GNDivision;
+use App\Models\User;
+use Database\Seeders\Data\UserData;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,13 +17,23 @@ class GnDivisionSeeder extends Seeder
      */
     public function run()
     {
-        $gn_divisions = $this->getGnDivisions();
 
-        foreach($gn_divisions as $gn_division) {
+        $gnDivisions = $this->getGnDivisions();
+        $gnUsers = User::where('user_type', 'gn')->get();
+        $snUsers = User::where('user_type', 'sn')->get();
+
+        // Create GN Divisions using already created GN and SN Users
+        foreach($gnDivisions as $key=>$gnDivision) {
+
+            $gnUser = $gnUsers[$key];
+            $snUser = $snUsers[$key];
+
             GNDivision::factory()->create([
-                'ward_no' => $gn_division['ward_no'],
-                'gn_division_no' => $gn_division['gn_division_no'],
-                'gn_division_name' => $gn_division['gn_division_name'],
+                'ward_no' => $gnDivision['ward_no'],
+                'gn_division_no' => $gnDivision['gn_division_no'],
+                'gn_division_name' => $gnDivision['gn_division_name'],
+                'gn_user_id'=>$gnUser->id,
+                'sn_user_id'=>$snUser->id
             ]);
         }
     }
