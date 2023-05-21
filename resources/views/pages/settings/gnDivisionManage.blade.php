@@ -27,7 +27,7 @@
         </div>
 
         <div>
-            <form method="POST" action="{{ route('gn-division') }}" class="mb-4">
+            <form method="POST" action="{{ route('gnDivision') }}" class="mb-4">
                 @csrf
 
                 <div class="mb-3">

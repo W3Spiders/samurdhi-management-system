@@ -11,24 +11,7 @@ use App\Models\Ward;
 
 class AdminController extends Controller
 {
-    public function showLogin()
-    {
-        return view('admin.login');
-    }
-
-    public function showWardManage() {
-
-        $wards = Ward::all();
-
-        return view('admin.settings.wardManage', ['wards' => $wards]);
-    }
-
-    public function showGnDivisionManage() {
-
-        $gnDivisions = GnDivision::all();
-
-        return view('admin.settings.gnDivisionManage', ['gnDivisions' => $gnDivisions]);
-    }
+    
 
     public function login(Request $request)
     {
@@ -51,8 +34,5 @@ class AdminController extends Controller
         return Redirect::back()->withErrors(['message' => "Wrong password"]);
     }
 
-    public function showDashboard()
-    {
-        return view('admin.dashboard');
-    }
+  
 }

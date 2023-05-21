@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GnDivisionController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\WardController;
 
 /*
@@ -17,24 +19,26 @@ use App\Http\Controllers\WardController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/dashboard');
 });
 
 
 // Admin
-Route::get('/admin/login', [AdminController::class, 'showLogin'])->name('admin.login');
-Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.attempt');
+Route::get('/login', [PageController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 
-Route::middleware('auth.admin')->group(function () {
-    Route::get('/admin/dashboard', [AdminController::class, 'showDashboard'])->name('admin.dashboard');
+// Authenticated Routes
+Route::middleware('auth')->group(function () {
+
+    // General Pages
+    Route::get('/dashboard', [PageController::class, 'showDashboard'])->name('dashboard');
+
+    // Settings Pages
+    Route::get('/settings/wards', [PageController::class, 'showWardManage'])->name(('settings.wards'));
+    Route::get('/settings/gn-divisions', [PageController::class, 'showGnDivisionManage'])->name(('settings.gnDivisions'));
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
+    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
 
-    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gn-division'));
-    
-    Route::get('/admin/settings/wards', [AdminController::class, 'showWardManage'])->name(('admin.settings.ward.manage'));
-
-    Route::get('/admin/settings/gn-divisions', [AdminController::class, 'showGnDivisionManage'])->name(('admin.settings.gn-division.manage'));
-
-    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
