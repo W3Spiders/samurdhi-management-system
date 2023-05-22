@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FamilyUnit extends Model
@@ -27,5 +29,23 @@ class FamilyUnit extends Model
     public function members(): HasMany
     {
         return $this->hasMany(Member::class);
+    }
+
+    /**
+     * 
+     */
+    public function adult_members(): HasMany {
+        $marginalDate = Carbon::now()->subYears(40);
+
+        return $this->hasMany(Member::class)->where('birthday', '<=', $marginalDate);
+    }
+
+    /**
+     * Get the gn division that owns the family unit
+     */
+    public function gn_division(): BelongsTo {
+
+        return $this->belongsTo(GnDivision::class);
+        
     }
 }
