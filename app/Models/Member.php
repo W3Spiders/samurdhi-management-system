@@ -22,9 +22,14 @@ class Member extends Model
     /**
      * Get the family unit that owns the member
      */
-    public function family_unit(): BelongsTo {
+    public function family_unit(): BelongsTo
+    {
 
         return $this->belongsTo(FamilyUnit::class);
-        
+    }
+
+    public function getFullNamesAttribute()
+    {
+        return ucwords("$this->first_name {$this->last_name}");
     }
 }

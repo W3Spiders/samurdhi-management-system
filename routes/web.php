@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
 
     // General Pages
     Route::get('/dashboard', [PageController::class, 'showDashboard'])->name('dashboard');
+    Route::get('/family-units', [PageController::class, 'showFamilyUnits'])->name('familyUnits');
+    Route::get('/family-units/{id}', [PageController::class, 'showFamilyUnit'])->name('familyUnit');
 
     // Settings Pages
     Route::get('/settings/wards', [PageController::class, 'showWardManage'])->name(('settings.wards'));

@@ -5,7 +5,17 @@
 //     "danger": #d63230,
 // );
 
+// Card
+$card-border-width: 0;
+
+// Forms
+$form-label-font-size: 0.875rem;
+
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules//bootstrap-icons/font/bootstrap-icons.css";
+
+@import "./typography";
+@import "./components/components.scss";
 
 html,
 body {
@@ -13,9 +23,26 @@ body {
     height: 100%;
 }
 
+body {
+    font-family: "Roboto", sans-serif;
+    font-size: 1rem;
+}
+
 .app-layout,
 .app-layout-content {
     height: 100%;
+}
+
+.app-layout-content {
+    background-color: #f0f5ff;
+
+    .app-layout-content-inner {
+        padding: 20px;
+    }
+}
+
+.app-layout-title {
+    padding: 10px 15px;
 }
 
 .app-layout {
@@ -24,8 +51,8 @@ body {
 
 .app-layout-column-1 {
     width: 300px;
-    border: 1px solid black;
     height: 100%;
+    background-color: #362e78;
 }
 
 .app-layout-column-2 {
@@ -36,10 +63,6 @@ body {
 .app-layout-sidebar {
     position: relative;
     height: 100%;
-}
-
-.app-layout-header {
-    background-color: antiquewhite;
 }
 
 .auth-page-wrapper {
@@ -61,4 +84,20 @@ body {
 
 .app-layout.login-page .app-layout-column-1 {
     display: none;
+}
+
+.app-header {
+    display: flex;
+    justify-content: end;
+}
+
+.profile-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+}
+
+.profile-card-inline .profile-icon {
+    width: 36px;
+    height: 36px;
 }

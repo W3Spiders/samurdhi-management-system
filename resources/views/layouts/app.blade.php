@@ -8,7 +8,9 @@
     <title>@yield('title') | Samurdhi and Beneficiary Management System</title>
 
     <!-- Fonts -->
-    <link href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
 
@@ -21,28 +23,32 @@
 
         <div class="app-layout-column-1">
 
-            {{-- @hasSection('sidebar') --}}
             <div class="app-layout-sidebar">
                 @section('sidebar')
                     @include('components.navigation')
                 @show
             </div>
-            {{-- @endif --}}
 
         </div>
 
         <div class="app-layout-column-2">
 
-            @hasSection('sidebar')
+            @if (auth()->user())
                 <div class="app-layout-header">
-                    @section('header')
-                        <p>This is the app header</p>
-                    @show
+
+                    @include('components.header')
+
                 </div>
             @endif
 
             <div class="app-layout-content">
-                @yield('content')
+
+                {{-- <h1 class="app-layout-title border-bottom">@yield('title')</h1> --}}
+
+                <div class="app-layout-content-inner container">
+                    @yield('content')
+                </div>
+
             </div>
         </div>
 

@@ -1,0 +1,40 @@
+.app-navigation {
+    .brand-container {
+        height: 80px;
+        border-bottom: 1px solid rgba($color: #ffffff, $alpha: 0.15);
+        margin-bottom: 20px;
+    }
+
+    ul {
+        > li {
+            > a {
+                display: block;
+                color: #8e99c9;
+                text-decoration: none;
+                padding: 1em 2em;
+                position: relative;
+
+                &::after {
+                    content: "";
+                    display: block;
+                    position: absolute;
+                    width: 3px;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                    background-color: transparent;
+                    transition: 0.1s linear;
+                }
+
+                &:hover {
+                    background-color: rgba($color: #ffffff, $alpha: 0.1);
+                    color: #ffffff;
+
+                    &::after {
+                        background-color: rgba($color: #ffffff, $alpha: 0.9);
+                    }
+                }
+            }
+        }
+    }
+}
