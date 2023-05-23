@@ -8,6 +8,7 @@ use App\Models\Ward;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class PageController extends Controller
 {
@@ -56,7 +57,8 @@ class PageController extends Controller
             $familyUnits = FamilyUnit::all();
         }
 
-        return view('familyUnits', ['familyUnits' => $familyUnits]);
+        //return view('familyUnits', ['familyUnits' => $familyUnits]);
+        return Inertia::render('FamilyUnit/FamilyUnitIndex', ['familyUnits' => $familyUnits]);
     }
 
     public function showFamilyUnit(string $id) {
