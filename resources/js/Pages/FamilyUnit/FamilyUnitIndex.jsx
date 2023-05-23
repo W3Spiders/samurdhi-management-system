@@ -1,42 +1,58 @@
-import { React, useEffect } from "react";
+import { React } from "react";
 import { usePage } from "@inertiajs/react";
 import AppLayout from "../../Layouts/AppLayout";
-import Grid from "../../Components/Grid";
+import { DataGrid } from "@mui/x-data-grid";
+import { TextField, InputAdornment, Button } from "@mui/material";
 
 export default function FamilyUnitIndex() {
     const { familyUnits } = usePage().props;
 
+    const columns = [
+        { field: "id", headerName: "ID", width: 70 },
+        {
+            field: "primary_member_id",
+            headerName: "Primary Member ID",
+            width: 130,
+        },
+    ];
+
     return (
         <AppLayout title="Family Units">
-            <Grid title="All family Units">
-                {familyUnits && (
-                    <table className="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Family Unit Id</th>
-                                <th>Primary Member Id</th>
-                                <th>Address</th>
-                            </tr>
-                        </thead>
+            <div className="grid-container">
+                <div className="grid-toolbar">
+                    <h2 className="grid-title">All Family Units</h2>
+                    <div className="grid-actions d-flex gap-3">
+                        <TextField
+                            id="search-text"
+                            label="Search"
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <i className="fa-solid fa-magnifying-glass"></i>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            variant="filled"
+                            size="small"
+                        />
 
-                        <tbody>
-                            {familyUnits.map((unit) => {
-                                return (
-                                    <tr key={`family-unit-${unit.id}`}>
-                                        <td>{unit.id}</td>
-                                        <td>{unit.primary_member_id}</td>
-                                        <td>
-                                            {unit.address_line_1},
-                                            {unit.address_line_2},{unit.city}{" "}
-                                            {unit.postal_code}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                )}
-            </Grid>
+                        <Button variant="contained">Create</Button>
+                    </div>
+                </div>
+
+                <DataGrid
+                    style={{ padding: 20 }}
+                    className="bg-white"
+                    rows={familyUnits}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                        },
+                    }}
+                    pageSizeOptions={[5, 10]}
+                />
+            </div>
         </AppLayout>
     );
 }

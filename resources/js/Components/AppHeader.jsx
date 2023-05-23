@@ -1,11 +1,11 @@
 export default function AppHeader() {
     return (
-        <header class="app-header d-flex justify-content-end px-3 py-3 border-bottom">
+        <header className="app-header">
             {/* <a href="#" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside" data-bs-offset="0,18">
         @include('components.profileIcon')
     </a> */}
 
-            <div class="dropdown-menu">
+            <div className="dropdown-menu">
                 {/* <div class="px-3 py-2 mb-2 border-bottom">
             @include('components.profileCardInline')
         </div>

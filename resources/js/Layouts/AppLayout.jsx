@@ -4,26 +4,22 @@ import AppNavigation from "../Components/AppNavigation";
 export default function AppLayout({ children, title }) {
     return (
         <>
-            <div class="app-layout @yield('layoutClass')">
-                <div class="app-layout-column-1">
-                    <div class="app-layout-sidebar">
+            <div className="app-layout @yield('layoutClass')">
+                <div className="app-layout-column-1">
+                    <div className="app-layout-sidebar">
                         <AppNavigation />
                     </div>
                 </div>
 
-                <div class="app-layout-column-2">
-                    <div class="app-layout-header">
+                <div className="app-layout-column-2">
+                    <div className="app-layout-header">
                         <AppHeader />
                     </div>
 
-                    <div class="app-layout-main">
-                        <h1 className="app-layout-title border-bottom py-3">
-                            {title}
-                        </h1>
+                    <div className="app-layout-main">
+                        <h1 className="app-layout-title">{title}</h1>
 
-                        <div class="app-layout-content container">
-                            {children}
-                        </div>
+                        <div className="app-layout-content">{children}</div>
                     </div>
                 </div>
             </div>

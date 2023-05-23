@@ -1,9 +1,9 @@
 export default function AppNavigation() {
     return (
-        <div class="app-navigation">
-            <div class="brand-container"></div>
+        <div className="app-navigation">
+            <div className="brand-container"></div>
 
-            <ul class="list-unstyled">
+            <ul className="list-unstyled m-0 p-0">
                 <li>
                     <a href="{{ route('dashboard') }}">Dashboard</a>
                 </li>
