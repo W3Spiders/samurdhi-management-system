@@ -1,35 +1,43 @@
-import { React, useEffect } from "react";
 import { usePage } from "@inertiajs/react";
 import AppLayout from "../../Layouts/AppLayout";
+import { Button, InputAdornment, TextField } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { TextField, InputAdornment, Button } from "@mui/material";
 
-export default function FamilyUnitIndex() {
-    const { familyUnits } = usePage().props;
+export default function FamilyUnitView() {
+    const { familyUnit } = usePage().props;
 
     const columns = [
         { field: "id", headerName: "ID", width: 70 },
         {
             field: "fullName",
-            headerName: "Primary Member",
+            headerName: "Full name",
             sortable: false,
             valueGetter: (params) =>
-                `${params.row.primary_member?.first_name || ""} ${
-                    params.row.primary_member?.last_name || ""
-                }`,
+                `${params.row.first_name || ""} ${params.row.last_name || ""}`,
             width: 200,
+        },
+        {
+            field: "nic",
+            headerName: "NIC",
+            width: 150,
+        },
+        {
+            field: "email",
+            headerName: "Email",
+            width: 250,
+        },
+        {
+            field: "phone",
+            headerName: "Phone",
+            width: 150,
         },
     ];
 
-    useEffect(() => {
-        console.log("family units: ", familyUnits);
-    });
-
     return (
-        <AppLayout title="Family Units">
+        <AppLayout title="Family Unit">
             <div className="grid-container">
                 <div className="grid-toolbar">
-                    <h2 className="grid-title">All Family Units</h2>
+                    <h2 className="grid-title">Members</h2>
                     <div className="grid-actions d-flex gap-3">
                         <TextField
                             id="search-text"
@@ -45,21 +53,21 @@ export default function FamilyUnitIndex() {
                             size="small"
                         />
 
-                        <Button variant="contained">Create</Button>
+                        <Button variant="contained">Add</Button>
                     </div>
                 </div>
 
                 <DataGrid
                     style={{ padding: 20 }}
                     className="bg-white"
-                    rows={familyUnits}
+                    rows={familyUnit.members}
                     columns={columns}
                     initialState={{
                         pagination: {
                             paginationModel: { page: 0, pageSize: 5 },
                         },
                     }}
-                    pageSizeOptions={[10, 10]}
+                    pageSizeOptions={[5, 10]}
                 />
             </div>
         </AppLayout>

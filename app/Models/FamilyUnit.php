@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FamilyUnit extends Model
 {
@@ -47,5 +48,12 @@ class FamilyUnit extends Model
 
         return $this->belongsTo(GnDivision::class);
         
+    }
+
+    /**
+     * Get the linked primary member
+     */
+    public function primary_member(): BelongsTo {
+        return $this->belongsTo(Member::class, 'primary_member_id');
     }
 }

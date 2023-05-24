@@ -51,13 +51,12 @@ class PageController extends Controller
             $gnDivision = GnDivision::where($userForeignKey, $loggedInUser->id)->first();
 
             // Get family units that belongs to the above gn division
-            $familyUnits = FamilyUnit::where('gn_division_id', $gnDivision[$userForeignKey])->get();
+            $familyUnits = FamilyUnit::with('primary_member')->where('gn_division_id', $gnDivision[$userForeignKey])->get();
 
         } else {
-            $familyUnits = FamilyUnit::all();
+            $familyUnits = FamilyUnit::with('primary_member')->all();
         }
 
-        //return view('familyUnits', ['familyUnits' => $familyUnits]);
         return Inertia::render('FamilyUnit/FamilyUnitIndex', ['familyUnits' => $familyUnits]);
     }
 
@@ -65,7 +64,7 @@ class PageController extends Controller
 
         $familyUnit = FamilyUnit::with('members', 'adult_members')->find($id);
 
-        return view('familyUnit', ['familyUnit' => $familyUnit]);
+        return Inertia::render('FamilyUnit/FamilyUnitView', ['familyUnit' => $familyUnit]);
     }
 
     public function showWardManage() {
