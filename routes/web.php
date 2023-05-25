@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GnDivisionController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\WardController;
 
@@ -34,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [PageController::class, 'showDashboard'])->name('dashboard');
     Route::get('/family-units', [PageController::class, 'showFamilyUnits'])->name('familyUnits');
     Route::get('/family-units/{id}', [PageController::class, 'showFamilyUnit'])->name('familyUnit');
+    Route::get('/family-units/{id}/create-member', [PageController::class, 'showCreateMember'])->name('familyUnit.createMember');
 
     // Settings Pages
     Route::get('/settings/wards', [PageController::class, 'showWardManage'])->name(('settings.wards'));
@@ -41,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
     Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
+    Route::post('/member', [MemberController::class, 'store'])->name('member.store');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

@@ -18,11 +18,18 @@ return new class extends Migration
             $table->integer('family_unit_id')->references('id')->on('family_units');
             $table->string('first_name', 50);
             $table->string('last_name', 50)->nullable();
+            $table->string('middle_name', 50)->nullable();
+            $table->string('phone', 10)->unique()->nullable();
+            $table->string('email', 50)->unique()->nullable();
             $table->string('nic', 12)->unique()->nullable();
             $table->date('birthday');
-            $table->string('email',50)->nullable();
-            $table->string('phone',10)->nullable();
+            $table->enum('has_income', [0,1]);
+            $table->double('monthly_income', 10, 2)->nullable();
+            $table->enum('gender', ['m','f']);
+            $table->string('race', 10);
+            $table->enum('marital_status', ['married', 'single']);
             $table->timestamps();
+
         });
     }
 

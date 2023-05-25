@@ -39,20 +39,49 @@ class MemberSeeder extends Seeder
         $birthdayFirst4Digits = substr($birthdayString, 0, 4); // Remove '-' chars
 
         $nic = null;
+        $maritalStatus = null;
 
         // Create NIC for people more than 16 years old.
         if ($birthday->diffInYears(Carbon::now()) > 16) {
             $nic = $birthdayFirst4Digits . fake()->randomNumber(8, true);
         }
 
+        // Select marital status randomly only for people more than 18 years old.
+        if ($birthday->diffInYears(Carbon::now()) >= 18) {
+            $maritalStatus = fake()->randomElement(['single', 'married']);
+        } else {
+            $maritalStatus = 'single';
+        }
+
+        // Select a random gender
+        $gender = fake()->randomElement(['m', 'f']);
+
+        // Generate first name according to the gender
+        $firstName = $gender == 'm' ? fake()->firstNameMale() : fake()->firstNameFemale();
+
+        // Randomly generate middle name or not
+        $middleName = fake()->randomElement([0,1]) == 0 ? null : fake()->firstName();
+
+        // Randomly select has income
+        $hasIncome = fake()->randomElement(['0','1']);
+
+        // Monthly income according to the hasIncome value
+        $monthlyIncome = $hasIncome == 0 ? null : fake()->numberBetween(5000, 50000);
+
         Member::factory()->create([
             'family_unit_id' => $familyUnitId,
-            'first_name' => fake()->firstName(),
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
             'last_name' => fake()->lastName(),
             'birthday' => $birthday,
             'nic'=> $nic,
             'email' => fake()->email(),
-            'phone' => $this->randomPhoneNumber()
+            'phone' => $this->randomPhoneNumber(),
+            'has_income' => $hasIncome,
+            'race' => fake()->randomElement(['sinhala', 'tamil', 'muslim']),
+            'monthly_income' => $monthlyIncome,
+            'marital_status' => $maritalStatus,
+            'gender' => $gender
         ]);
     }
 

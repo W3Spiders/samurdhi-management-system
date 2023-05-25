@@ -54,7 +54,7 @@ class PageController extends Controller
             $familyUnits = FamilyUnit::with('primary_member')->where('gn_division_id', $gnDivision[$userForeignKey])->get();
 
         } else {
-            $familyUnits = FamilyUnit::with('primary_member')->all();
+            $familyUnits = FamilyUnit::with('primary_member')->get();
         }
 
         return Inertia::render('FamilyUnit/FamilyUnitIndex', ['familyUnits' => $familyUnits]);
@@ -65,6 +65,13 @@ class PageController extends Controller
         $familyUnit = FamilyUnit::with('members', 'adult_members')->find($id);
 
         return Inertia::render('FamilyUnit/FamilyUnitView', ['familyUnit' => $familyUnit]);
+    }
+
+    public function showCreateMember(string $id) {
+
+        $familyUnit = FamilyUnit::find($id);
+
+        return Inertia::render('Member/MemberCreate', ['familyUnit' => $familyUnit]);
     }
 
     public function showWardManage() {

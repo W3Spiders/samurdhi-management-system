@@ -5,18 +5,16 @@ export default function AppNavigation() {
 
             <ul className="list-unstyled m-0 p-0">
                 <li>
-                    <a href="{{ route('dashboard') }}">Dashboard</a>
+                    <a href={route("dashboard")}>Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{ route('familyUnits') }}">Family Units</a>
+                    <a href={route("familyUnits")}>Family Units</a>
                 </li>
                 <li>
-                    <a href="{{ route('settings.wards') }}">Wards</a>
+                    <a href={route("settings.wards")}>Wards</a>
                 </li>
                 <li>
-                    <a href="{{ route('settings.gnDivisions') }}">
-                        GN Divisions
-                    </a>
+                    <a href={route("settings.gnDivisions")}>GN Divisions</a>
                 </li>
             </ul>
         </div>

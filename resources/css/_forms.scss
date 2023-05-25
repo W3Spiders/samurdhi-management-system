@@ -1,0 +1,28 @@
+.MuiTextField-root {
+    width: 100%;
+
+    .MuiFormLabel-root {
+        position: relative;
+        transform: none;
+    }
+
+    .MuiOutlinedInput-notchedOutline > fieldset > legend > span {
+        visibility: hidden;
+    }
+}
+
+form {
+    .row > div {
+        margin-bottom: 1rem;
+    }
+
+    .form-section-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 1.5rem;
+    }
+}

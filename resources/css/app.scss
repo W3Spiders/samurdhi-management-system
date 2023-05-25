@@ -18,12 +18,25 @@ $btn-border-radius: 0.25rem;
 
 $min-contrast-ratio: 2.1;
 
-// @import "../../node_modules/bootstrap/scss/bootstrap.scss";
-// @import "../../node_modules//bootstrap-icons/font/bootstrap-icons.css";
+// Bootstrap configurations
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/utilities";
+
+// Bootstrap necessary files
+@import "../../node_modules/bootstrap/scss/root";
+@import "../../node_modules/bootstrap/scss/reboot";
+@import "../../node_modules/bootstrap/scss/containers";
+@import "../../node_modules/bootstrap/scss/grid";
+@import "../../node_modules/bootstrap/scss/card";
+@import "../../node_modules/bootstrap/scss/helpers";
 
 @import "./typography";
 @import "./utils";
 @import "./components/components.scss";
+@import "./forms";
 
 html,
 body {
@@ -64,10 +77,16 @@ body {
     max-height: 100vh;
     overflow-y: auto;
     background-color: #1d2d49;
+    position: fixed;
+    left: 0;
+    top: 0;
 }
 
 .app-layout-column-2 {
     width: 100%;
+    position: relative;
+    margin-left: 300px;
+    max-width: calc(100% - 300px);
 }
 
 .app-layout-sidebar {
@@ -96,9 +115,15 @@ body {
     display: none;
 }
 
-.app-header {
+.app-layout-header {
     display: flex;
     justify-content: end;
+    height: 80px;
+    border-bottom: 1px solid #eee;
+    background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .profile-icon {

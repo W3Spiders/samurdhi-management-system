@@ -3,6 +3,7 @@ import { usePage } from "@inertiajs/react";
 import AppLayout from "../../Layouts/AppLayout";
 import { DataGrid } from "@mui/x-data-grid";
 import { TextField, InputAdornment, Button } from "@mui/material";
+import { router } from "@inertiajs/react";
 
 export default function FamilyUnitIndex() {
     const { familyUnits } = usePage().props;
@@ -21,16 +22,16 @@ export default function FamilyUnitIndex() {
         },
     ];
 
-    useEffect(() => {
-        console.log("family units: ", familyUnits);
-    });
+    const onRowClick = (familyUnit) => {
+        router.visit(route("familyUnit", { id: familyUnit.id }));
+    };
 
     return (
         <AppLayout title="Family Units">
             <div className="grid-container">
                 <div className="grid-toolbar">
                     <h2 className="grid-title">All Family Units</h2>
-                    <div className="grid-actions d-flex gap-3">
+                    <div className="grid-actions">
                         <TextField
                             id="search-text"
                             label="Search"
@@ -45,7 +46,9 @@ export default function FamilyUnitIndex() {
                             size="small"
                         />
 
-                        <Button variant="contained">Create</Button>
+                        <div style={{ display: "flex", alignItems: "end" }}>
+                            <Button variant="contained">Create</Button>
+                        </div>
                     </div>
                 </div>
 
@@ -56,10 +59,11 @@ export default function FamilyUnitIndex() {
                     columns={columns}
                     initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 5 },
+                            paginationModel: { page: 0, pageSize: 25 },
                         },
                     }}
-                    pageSizeOptions={[10, 10]}
+                    pageSizeOptions={[25, 50, 100]}
+                    onRowClick={(e) => onRowClick(e)}
                 />
             </div>
         </AppLayout>
