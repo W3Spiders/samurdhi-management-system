@@ -1,37 +1,6 @@
-$theme-colors: (
-    "primary": #1678f2,
-    "light": #ebf2fa,
-    "secondary": #427aa1,
-    "danger": #d63230,
-);
-
-// Card
-$card-border-width: 0;
-
-// Forms
-$form-label-font-size: 0.875rem;
-
-// Buttons
-$btn-padding-y: 0.5rem;
-$btn-padding-x: 1rem;
-$btn-border-radius: 0.25rem;
-
-$min-contrast-ratio: 2.1;
-
-// Bootstrap configurations
-// @import "../../node_modules/bootstrap/scss/functions";
-// @import "../../node_modules/bootstrap/scss/variables";
-// @import "../../node_modules/bootstrap/scss/maps";
-// @import "../../node_modules/bootstrap/scss/mixins";
-// @import "../../node_modules/bootstrap/scss/utilities";
-
-// Bootstrap necessary files
-// @import "../../node_modules/bootstrap/scss/root";
-// @import "../../node_modules/bootstrap/scss/reboot";
-// @import "../../node_modules/bootstrap/scss/containers";
-// @import "../../node_modules/bootstrap/scss/grid";
-// @import "../../node_modules/bootstrap/scss/card";
-// @import "../../node_modules/bootstrap/scss/helpers";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @import "./typography";
 @import "./utils";
@@ -117,7 +86,7 @@ body {
 
 .app-layout-header {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     height: 80px;
     border-bottom: 1px solid #eee;
     background-color: white;
