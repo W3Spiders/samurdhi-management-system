@@ -78,7 +78,6 @@ class MemberSeeder extends Seeder
             'email' => fake()->email(),
             'phone' => $this->randomPhoneNumber(),
             'has_income' => $hasIncome,
-            'race' => fake()->randomElement(['sinhala', 'tamil', 'muslim']),
             'monthly_income' => $monthlyIncome,
             'marital_status' => $maritalStatus,
             'gender' => $gender

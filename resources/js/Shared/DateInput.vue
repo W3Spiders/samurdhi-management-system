@@ -1,14 +1,10 @@
 <template>
     <div :class="$attrs.class">
         <label v-if="label" class="form-label" :for="id">{{ label }}:</label>
-        <input
-            :id="id"
-            ref="input"
-            v-bind="{ ...$attrs, class: null }"
-            class="form-input"
-            :class="{ error: error }"
-            :type="type"
+        <VueDatePicker
             :value="modelValue"
+            :format="format"
+            :year-range="[1930, 2023]"
             @input="$emit('update:modelValue', $event.target.value)"
         />
         <div v-if="error" class="form-error">{{ error }}</div>
@@ -16,23 +12,20 @@
 </template>
 
 <script>
-import { v4 as uuid } from "uuid";
+import { ref } from "vue";
 
 export default {
+    components: {},
     props: {
         id: {
             type: String,
             default() {
-                return `text-input-${uuid()}`;
+                return `date-input-${1}`;
             },
-        },
-        type: {
-            type: String,
-            default: "text",
         },
         error: String,
         label: String,
-        modelValue: String,
+        modelValue: Date,
     },
     emits: ["update:modelValue"],
     methods: {
@@ -45,6 +38,11 @@ export default {
         setSelectionRange(start, end) {
             this.$refs.input.setSelectionRange(start, end);
         },
+    },
+    data() {
+        return {
+            date: ref(),
+        };
     },
 };
 </script>

@@ -50,6 +50,60 @@
                         label="Phone"
                     />
 
+                    <select-input
+                        v-model="form.gender"
+                        :error="form.errors.gender"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Gender"
+                    >
+                        <option :value="null" disabled />
+                        <option value="m">Male</option>
+                        <option value="f">Female</option>
+                    </select-input>
+
+                    <div class="pb-8 pr-6 w-full lg:w-1/2">
+                        <label class="form-label" for="birthday-input"
+                            >Birthday</label
+                        >
+                        <input
+                            class="form-input"
+                            id="birthday-input"
+                            v-model="form.birthday"
+                            type="text"
+                            pattern="((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"
+                        />
+
+                        <div v-if="!form.errors.birthday" class="form-hint">
+                            Accepted format: YYYY-MM-DD
+                        </div>
+
+                        <div v-if="form.errors.birthday" class="form-error">
+                            {{ form.errors.birthday }}
+                        </div>
+                    </div>
+
+                    <select-input
+                        v-model="form.marital_status"
+                        :error="form.errors.marital_status"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Marital Status"
+                    >
+                        <option :value="null" disabled />
+                        <option value="single">Single</option>
+                        <option value="married">Married</option>
+                    </select-input>
+
+                    <select-input
+                        v-model="form.has_income"
+                        :error="form.errors.has_income"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Has Income"
+                    >
+                        <option :value="null" disabled />
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select-input>
+
                     <text-input
                         v-model="form.monthly_income"
                         :error="form.errors.monthly_income"
@@ -91,24 +145,31 @@ export default {
     },
     layout: Layout,
     props: {
-        family_unit_id: Number,
+        family_unit_id: String,
     },
     remember: "form",
     data() {
         return {
             form: this.$inertia.form({
+                family_unit_id: this.family_unit_id,
                 first_name: "",
+                middle_name: "",
                 last_name: "",
-                organization_id: null,
                 email: "",
                 phone: "",
-                address: "",
-                city: "",
-                region: "",
-                country: "",
-                postal_code: "",
+                birthday: "",
+                gender: "",
+                has_income: "",
+                monthly_income: "",
+                marital_status: "",
+                nic: "",
             }),
         };
+    },
+    methods: {
+        store() {
+            this.form.post("/members");
+        },
     },
 };
 </script>

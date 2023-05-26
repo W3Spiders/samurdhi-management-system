@@ -21,6 +21,8 @@
     "dependencies": {
         "@inertiajs/vue3": "^1.0.7",
         "@popperjs/core": "^2.11.7",
+        "@vuepic/vue-datepicker": "^5.1.2",
+        "moment": "^2.29.4",
         "uuid": "^9.0.0"
     }
 }

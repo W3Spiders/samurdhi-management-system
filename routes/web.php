@@ -43,10 +43,15 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
     Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
-    Route::post('/member', [MemberController::class, 'store'])->name('member.store');
+    // Route::post('/member', [MemberController::class, 'store'])->name('member.store');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Family Units
-    Route::get('/family-units/{id}/members/create', [MemberController::class, 'create'])->name('members.create');
+    
+    
+    // Member Routes
+    Route::get('/family-units/{family_unit_id}/members/create', [MemberController::class, 'create'])->name('members.create');
+    Route::post('/members', [MemberController::class, 'store'])->name('members.store');
+
 });
