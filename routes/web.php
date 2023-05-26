@@ -46,4 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/member', [MemberController::class, 'store'])->name('member.store');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Family Units
+    Route::get('/family-units/{id}/members/create', [MemberController::class, 'create'])->name('members.create');
 });
