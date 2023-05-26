@@ -1,0 +1,8 @@
+.btn {
+    @apply px-6 py-3 rounded;
+}
+
+.btn-primary {
+    color: #ffffff;
+    @apply bg-sky-600 hover:bg-sky-700 focus:bg-sky-700;
+}

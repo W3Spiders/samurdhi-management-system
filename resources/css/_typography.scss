@@ -18,3 +18,11 @@ h1 {
 h2 {
     font-size: 22px;
 }
+
+.breadcrumb-link {
+    @apply text-slate-500;
+}
+
+.breadcrum-current {
+    @apply text-slate-800;
+}

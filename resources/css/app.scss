@@ -6,6 +6,7 @@
 @import "./utils";
 @import "./components/components.scss";
 @import "./forms";
+@import "./buttons";
 
 html,
 body {
@@ -16,7 +17,7 @@ body {
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    @apply font-sans;
     font-size: 1rem;
     padding: 0;
     margin: 0;
