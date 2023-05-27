@@ -12,9 +12,8 @@
                 @reset="reset"
             >
             </search-filter>
-            <Link class="btn btn-primary" href="/contacts/create">
-                <span>Create</span>
-                <span class="hidden md:inline">&nbsp;Member</span>
+            <Link class="btn btn-primary" :href="route('family_units.create')">
+                <span>Add</span>
             </Link>
         </div>
 
@@ -23,7 +22,9 @@
             <table class="w-full whitespace-nowrap">
                 <tr class="text-left font-bold">
                     <th class="pb-4 pt-6 px-6">Reference ID</th>
-                    <th class="pb-4 pt-6 px-6">Primary Member</th>
+                    <th class="pb-4 pt-6 px-6">House Holder</th>
+                    <th class="pb-4 pt-6 px-6">Address</th>
+                    <th class="pb-4 pt-6 px-6">No of Members</th>
                 </tr>
                 <tr
                     v-for="family_unit in family_units"
@@ -33,7 +34,9 @@
                     <td class="border-t">
                         <div class="table-cell-inner">
                             <Link
-                                :href="`/family-units/${family_unit.id}/view`"
+                                :href="
+                                    route('family_units.show', family_unit.id)
+                                "
                             >
                                 {{ family_unit.family_unit_ref }}
                             </Link>
@@ -49,6 +52,17 @@
                             >
                                 {{ family_unit.primary_member.full_name }}
                             </Link>
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div
+                            class="table-cell-inner text-xs"
+                            v-html="family_unit.full_address_html"
+                        ></div>
+                    </td>
+                    <td class="border-t">
+                        <div class="table-cell-inner">
+                            {{ family_unit.member_count }}
                         </div>
                     </td>
                 </tr>

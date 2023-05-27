@@ -3,9 +3,52 @@
 
     <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
+    <!-- Family Unit Summary -->
+    <div class="mt-6 bg-white rounded-md shadow overflow-x-auto">
+        <div class="flex flex-wrap p-8">
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Family Unit Reference</div>
+                <div class="form-input">{{ family_unit.family_unit_ref }}</div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">House Holder Name</div>
+                <div class="form-input">
+                    {{ family_unit.primary_member.full_name }}
+                </div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Address</div>
+                <div
+                    class="form-input"
+                    v-html="family_unit.full_address_html"
+                ></div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">No. of Members</div>
+                <div class="form-input">{{ family_unit.members_count }}</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Members Table -->
-    <!-- Table -->
-    <div class="bg-white rounded-md shadow overflow-x-auto">
+    <h2 class="mt-12 text-2xl font-bold">Members</h2>
+
+    <!-- Table Actions -->
+    <div class="flex items-center justify-end mb-6">
+        <Link
+            class="btn btn-primary"
+            :href="
+                route('members.create', { family_unit_id: this.family_unit.id })
+            "
+        >
+            <span>Add</span>
+        </Link>
+    </div>
+
+    <div class="mt-6 bg-white rounded-md shadow overflow-x-auto">
         <table class="w-full whitespace-nowrap">
             <tr>
                 <th class="table-header-cell">Full Name</th>
@@ -22,7 +65,16 @@
             >
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ member.full_name }}
+                        <Link
+                            :href="
+                                route('members.show', {
+                                    family_unit_id: member.family_unit_id,
+                                    id: member.id,
+                                })
+                            "
+                        >
+                            {{ member.full_name }}
+                        </Link>
                     </div>
                 </td>
                 <td class="border-t">
@@ -73,7 +125,7 @@ export default {
                     link: "/family_units",
                 },
                 {
-                    text: "Family Unit ID",
+                    text: this.family_unit.family_unit_ref,
                     link: "",
                 },
             ],

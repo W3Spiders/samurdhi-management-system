@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FamilyUnit;
 use App\Models\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,11 +13,20 @@ class MemberController extends Controller
 {
 
     /**
-     * Show member create view
+     * Create member
      */
     public function create(Request $request) {
         
         return Inertia::render('Members/Create', ['family_unit_id' => $request->family_unit_id]);
+    }
+
+    /** 
+     * View single member
+     */
+    public function show($family_unit_id, $member_id) {
+        $member = Member::with('family_unit')->find($member_id);
+
+        return Inertia::render('Members/View', ['member' => $member]);
     }
 
     /**

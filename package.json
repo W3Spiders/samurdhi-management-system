@@ -23,6 +23,7 @@
         "@popperjs/core": "^2.11.8",
         "@vuepic/vue-datepicker": "^5.1.2",
         "moment": "^2.29.4",
-        "uuid": "^9.0.0"
+        "uuid": "^9.0.0",
+        "ziggy": "^2.4.0"
     }
 }

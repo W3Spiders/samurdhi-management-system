@@ -23,11 +23,19 @@ class FamilyUnitController extends Controller
     }   
 
     /**
+     * Create family unit
+     */
+    public function create() {
+
+        return Inertia::render('FamilyUnits/Create');
+    }  
+
+    /**
      * View single family unit
      */
     public function show($id) {
 
-        $family_unit = FamilyUnit::with('members')->find($id);
+        $family_unit = FamilyUnit::with(['primary_member','members'])->withCount('members')->find($id);
 
         return Inertia::render('FamilyUnits/View', [
             'family_unit' => $family_unit

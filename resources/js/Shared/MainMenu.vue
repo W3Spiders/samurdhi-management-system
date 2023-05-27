@@ -23,7 +23,10 @@
             </Link>
         </div>
         <div class="mb-4">
-            <Link class="group flex items-center py-3" href="/family-units">
+            <Link
+                class="group flex items-center py-3"
+                :href="route('family_units.index')"
+            >
                 <icon
                     name="office"
                     class="mr-2 w-4 h-4"

@@ -40,7 +40,18 @@ class Member extends Model
 
     public function getFullNameAttribute()
     {
-        return ucwords("$this->first_name {$this->last_name}");
+
+        $full_name = $this->first_name;
+
+        if ($this->middle_name) {
+            $full_name .= ' ' . $this->middle_name;
+        }
+
+        if ($this->last_name) {
+            $full_name .= ' ' . $this->last_name;
+        }
+
+        return ucwords($full_name);
     }
 
     public function getGenderStringAttribute() {
