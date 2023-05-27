@@ -11,11 +11,17 @@ use Inertia\Inertia;
 class MemberController extends Controller
 {
 
+    /**
+     * Show member create view
+     */
     public function create(Request $request) {
         
         return Inertia::render('Members/Create', ['family_unit_id' => $request->family_unit_id]);
     }
 
+    /**
+     * Validate form request and store member
+     */
     public function store(Request $request)
     {
 

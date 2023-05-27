@@ -1,15 +1,9 @@
 <template>
     <div>
-        <Head title="Create Contact" />
-        <h1 class="mb-8 text-2xl font-medium">
-            <Link class="breadcrumb-link" href="/family-units"
-                >Family Units</Link
-            >
-            <span class="breadcrumb-link"> /</span>
-            <Link class="breadcrumb-link" href="/members"> Members </Link>
-            <span class="breadcrumb-link">/</span>
-            <span class="breadcrum-current"> Create</span>
-        </h1>
+        <Head title="Create Member" />
+
+        <breadcrumb :items="breadcrumb_items"></breadcrumb>
+
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
             <form @submit.prevent="store">
                 <div class="flex flex-wrap -mb-8 -mr-6 p-8">
@@ -120,7 +114,7 @@
                         class="btn btn-primary"
                         type="submit"
                     >
-                        Create Contact
+                        Create Member
                     </loading-button>
                 </div>
             </form>
@@ -134,6 +128,7 @@ import Layout from "@/Shared/Layout";
 import TextInput from "@/Shared/TextInput";
 import SelectInput from "@/Shared/SelectInput";
 import LoadingButton from "@/Shared/LoadingButton";
+import Breadcrumb from "@/Shared/Breadcrumb";
 
 export default {
     components: {
@@ -142,6 +137,7 @@ export default {
         LoadingButton,
         SelectInput,
         TextInput,
+        Breadcrumb,
     },
     layout: Layout,
     props: {
@@ -164,6 +160,21 @@ export default {
                 marital_status: "",
                 nic: "",
             }),
+
+            breadcrumb_items: [
+                {
+                    text: "Family Units",
+                    link: "/family_units",
+                },
+                {
+                    text: "Members",
+                    link: "/members",
+                },
+                {
+                    text: "Create",
+                    link: "",
+                },
+            ],
         };
     },
     methods: {

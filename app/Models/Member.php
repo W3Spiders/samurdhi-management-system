@@ -10,6 +10,16 @@ class Member extends Model
 {
     use HasFactory;
 
+    /**
+     * The accessors to append to the model's array form.
+     */
+    protected $appends = [
+        'full_name',
+         'gender_string',
+         'has_income_string'
+    ];
+
+
     protected $fillable = [
         'family_unit_id',
         'first_name',
@@ -28,8 +38,26 @@ class Member extends Model
         return $this->belongsTo(FamilyUnit::class);
     }
 
-    public function getFullNamesAttribute()
+    public function getFullNameAttribute()
     {
         return ucwords("$this->first_name {$this->last_name}");
+    }
+
+    public function getGenderStringAttribute() {
+        if ($this->gender === 'm') {
+            return 'Male';
+        } else if ($this->gender === 'f') {
+            return 'Female';
+        } else {
+            return 'Other';
+        }
+    }
+
+    public function getHasIncomeStringAttribute() {
+        if ($this->has_income == '0') {
+            return 'No';
+        } else {
+            return 'Yes';
+        }
     }
 }
