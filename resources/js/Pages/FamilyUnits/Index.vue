@@ -22,7 +22,7 @@
         <div class="bg-white rounded-md shadow overflow-x-auto">
             <table class="w-full whitespace-nowrap">
                 <tr class="text-left font-bold">
-                    <th class="pb-4 pt-6 px-6">ID</th>
+                    <th class="pb-4 pt-6 px-6">Reference ID</th>
                     <th class="pb-4 pt-6 px-6">Primary Member</th>
                 </tr>
                 <tr
@@ -35,7 +35,7 @@
                             <Link
                                 :href="`/family-units/${family_unit.id}/view`"
                             >
-                                {{ family_unit.id }}
+                                {{ family_unit.family_unit_ref }}
                             </Link>
                         </div>
                     </td>

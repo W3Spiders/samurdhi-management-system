@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('family_units', function (Blueprint $table) {
             $table->id();
             $table->integer('gn_division_id')->references('id')->on('gn_divisions');
-            // $table->string('family_unit_no');
+            $table->string('family_unit_ref')->unique();
             $table->integer('primary_member_id')->unique()->nullable();
             $table->string('address_line_1', 50);
             $table->string('address_line_2',50)->nullable();
