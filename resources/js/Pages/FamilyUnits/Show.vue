@@ -49,6 +49,17 @@
                 <div class="form-label">Total Income</div>
                 <div class="form-input">{{ this.totalMonthlyIncome }}</div>
             </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Has Met Samurdhi Eligible Criteria</div>
+                <div class="form-input">
+                    {{
+                        this.family_unit.has_met_samurdhi_eligible_criteria
+                            ? "Yes"
+                            : "No"
+                    }}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -166,6 +177,10 @@ export default {
             }
 
             return totalIncome;
+        },
+
+        isMetSamurdhiEligibleCriteria() {
+            return true;
         },
     },
 };

@@ -75,4 +75,28 @@ class FamilyUnit extends Model
 
         return $address_html;
     }
+
+    public function getHasMetSamurdhiEligibleCriteriaAttribute() {
+
+        $total_income = 0;
+
+        $members_with_income = $this->members->filter(function ($member) {
+            if ($member->monthly_income > 0) {
+                return true;
+            }
+
+            return false;
+        });
+
+        foreach($members_with_income as $member) {
+            $total_income += $member->monthly_income;
+        }
+
+        // $total_income < 20000 * members_with_income_count;
+        if ($total_income < 20000 * count($members_with_income)) {
+            return true;
+        }
+
+        return false;
+    }
 }
