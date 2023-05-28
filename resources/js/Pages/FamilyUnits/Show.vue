@@ -44,6 +44,11 @@
                 <div class="form-label">No. of Members</div>
                 <div class="form-input">{{ family_unit.members_count }}</div>
             </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Total Income</div>
+                <div class="form-input">{{ this.totalMonthlyIncome }}</div>
+            </div>
         </div>
     </div>
 
@@ -144,6 +149,24 @@ export default {
                 },
             ],
         };
+    },
+    computed: {
+        totalMonthlyIncome() {
+            const incomes = this.family_unit.members.map(
+                (member) => member.monthly_income
+            );
+            const filteredIncomes = incomes.filter((item) => item !== null);
+
+            let totalIncome = 0;
+
+            if (filteredIncomes.length > 0) {
+                totalIncome = filteredIncomes.reduce((total, value) => {
+                    return total + value;
+                });
+            }
+
+            return totalIncome;
+        },
     },
 };
 </script>
