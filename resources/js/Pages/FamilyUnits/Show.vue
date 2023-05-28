@@ -19,6 +19,20 @@
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">House Holder's Occupation Type</div>
+                <div class="form-input">
+                    {{ family_unit.primary_member.occupation_type.name }}
+                </div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">House Holder's Occupation</div>
+                <div class="form-input">
+                    {{ family_unit.primary_member.occupation || "-" }}
+                </div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Address</div>
                 <div
                     class="form-input"
@@ -122,7 +136,7 @@ export default {
             breadcrumb_items: [
                 {
                     text: "Family Units",
-                    link: "/family_units",
+                    link: route("family_units.index"),
                 },
                 {
                     text: this.family_unit.family_unit_ref,

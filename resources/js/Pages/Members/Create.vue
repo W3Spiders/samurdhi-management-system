@@ -5,7 +5,7 @@
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-            <form @submit.prevent="store">
+            <form @submit.prevent="submit">
                 <div class="flex flex-wrap -mb-8 -mr-6 p-8">
                     <text-input
                         v-model="form.first_name"
@@ -98,6 +98,27 @@
                         <option value="1">Yes</option>
                     </select-input>
 
+                    <select-input
+                        v-model="form.occupation_type"
+                        :error="form.errors.occupation_type"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Occupation Type"
+                    >
+                        <option
+                            v-for="occupation_type in occupation_types"
+                            :value="occupation_type.id"
+                        >
+                            {{ occupation_type.name }}
+                        </option>
+                    </select-input>
+
+                    <text-input
+                        v-model="form.occupation"
+                        :error="form.errors.occupation"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Occupation"
+                    />
+
                     <text-input
                         v-model="form.monthly_income"
                         :error="form.errors.monthly_income"
@@ -114,7 +135,7 @@
                         class="btn btn-primary"
                         type="submit"
                     >
-                        Create Member
+                        {{ this.member ? "Update" : "Create" }}
                     </loading-button>
                 </div>
             </form>
@@ -141,45 +162,67 @@ export default {
     },
     layout: Layout,
     props: {
+        member: Object,
         family_unit_id: String,
+        family_unit: Object,
+        occupation_types: Array,
     },
     remember: "form",
     data() {
         return {
             form: this.$inertia.form({
-                family_unit_id: this.family_unit_id,
-                first_name: "",
-                middle_name: "",
-                last_name: "",
-                email: "",
-                phone: "",
-                birthday: "",
-                gender: "",
-                has_income: "",
-                monthly_income: "",
-                marital_status: "",
-                nic: "",
+                family_unit_id: this.member
+                    ? this.member.family_unit_id
+                    : this.family_unit_id,
+                first_name: this.member ? this.member.first_name : "",
+                middle_name: this.member ? this.member.middle_name : "",
+                last_name: this.member ? this.member.last_name : "",
+                email: this.member ? this.member.email : "",
+                phone: this.member ? this.member.phone : "",
+                birthday: this.member ? this.member.birthday : "",
+                gender: this.member ? this.member.gender : "",
+                has_income: this.member ? this.member.has_income : "",
+                monthly_income: this.member ? this.member.monthly_income : "",
+                marital_status: this.member ? this.member.marital_status : "",
+                nic: this.member ? this.member.nic : "",
+                occupation_type: this.member
+                    ? this.member.occupation_type_id
+                    : "",
+                occupation: this.member ? this.member.occupation : "",
             }),
 
             breadcrumb_items: [
                 {
                     text: "Family Units",
-                    link: "/family_units",
+                    link: route("family_units.index"),
+                },
+                {
+                    text: this.family_unit.family_unit_ref,
+                    link: route("family_units.show", this.family_unit.id),
                 },
                 {
                     text: "Members",
-                    link: "/members",
+                    link: route(
+                        "family_units.show",
+                        this.member
+                            ? this.member.family_unit_id
+                            : this.family_unit_id
+                    ),
                 },
                 {
-                    text: "Create",
+                    text: this.member ? "Edit" : "Create",
                     link: "",
                 },
             ],
         };
     },
     methods: {
-        store() {
-            this.form.post("/members");
+        submit() {
+            if (this.member) {
+                this.form.put(route("members.update", { id: this.member.id }));
+            } else {
+                this.form.post(route("members.store"));
+            }
         },
     },
 };

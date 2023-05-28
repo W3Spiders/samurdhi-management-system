@@ -27,6 +27,8 @@ return new class extends Migration
             $table->double('monthly_income', 10, 2)->nullable();
             $table->enum('gender', ['m','f']);
             $table->enum('marital_status', ['married', 'single']);
+            $table->integer('occupation_type_id')->references('id')->on('occupation_types');
+            $table->string('occupation', 50)->nullable();
             $table->timestamps();
 
         });

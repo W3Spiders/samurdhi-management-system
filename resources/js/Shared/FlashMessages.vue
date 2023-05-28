@@ -2,7 +2,7 @@
     <div>
         <div
             v-if="$page.props.flash.success && show"
-            class="flex items-center justify-between mb-8 max-w-3xl bg-green-500 rounded"
+            class="flex items-center justify-between mb-8 max-w-3xl bg-green-600 rounded"
         >
             <div class="flex items-center">
                 <svg
@@ -36,7 +36,7 @@
                     Object.keys($page.props.errors).length > 0) &&
                 show
             "
-            class="flex items-center justify-between mb-8 max-w-3xl bg-red-500 rounded"
+            class="flex items-center justify-between mb-8 max-w-3xl bg-red-600 rounded"
         >
             <div class="flex items-center">
                 <svg

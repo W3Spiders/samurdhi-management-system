@@ -2,7 +2,7 @@
 
     <div class="brand-container"></div>
 
-    <ul class="list-unstyled">
+    {{-- <ul class="list-unstyled">
         <li>
             <a href="{{ route('dashboard') }}">Dashboard</a>
         </li>
@@ -15,5 +15,5 @@
         <li>
             <a href="{{ route('settings.gnDivisions') }}">GN Divisions</a>
         </li>
-    </ul>
+    </ul> --}}
 </div>

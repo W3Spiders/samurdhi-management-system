@@ -40,7 +40,8 @@
 
     <div class="mb-3">
         <label for="cityInput" class="form-label">City</label>
-        <input class="form-control" type="text" id="cityInput" name="city" value="{{ $familyUnit->city }}" disabled>
+        <input class="form-control" type="text" id="cityInput" name="city" value="{{ $familyUnit->city }}"
+            disabled>
     </div>
 
     <div class="mb-3">

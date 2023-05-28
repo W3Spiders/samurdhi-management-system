@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FamilyUnit;
 use App\Models\Member;
+use App\Models\OccupationType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
@@ -16,17 +17,28 @@ class MemberController extends Controller
      * Create member
      */
     public function create(Request $request) {
+
+        $occupation_types = OccupationType::all();
+        $family_unit = FamilyUnit::find($request->family_unit_id);
         
-        return Inertia::render('Members/Create', ['family_unit_id' => $request->family_unit_id]);
+        return Inertia::render('Members/Create', ['family_unit' => $family_unit,'family_unit_id' => $request->family_unit_id, 'occupation_types' => $occupation_types]);
     }
 
     /** 
      * View single member
      */
-    public function show($family_unit_id, $member_id) {
+    public function show($member_id) {
         $member = Member::with('family_unit')->find($member_id);
 
-        return Inertia::render('Members/View', ['member' => $member]);
+        return Inertia::render('Members/Show', ['member' => $member]);
+    }
+
+    public function edit($id) {
+        $member = Member::find($id);
+        $family_unit = FamilyUnit::find($member->family_unit_id);
+        $occupation_types = OccupationType::all();
+
+        return Inertia::render('Members/Create', ['member' => $member, 'family_unit' => $family_unit, 'occupation_types' => $occupation_types]);
     }
 
     /**
@@ -34,6 +46,64 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required',
+            'nic' => ['unique:members','nullable', 'min:10', 'max:12', "regex:/(?:19|20)?\d{2}[0-9]{10}|[0-9]{9}[x|X|v|V]/"],
+            'marital_status' => 'required',
+            'monthly_income' => 'required_if:has_income,1|max:10000000',
+            'phone' => 'unique:members|min:10|max:10',
+            'email' => 'unique:members|nullable|email|max:50',
+            'birthday' => 'required|before:today',
+            'gender' => 'required'
+        ], [
+            'monthly_income.required_if' => 'Required when has monthly income selected',
+            'nic.regex' => 'Invalid ID number',
+            'nic.unique' => 'A member has been registered with this national id',
+            'phone.unique' => 'This phone number is used for another member',
+            'email.unique' => 'This email is used for another member'
+        ]);
+
+        if ($validator->fails()) {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+        // Create new member
+        $new_member = new Member();
+
+        $new_member->family_unit_id = $request->family_unit_id;
+        $new_member->first_name = $request->first_name;
+        $new_member->last_name = $request->last_name;
+        $new_member->middle_name = $request->middle_name;
+        $new_member->phone = $request->phone;
+        $new_member->email = $request->email;
+        $new_member->nic = $request->nic;
+        $new_member->birthday = $request->birthday;
+        $new_member->has_income = $request->has_income;
+        $new_member->monthly_income = $request->monthly_income;
+        $new_member->gender = $request->gender;
+        $new_member->marital_status = $request->marital_status;
+        $new_member->occupation_type_id = $request->occupation_type_id;
+        $new_member->occupation = $request->occupation;
+
+        $result = $new_member->save();
+
+        if ($result) {
+            return Redirect::route('family_units.show', ['family_unit_id' => $new_member->family_unit_id])->with('success', 'Member added successfully');
+        }
+    }
+
+    /**
+     * Validate form request, check whether member exists and update member
+     */
+    public function update($id, Request $request)
+    {
+
+        $member = Member::find($id);
+
+        if (!$member) {
+            return Redirect::back()->with('error', 'Member doesn\'t exist');
+        }
 
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
@@ -46,33 +116,33 @@ class MemberController extends Controller
             'gender' => 'required'
         ], [
             'monthly_income.required_if' => 'Required when has monthly income selected',
-            'nix.regex' => 'Invalid ID number'
+            'nic.regex' => 'Invalid ID number',
+            'nic.unique' => 'A member has been registered with this national id',
+            'phone.unique' => 'This phone number is used for another member',
+            'email.unique' => 'This email is used for another member'
         ]);
 
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
-        // Create new member
-        $newMember = new Member();
+        $member->family_unit_id = $request->family_unit_id;
+        $member->first_name = $request->first_name;
+        $member->last_name = $request->last_name;
+        $member->middle_name = $request->middle_name;
+        $member->phone = $request->phone;
+        $member->email = $request->email;
+        $member->nic = $request->nic;
+        $member->birthday = $request->birthday;
+        $member->has_income = $request->has_income;
+        $member->monthly_income = $request->monthly_income;
+        $member->gender = $request->gender;
+        $member->marital_status = $request->marital_status;
 
-        $newMember->family_unit_id = $request->family_unit_id;
-        $newMember->first_name = $request->first_name;
-        $newMember->last_name = $request->last_name;
-        $newMember->middle_name = $request->middle_name;
-        $newMember->phone = $request->phone;
-        $newMember->email = $request->email;
-        $newMember->nic = $request->nic;
-        $newMember->birthday = $request->birthday;
-        $newMember->has_income = $request->has_income;
-        $newMember->monthly_income = $request->monthly_income;
-        $newMember->gender = $request->gender;
-        $newMember->marital_status = $request->marital_status;
-
-        $result = $newMember->save();
+        $result = $member->save();
 
         if ($result) {
-            return Redirect::back()->with('success', 'Member created successfully');
+            return Redirect::route('members.show', $member->id)->with('success', 'Member updated successfully');
         }
     }
 }

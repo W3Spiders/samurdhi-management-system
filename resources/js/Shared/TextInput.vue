@@ -32,7 +32,7 @@ export default {
         },
         error: String,
         label: String,
-        modelValue: String,
+        modelValue: [String, Number],
     },
     emits: ["update:modelValue"],
     methods: {

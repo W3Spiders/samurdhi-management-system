@@ -2,7 +2,7 @@
     <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
     <!-- Member Summary -->
-    <div class="mt-6 bg-white rounded-md shadow overflow-x-auto">
+    <div class="max-w-3xl mt-6 bg-white rounded-md shadow overflow-x-auto">
         <div class="flex flex-wrap p-8">
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Full Name</div>
@@ -48,6 +48,14 @@
                 <div class="form-label">Monthly Income</div>
                 <div class="form-input">{{ member.monthly_income || "-" }}</div>
             </div>
+        </div>
+
+        <div class="form-footer">
+            <Link
+                class="btn btn-primary"
+                :href="route('members.edit', { id: member.id })"
+                ><i class="fa-solid fa-pen-to-square"></i> Edit</Link
+            >
         </div>
     </div>
 </template>

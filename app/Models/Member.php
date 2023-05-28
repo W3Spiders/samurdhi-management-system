@@ -38,6 +38,10 @@ class Member extends Model
         return $this->belongsTo(FamilyUnit::class);
     }
 
+    public function occupation_type(): BelongsTo {
+        return $this->belongsTo(OccupationType::class);
+    }
+
     public function getFullNameAttribute()
     {
 
