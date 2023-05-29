@@ -70,12 +70,12 @@ class MemberSeeder extends Seeder
         $middleName = fake()->randomElement([0,1]) == 0 ? null : fake()->firstName();
 
         // Randomly select has income
-        $hasIncome = fake()->randomElement(['0','1']);
-
-        // Monthly income according to the hasIncome value
-        $monthlyIncome = $hasIncome == 0 ? null : fake()->numberBetween(5000, 50000);
+        // $hasIncome = fake()->randomElement(['0','1']);
 
         $occupation = $this->get_random_occupation($is_adult);
+
+        // Monthly income according to the hasIncome value
+        $monthlyIncome = $occupation['occupation_type_id'] == 1 ? null : fake()->numberBetween(5000, 50000);
 
         Member::factory()->create([
             'family_unit_id' => $familyUnitId,
@@ -86,7 +86,6 @@ class MemberSeeder extends Seeder
             'nic'=> $nic,
             'email' => fake()->email(),
             'phone' => $this->randomPhoneNumber(),
-            'has_income' => $hasIncome,
             'monthly_income' => $monthlyIncome,
             'marital_status' => $maritalStatus,
             'gender' => $gender,

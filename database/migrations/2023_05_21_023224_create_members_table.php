@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('email', 50)->unique()->nullable();
             $table->string('nic', 12)->unique()->nullable();
             $table->date('birthday');
-            $table->enum('has_income', [0,1]);
             $table->double('monthly_income', 10, 2)->nullable();
             $table->enum('gender', ['m','f']);
             $table->enum('marital_status', ['married', 'single']);

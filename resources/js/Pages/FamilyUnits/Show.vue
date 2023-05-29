@@ -87,7 +87,7 @@
                 <th class="table-header-cell">National ID</th>
                 <th class="table-header-cell">Gender</th>
                 <th class="table-header-cell">Marital Status</th>
-                <th class="table-header-cell">Has Income</th>
+                <th class="table-header-cell">Occupation Type</th>
             </tr>
 
             <tr
@@ -111,7 +111,7 @@
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ member.nic }}
+                        {{ member.nic || "-" }}
                     </div>
                 </td>
                 <td class="border-t">
@@ -126,7 +126,7 @@
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ member.has_income_string }}
+                        {{ member.occupation_type.name }}
                     </div>
                 </td>
             </tr>

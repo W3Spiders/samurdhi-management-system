@@ -35,7 +35,7 @@ class FamilyUnitController extends Controller
      */
     public function show($id) {
 
-        $family_unit = FamilyUnit::with(['primary_member.occupation_type','members',])->withCount('members')->find($id);
+        $family_unit = FamilyUnit::with(['primary_member.occupation_type','members.occupation_type',])->withCount('members')->find($id);
         $family_unit = $family_unit->append('has_met_samurdhi_eligible_criteria');
 
         return Inertia::render('FamilyUnits/Show', [

@@ -28,7 +28,7 @@ class MemberController extends Controller
      * View single member
      */
     public function show($member_id) {
-        $member = Member::with('family_unit')->find($member_id);
+        $member = Member::with(['family_unit', 'occupation_type'])->find($member_id);
 
         return Inertia::render('Members/Show', ['member' => $member]);
     }
@@ -51,7 +51,7 @@ class MemberController extends Controller
             'first_name' => 'required',
             'nic' => ['unique:members','nullable', 'min:10', 'max:12', "regex:/(?:19|20)?\d{2}[0-9]{10}|[0-9]{9}[x|X|v|V]/"],
             'marital_status' => 'required',
-            'monthly_income' => 'required_if:has_income,1|max:10000000',
+            'monthly_income' => 'max:10000000',
             'phone' => 'unique:members|min:10|max:10',
             'email' => 'unique:members|nullable|email|max:50',
             'birthday' => 'required|before:today',
@@ -79,11 +79,10 @@ class MemberController extends Controller
         $new_member->email = $request->email;
         $new_member->nic = $request->nic;
         $new_member->birthday = $request->birthday;
-        $new_member->has_income = $request->has_income;
         $new_member->monthly_income = $request->monthly_income;
         $new_member->gender = $request->gender;
         $new_member->marital_status = $request->marital_status;
-        $new_member->occupation_type_id = $request->occupation_type_id;
+        $new_member->occupation_type_id = $request->occupation_type;
         $new_member->occupation = $request->occupation;
 
         $result = $new_member->save();
@@ -109,7 +108,7 @@ class MemberController extends Controller
             'first_name' => 'required',
             'nic' => ['nullable', 'min:10', 'max:12', "regex:/r'^(?:19|20)?\d{2}[0-9]{10}|[0-9]{9}[x|X|v|V]/"],
             'marital_status' => 'required',
-            'monthly_income' => 'required_if:has_income,1|max:10000000',
+            'monthly_income' => 'max:10000000',
             'phone' => 'min:10|max:10',
             'email' => 'nullable|email|max:50',
             'birthday' => 'required|before:today',
@@ -134,10 +133,11 @@ class MemberController extends Controller
         $member->email = $request->email;
         $member->nic = $request->nic;
         $member->birthday = $request->birthday;
-        $member->has_income = $request->has_income;
         $member->monthly_income = $request->monthly_income;
         $member->gender = $request->gender;
         $member->marital_status = $request->marital_status;
+        $member->occupation_type_id = $request->occupation_type;
+        $member->occupation = $request->occupation;
 
         $result = $member->save();
 
