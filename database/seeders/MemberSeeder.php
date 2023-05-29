@@ -4,12 +4,16 @@ namespace Database\Seeders;
 
 use App\Models\FamilyUnit;
 use App\Models\Member;
+use App\Models\OccupationType;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MemberSeeder extends Seeder
 {
+
+    private $occupation_types = [];
+
     /**
      * Run the database seeds.
      *
@@ -19,6 +23,8 @@ class MemberSeeder extends Seeder
     {
 
         $familyUnits = FamilyUnit::all();
+
+        $this->occupation_types = OccupationType::all();
 
         // Iterate number of family units
         for ($familyUnitId = 1; $familyUnitId <= count($familyUnits); $familyUnitId++) {
@@ -38,6 +44,7 @@ class MemberSeeder extends Seeder
         $birthdayString = $birthday->toDateString(); // 1999-01-01
         $birthdayFirst4Digits = substr($birthdayString, 0, 4); // Remove '-' chars
 
+        $is_adult = $birthday->diffInYears(Carbon::now()) >= 18;
         $nic = null;
         $maritalStatus = null;
 
@@ -47,7 +54,7 @@ class MemberSeeder extends Seeder
         }
 
         // Select marital status randomly only for people more than 18 years old.
-        if ($birthday->diffInYears(Carbon::now()) >= 18) {
+        if ($is_adult) {
             $maritalStatus = fake()->randomElement(['single', 'married']);
         } else {
             $maritalStatus = 'single';
@@ -68,6 +75,8 @@ class MemberSeeder extends Seeder
         // Monthly income according to the hasIncome value
         $monthlyIncome = $hasIncome == 0 ? null : fake()->numberBetween(5000, 50000);
 
+        $occupation = $this->get_random_occupation($is_adult);
+
         Member::factory()->create([
             'family_unit_id' => $familyUnitId,
             'first_name' => $firstName,
@@ -78,11 +87,39 @@ class MemberSeeder extends Seeder
             'email' => fake()->email(),
             'phone' => $this->randomPhoneNumber(),
             'has_income' => $hasIncome,
-            'race' => fake()->randomElement(['sinhala', 'tamil', 'muslim']),
             'monthly_income' => $monthlyIncome,
             'marital_status' => $maritalStatus,
-            'gender' => $gender
+            'gender' => $gender,
+            'occupation_type_id' => $occupation['occupation_type_id'], 
+            'occupation' => $occupation['occupation_name']
         ]);
+    }
+
+    public function get_random_occupation(bool $is_adult) {
+        
+        $occupation = [
+            'occupation_type_id' => null,
+            'occupation_name' => null,
+        ];
+
+        if (!$is_adult) {
+            // Set occupation_type = null
+            $occupation['occupation_type_id'] = $this->occupation_types[0]->id;
+            $occupation['occupation_name'] = $this->occupation_types[0]->name;
+            
+        } else {
+            
+            $selected_occupation_type = fake()->randomElement($this->occupation_types);
+
+            $occupation['occupation_type_id'] = $selected_occupation_type->id;
+
+            // Set occupation name if only selected an occupation except 'None'
+            if (strtolower($selected_occupation_type->name) != 'none') {
+                $occupation['occupation_name'] = fake()->jobTitle();
+            }
+        }
+
+        return $occupation;
     }
 
     public function randomPhoneNumber() {

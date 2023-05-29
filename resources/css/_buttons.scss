@@ -1,0 +1,12 @@
+.btn {
+    @apply px-6 py-3 rounded;
+}
+
+.btn-primary {
+    color: #ffffff;
+    @apply border-sky-600 border bg-sky-600 hover:bg-sky-700 focus:bg-sky-700;
+}
+
+.btn-danger-outline {
+    @apply text-red-700 border-red-700 border-solid border;
+}

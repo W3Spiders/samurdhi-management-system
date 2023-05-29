@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\FamilyUnit;
+use App\Models\GnDivision;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,21 +18,30 @@ class FamilyUnitSeeder extends Seeder
     {
 
         // Iterate number of GN divisions
-        for ($gnDivisionId = 1; $gnDivisionId <= 3; $gnDivisionId++) {
+        for ($gn_division_id = 1; $gn_division_id <= 2; $gn_division_id++) {
 
             // Iterate number of family units that this GN division owns
             for ($j = 1; $j <= 3; $j++) {
 
-                $this->createSingleFamilyUnit($gnDivisionId);
+                $this->create_single_family_unit($gn_division_id);
             }
         }
     }
 
-    public function createSingleFamilyUnit($gnDivisionId)
+    public function create_single_family_unit($gn_division_id)
     {
+
+        $gn_division = GnDivision::find($gn_division_id);
+
+        $gn_division_no = $gn_division->gn_division_no;
+        $gn_division_no_cleaned = preg_replace("/[^a-zA-Z0-9]+/", "", $gn_division_no);
+        $house_no = fake()->buildingNumber();
+        $house_no_cleaned = preg_replace("/[^a-zA-Z0-9]+/", "", $house_no);
+
         FamilyUnit::factory()->create([
-            'gn_division_id' => $gnDivisionId,
+            'gn_division_id' => $gn_division_id,
             'primary_member_id' => null,
+            'family_unit_ref' => $gn_division_no_cleaned . $house_no_cleaned,
             'address_line_1' => fake()->buildingNumber(),
             'address_line_2' => fake()->streetAddress(),
             'city' => fake()->city(),

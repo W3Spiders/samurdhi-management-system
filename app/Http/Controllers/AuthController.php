@@ -26,7 +26,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return Redirect::intended(route('dashboard'));
+            return Redirect::intended(route('dashboard.index'));
         }
 
         return Redirect::back()->withErrors(['message' => "Incorrect password"]);

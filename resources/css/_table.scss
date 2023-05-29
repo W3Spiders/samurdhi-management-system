@@ -1,0 +1,7 @@
+.table-cell-inner {
+    @apply flex items-center px-6 py-4;
+}
+
+.table-header-cell {
+    @apply text-gray-700 pb-4 pt-6 px-6 text-left font-bold;
+}

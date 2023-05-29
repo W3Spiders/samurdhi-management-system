@@ -21,12 +21,11 @@
     <!-- Ziggy routes -->
     @routes
 
-    @viteReactRefresh
-    @vite(['resources/css/app.scss', 'resources/js/app.jsx'])
+    @vite(['resources/css/app.scss', 'resources/js/app.js'])
     @inertiaHead
 </head>
 
-<body>
+<body class="text-gray-700">
     @inertia
 </body>
 

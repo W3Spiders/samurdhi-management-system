@@ -13,6 +13,10 @@ class FamilyUnit extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'full_address_html'
+    ];
+
     protected $fillable = [
         'gn_division_id',
         // 'family_unit_no',
@@ -55,5 +59,44 @@ class FamilyUnit extends Model
      */
     public function primary_member(): BelongsTo {
         return $this->belongsTo(Member::class, 'primary_member_id');
+    }
+
+    public function getFullAddressHtmlAttribute() {
+
+        $address_html = $this->address_line_1 . '<br />';
+
+        if ($this->address_line_2) {
+            $address_html .= $this->address_line_2 . '<br />';
+        }
+
+        $address_html .= $this->city . ' ';
+
+        $address_html .= $this->postal_code;
+
+        return $address_html;
+    }
+
+    public function getHasMetSamurdhiEligibleCriteriaAttribute() {
+
+        $total_income = 0;
+
+        $members_with_income = $this->members->filter(function ($member) {
+            if ($member->monthly_income > 0) {
+                return true;
+            }
+
+            return false;
+        });
+
+        foreach($members_with_income as $member) {
+            $total_income += $member->monthly_income;
+        }
+
+        // $total_income < 20000 * members_with_income_count;
+        if ($total_income < 20000 * count($members_with_income)) {
+            return true;
+        }
+
+        return false;
     }
 }
