@@ -145,4 +145,17 @@ class MemberController extends Controller
             return Redirect::route('members.show', $member->id)->with('success', 'Member updated successfully');
         }
     }
+
+    public function destroy($id) {
+        $member = Member::find($id);
+        $family_unit_id = $member->family_unit_id;
+
+        if (!$member) {
+            return Redirect::back()->with('error', 'Member doesn\'t exist');
+        }
+
+        $member->delete();
+
+        return Redirect::route('family_units.show', $family_unit_id)->with('success', 'Member deleted.');
+    }
 }

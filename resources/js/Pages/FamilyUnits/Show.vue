@@ -14,21 +14,23 @@
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">House Holder Name</div>
                 <div class="form-input">
-                    {{ family_unit.primary_member.full_name }}
+                    {{ family_unit.primary_member?.full_name || "-" }}
                 </div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">House Holder's Occupation Type</div>
                 <div class="form-input">
-                    {{ family_unit.primary_member.occupation_type.name }}
+                    {{
+                        family_unit.primary_member?.occupation_type?.name || "-"
+                    }}
                 </div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">House Holder's Occupation</div>
                 <div class="form-input">
-                    {{ family_unit.primary_member.occupation || "-" }}
+                    {{ family_unit.primary_member?.occupation || "-" }}
                 </div>
             </div>
 

@@ -50,12 +50,25 @@
             </div>
         </div>
 
-        <div class="form-footer">
+        <div class="form-footer gap-3">
+            <button
+                class="btn btn-danger-outline"
+                type="button"
+                @click="
+                    ($event) => {
+                        this.delete();
+                    }
+                "
+            >
+                Delete
+            </button>
+
             <Link
                 class="btn btn-primary"
                 :href="route('members.edit', { id: member.id })"
-                ><i class="fa-solid fa-pen-to-square"></i> Edit</Link
             >
+                <i class="fa-solid fa-pen-to-square"></i> Edit
+            </Link>
         </div>
     </div>
 </template>
@@ -91,6 +104,15 @@ export default {
                 },
             ],
         };
+    },
+    methods: {
+        delete() {
+            if (confirm("Are you sure you want to delete this member?")) {
+                this.$inertia.delete(
+                    route("members.delete", { id: this.member.id })
+                );
+            }
+        },
     },
 };
 </script>

@@ -59,5 +59,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/members/{id}/edit', [MemberController::class, 'edit'])->name('members.edit');
     Route::put('/members/{id}', [MemberController::class, 'update'])->name('members.update');
     Route::post('/members', [MemberController::class, 'store'])->name('members.store');
-
+    Route::delete('/members/{id}', [MemberController::class, 'destroy'])->name('members.delete');
 });
