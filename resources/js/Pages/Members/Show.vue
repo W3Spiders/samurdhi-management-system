@@ -11,7 +11,7 @@
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">National ID</div>
-                <div class="form-input">{{ member.nic }}</div>
+                <div class="form-input">{{ member.nic || "-" }}</div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
@@ -40,8 +40,17 @@
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
-                <div class="form-label">Has Income?</div>
-                <div class="form-input">{{ member.has_income_string }}</div>
+                <div class="form-label">Occupation Type</div>
+                <div class="form-input">
+                    {{ member.occupation_type?.name || "-" }}
+                </div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Occupation</div>
+                <div class="form-input">
+                    {{ member.occupation || "-" }}
+                </div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">

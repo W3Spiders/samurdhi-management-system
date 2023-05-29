@@ -16,7 +16,6 @@ class Member extends Model
     protected $appends = [
         'full_name',
          'gender_string',
-         'has_income_string'
     ];
 
 
@@ -65,14 +64,6 @@ class Member extends Model
             return 'Female';
         } else {
             return 'Other';
-        }
-    }
-
-    public function getHasIncomeStringAttribute() {
-        if ($this->has_income == '0') {
-            return 'No';
-        } else {
-            return 'Yes';
         }
     }
 }

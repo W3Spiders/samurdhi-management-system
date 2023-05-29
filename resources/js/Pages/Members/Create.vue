@@ -88,17 +88,6 @@
                     </select-input>
 
                     <select-input
-                        v-model="form.has_income"
-                        :error="form.errors.has_income"
-                        class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Has Income"
-                    >
-                        <option :value="null" disabled />
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select-input>
-
-                    <select-input
                         v-model="form.occupation_type"
                         :error="form.errors.occupation_type"
                         class="pb-8 pr-6 w-full lg:w-1/2"
@@ -181,7 +170,6 @@ export default {
                 phone: this.member ? this.member.phone : "",
                 birthday: this.member ? this.member.birthday : "",
                 gender: this.member ? this.member.gender : "",
-                has_income: this.member ? this.member.has_income : "",
                 monthly_income: this.member ? this.member.monthly_income : "",
                 marital_status: this.member ? this.member.marital_status : "",
                 nic: this.member ? this.member.nic : "",
