@@ -25,9 +25,12 @@ Route::get('/', function () {
 });
 
 
-// Admin
-Route::get('/login', [PageController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+// Guest Users
+Route::middleware('guest')->group(function() {
+    Route::get('/login', [AuthController::class, 'show_login'])->name('login.show');
+    Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
+});
+
 
 // Authenticated Routes
 Route::middleware('auth')->group(function () {

@@ -16,10 +16,10 @@ class UserData {
 
     public static $gnUsers = [
         [
-            'username' => 'alice',
-            'first_name' => 'Alice',
-            'last_name' => 'Blake',
-            'email' => 'alice@mysbsdemo.com',
+            'username' => 'nimali',
+            'first_name' => 'Nimali',
+            'last_name' => 'Perera',
+            'email' => 'nimalp@mysbsdemo.com',
         ],
         [
             'username' => 'angela',
