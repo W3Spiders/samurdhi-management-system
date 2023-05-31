@@ -23,8 +23,6 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'username' => ['required'],
             'password' => ['required']
-        ], [
-            'username.exists' => 'Username is not exist'
         ]);
 
         $user = User::where('username', $request->username)->first();

@@ -37,19 +37,6 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-    
-    
-    Route::get('/family-units/{id}/create-member', [PageController::class, 'showCreateMember'])->name('familyUnit.createMember');
-
-    // Settings Pages
-    Route::get('/settings/wards', [PageController::class, 'showWardManage'])->name(('settings.wards'));
-    Route::get('/settings/gn-divisions', [PageController::class, 'showGnDivisionManage'])->name(('settings.gnDivisions'));
-
-    Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
-    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
-    // Route::post('/member', [MemberController::class, 'store'])->name('member.store');
-
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Family Units
     Route::get('/family-units', [FamilyUnitController::class, 'index'])->name('family_units.index');
@@ -63,4 +50,13 @@ Route::middleware('auth')->group(function () {
     Route::put('/members/{id}', [MemberController::class, 'update'])->name('members.update');
     Route::post('/members', [MemberController::class, 'store'])->name('members.store');
     Route::delete('/members/{id}', [MemberController::class, 'destroy'])->name('members.delete');
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Settings Pages
+    Route::get('/settings/wards', [PageController::class, 'showWardManage'])->name(('settings.wards'));
+    Route::get('/settings/gn-divisions', [PageController::class, 'showGnDivisionManage'])->name(('settings.gnDivisions'));
+
+    Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
+    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
 });
