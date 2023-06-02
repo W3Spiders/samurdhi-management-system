@@ -34,16 +34,14 @@
                     <div
                         class="md:text-md flex items-center justify-between p-4 w-full text-sm bg-white border-b md:px-12 md:py-0"
                     >
-                        <div class="mr-4 mt-1">
-                            Samurdhi & Beneficiary Management System
-                        </div>
+                        <div class="mr-4 mt-1"></div>
                         <dropdown class="mt-1" placement="bottom-end">
                             <template #default>
                                 <div
                                     class="group flex items-center cursor-pointer select-none"
                                 >
                                     <div
-                                        class="mr-1 text-gray-700 group-hover:text-indigo-600 focus:text-indigo-600 whitespace-nowrap"
+                                        class="text-lg font-medium mr-1 text-gray-700 group-hover:text-indigo-600 focus:text-indigo-600 whitespace-nowrap"
                                     >
                                         <span>{{ auth.user.first_name }}</span>
                                         <span class="hidden md:inline"

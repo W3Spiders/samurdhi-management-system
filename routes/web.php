@@ -7,6 +7,7 @@ use App\Http\Controllers\FamilyUnitController;
 use App\Http\Controllers\GnDivisionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\WardController;
 
 /*
@@ -50,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/members/{id}', [MemberController::class, 'update'])->name('members.update');
     Route::post('/members', [MemberController::class, 'store'])->name('members.store');
     Route::delete('/members/{id}', [MemberController::class, 'destroy'])->name('members.delete');
+
+    // Reports
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
