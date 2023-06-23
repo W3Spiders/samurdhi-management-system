@@ -4,8 +4,10 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -44,4 +46,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the linked gn_division for the user
+     * Not every user has gn_division linked.
+     * It's linked only for the GN and SN users.
+     */
+    public function gn_division(): HasOne
+    {
+
+        $foreign_key = (Auth::user()->user_type == 'gn') ? 'gn_user_id' : 'sn_user_id';
+
+        return $this->hasOne(GnDivision::class, $foreign_key);
+    }
 }

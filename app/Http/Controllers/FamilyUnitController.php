@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\FamilyUnit;
 use App\Models\Member;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Request;
 
@@ -14,8 +16,22 @@ class FamilyUnitController extends Controller
      */
     public function index() {
 
-        $family_units = FamilyUnit::with('primary_member')->get();
+        $family_units = [];
+        // $family_units = FamilyUnit::with('primary_member')->get();
 
+        $user = Auth::user();
+        //return $user->id;
+        $user = User::with('gn_division.family_units.primary_member')->get()->find($user->id);
+
+        if (isset($user['gn_division']) && isset($user['gn_division']['family_units']) && !is_null($user['gn_division']['family_units'])) {
+            $family_units = $user['gn_division']['family_units'];
+        }
+
+        // if ($user['user_type'] != 'admin' && $user['user_type'] != 'ds' && !is_null($gn_division_id)) {
+        //     $family_units = FamilyUnit::with('primary_member')->where('gn_division_id', $gn_division_id)->get();
+        // }
+
+        //return $family_units;
         return Inertia::render('FamilyUnits/Index', [
             'filters' => Request::all('search', 'trashed'),
             'family_units' => $family_units,
