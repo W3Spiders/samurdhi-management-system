@@ -6,6 +6,22 @@
     <!-- Family Unit Summary -->
     <div class="mt-6 bg-white rounded-md shadow overflow-x-auto">
         <div class="flex flex-wrap p-8">
+            <div class="flex mb-12 w-full bg-slate-100 rounded-md p-8">
+                <div class="pr-6 w-full lg:w-1/2">
+                    <div class="form-label">GN Division No</div>
+                    <div class="form-input">
+                        {{ this.family_unit.gn_division.gn_division_no }}
+                    </div>
+                </div>
+
+                <div class="pr-6 w-full lg:w-1/2">
+                    <div class="form-label">GN Division</div>
+                    <div class="form-input">
+                        {{ this.family_unit.gn_division.gn_division_name }}
+                    </div>
+                </div>
+            </div>
+
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Family Unit Reference</div>
                 <div class="form-input">{{ family_unit.family_unit_ref }}</div>
@@ -60,6 +76,13 @@
                             ? "Yes"
                             : "No"
                     }}
+                </div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Status</div>
+                <div class="form-input">
+                    {{ this.family_unit.status.status_title }}
                 </div>
             </div>
         </div>

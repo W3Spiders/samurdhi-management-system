@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FamilyUnit extends Model
 {
@@ -51,6 +52,10 @@ class FamilyUnit extends Model
 
         return $this->belongsTo(GnDivision::class);
         
+    }
+
+    public function status(): BelongsTo {
+        return $this->belongsTo(FamilyUnitStatus::class);
     }
 
     /**

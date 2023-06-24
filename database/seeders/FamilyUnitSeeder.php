@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\FamilyUnit;
 use App\Models\GnDivision;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+use function App\Helpers\generate_family_unit_ref;
 
 class FamilyUnitSeeder extends Seeder
 {
@@ -32,16 +33,13 @@ class FamilyUnitSeeder extends Seeder
     {
 
         $gn_division = GnDivision::find($gn_division_id);
-
-        $gn_division_no = $gn_division->gn_division_no;
-        $gn_division_no_cleaned = preg_replace("/[^a-zA-Z0-9]+/", "", $gn_division_no);
         $house_no = fake()->buildingNumber();
-        $house_no_cleaned = preg_replace("/[^a-zA-Z0-9]+/", "", $house_no);
+        $gn_division_no = $gn_division->gn_division_no;
 
         FamilyUnit::factory()->create([
             'gn_division_id' => $gn_division_id,
             'primary_member_id' => null,
-            'family_unit_ref' => $gn_division_no_cleaned . $house_no_cleaned,
+            'family_unit_ref' => generate_family_unit_ref($gn_division_no, $house_no),
             'address_line_1' => fake()->buildingNumber(),
             'address_line_2' => fake()->streetAddress(),
             'city' => fake()->city(),

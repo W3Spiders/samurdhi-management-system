@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(OccupationTypeSeeder::class);
         $this->call(WardSeeder::class);
         $this->call(GnDivisionSeeder::class);
+        $this->call(FamilyUnitStatusSeeder::class);
         $this->call(FamilyUnitSeeder::class);
         $this->call(MemberSeeder::class);
 

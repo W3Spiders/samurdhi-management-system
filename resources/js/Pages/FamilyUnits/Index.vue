@@ -22,6 +22,7 @@
             <table class="w-full whitespace-nowrap">
                 <tr class="text-left font-bold">
                     <th class="pb-4 pt-6 px-6">Reference ID</th>
+                    <th class="pb-4 pt-6 px-6">Status</th>
                     <th class="pb-4 pt-6 px-6">House Holder</th>
                     <th class="pb-4 pt-6 px-6">Address</th>
                     <th class="pb-4 pt-6 px-6">No of Members</th>
@@ -40,6 +41,13 @@
                             >
                                 {{ family_unit.family_unit_ref }}
                             </Link>
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div class="table-cell-inner">
+                            <span :class="`px-4 py-2 rounded-lg font-medium`">
+                                {{ getStatusTitleById(family_unit.status_id) }}
+                            </span>
                         </div>
                     </td>
                     <td class="border-t">
@@ -102,6 +110,7 @@ export default {
         filters: Object,
         family_units: Object,
         members: Object,
+        status_list: Object,
     },
     data() {
         return {
@@ -130,6 +139,35 @@ export default {
     methods: {
         reset() {
             this.form = mapValues(this.form, () => null);
+        },
+
+        getStatusTitleById(id) {
+            const status = this.status_list.find((s) => s.id === id);
+            return status?.status_title;
+        },
+
+        getStatusCodeById(id) {
+            const status = this.status_list.find((s) => s.id === id);
+            return status?.status_code || "";
+        },
+
+        getStatusColorClassById(id) {
+            const status = this.status_list.find((s) => s.id === id);
+            code = status?.status_code || "new";
+
+            let colorClass = "bg-blue-200";
+
+            if (code === "new ") {
+                colorClass = "bg-blue-200";
+            } else if (core === "pending_approval") {
+                colorClass = "bg-amber-200";
+            } else if (core === "approved") {
+                colorClass = "bg-green-200";
+            } else if (core === "rejected") {
+                colorClass = "bg-red-200";
+            }
+
+            return colorClass;
         },
     },
 };
