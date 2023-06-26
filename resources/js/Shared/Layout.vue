@@ -55,6 +55,9 @@
                                         name="cheveron-down"
                                     />
                                 </div>
+                                <div class="text-sm">
+                                    {{ getUserTypeTitle(auth.user) }}
+                                </div>
                             </template>
                             <template #dropdown>
                                 <div
@@ -118,6 +121,21 @@ export default {
     },
     props: {
         auth: Object,
+    },
+    methods: {
+        getUserTypeTitle(user) {
+            if (user.user_type == "gn") {
+                return "Grama Niladhari";
+            } else if (user.user_type == "sn") {
+                return "Samurdhi Niladhari";
+            } else if (user.user_type == "ds") {
+                return "Grama Niladhari";
+            } else if (user.user_type == "admin") {
+                return "Admin User";
+            } else {
+                return "";
+            }
+        },
     },
 };
 </script>

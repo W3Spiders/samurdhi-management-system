@@ -21,13 +21,14 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-        $this->createAdminUser();
+        $this->createAdminUsers();
+        $this->createDsUsers();
         $this->createGnUsers();
         $this->createSnUsers();
         
     }
 
-    public function createAdminUser() {
+    public function createAdminUsers() {
 
         $adminUsers = UserData::$adminUsers;
         $userType = 'admin';
@@ -40,6 +41,25 @@ class UserSeeder extends Seeder
                 'last_name' => $adminUser['last_name'],
                 'user_type' => $userType,
                 'email' => $adminUser['email'],
+                'password' => Hash::make($this->userPassword)
+            ]);
+
+        }
+    }
+
+    public function createDsUsers() {
+
+        $dsUsers = UserData::$dsUsers;
+        $userType = 'ds';
+
+        foreach($dsUsers as $dsUser) {
+
+            User::factory()->create([
+                'username' => $dsUser['username'],
+                'first_name' => $dsUser['first_name'],
+                'last_name' => $dsUser['last_name'],
+                'user_type' => $userType,
+                'email' => $dsUser['email'],
                 'password' => Hash::make($this->userPassword)
             ]);
 

@@ -17,6 +17,7 @@ class FamilyUnitStatusSeeder extends Seeder
     {
         $status_list = [
             ['status_code' => 'new', 'status_title' => 'New'],
+            ['status_code' => 'viewed', 'status_title' => 'Viewed'],
             ['status_code' => 'pending_approval', 'status_title' => 'Pending Approval'],
             ['status_code' => 'approved', 'status_title' => 'Approved'],
             ['status_code' => 'rejected', 'status_title' => 'Rejected']

@@ -2,13 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+
+        $family_units = [];
+        // $family_units = FamilyUnit::with('primary_member')->get();
+
+        $user = Auth::user();
+        $user = User::with(['gn_division.sn_user', 'gn_division.gn_user' ,'gn_division.family_units.primary_member'])->get()->find($user->id);
+
+        if (isset($user['gn_division']) && isset($user['gn_division']['family_units']) && !is_null($user['gn_division']['family_units'])) {
+            $family_units = $user['gn_division']['family_units'];
+        }
+
+        $samurdhi_approved_count = 0;
+
+        foreach($family_units as $family_unit) {
+            if ($family_unit['status']['status_code'] === 'approved') {
+                $samurdhi_approved_count++;
+            }
+        }
+
         $payment_requests = [
             [
                 'family_unit_ref' => '606A47558',
@@ -47,6 +68,6 @@ class DashboardController extends Controller
             ]
         ];
 
-        return Inertia::render('Dashboard/Index', ['payment_requests' => $payment_requests]);
+        return Inertia::render('Dashboard/Index', ['payment_requests' => $payment_requests, 'family_units_count' => count($family_units), 'samurdhi_approved_count' => $samurdhi_approved_count, 'gn_division' => $user['gn_division']]);
     }
 }

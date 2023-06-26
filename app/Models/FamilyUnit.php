@@ -37,10 +37,10 @@ class FamilyUnit extends Model
     }
 
     /**
-     * 
+     * Get primary eligible members
      */
-    public function adult_members(): HasMany {
-        $marginalDate = Carbon::now()->subYears(40);
+    public function primary_eligible_members(): HasMany {
+        $marginalDate = Carbon::now()->subYears(18);
 
         return $this->hasMany(Member::class)->where('birthday', '<=', $marginalDate);
     }

@@ -14,6 +14,15 @@ class UserData {
         ]
     ];
 
+    public static $dsUsers = [
+        [
+            'username' => 'kamal',
+            'first_name' => 'Kamal',
+            'last_name' => 'De Silva',
+            'email' => 'kamal@mysbs.com',
+        ]
+    ];
+
     public static $gnUsers = [
         [
             'username' => 'nimali',

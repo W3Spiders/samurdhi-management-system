@@ -23,22 +23,37 @@
                         <div class="text-sm text-slate-500 mb-1">
                             Division No
                         </div>
-                        <div class="text-xl font-bold">606A</div>
+                        <div class="text-xl font-bold">
+                            {{ gn_division?.gn_division_no || "-" }}
+                        </div>
                     </div>
 
                     <div>
                         <div class="text-sm text-slate-500 mb-1">
                             Division Name
                         </div>
-                        <div class="text-xl font-bold">Welmilla</div>
+                        <div class="text-xl font-bold">
+                            {{ gn_division?.gn_division_name || "-" }}
+                        </div>
                     </div>
                 </div>
 
                 <div class="px-8 pt-8 pb-4 text-lg border-r border-slate-200">
+                    <div class="mb-4">
+                        <div class="text-sm text-slate-500 mb-1">
+                            Grama Niladhari's Name
+                        </div>
+                        <div class="text-xl font-bold">
+                            {{ getUserFullName(gn_division.gn_user) }}
+                        </div>
+                    </div>
+
                     <div class="text-sm text-slate-500 mb-1">
                         Samurdhi Niladhari's Name
                     </div>
-                    <div class="text-xl font-bold">Padmini Thilakawardhana</div>
+                    <div class="text-xl font-bold">
+                        {{ getUserFullName(gn_division.sn_user) }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,15 +61,15 @@
         <div class="mt-8 grid grid-cols-3 gap-8">
             <dash-card
                 primaryText="Total Family Units"
-                secondaryText="48"
+                :secondaryText="family_units_count"
                 :link="route('family_units.index')"
                 linkText="View All"
             >
             </dash-card>
 
             <dash-card
-                primaryText="Total Samurdhi Eligible Family Units"
-                secondaryText="25"
+                primaryText="Total Samurdhi Approved Family Units"
+                :secondaryText="samurdhi_approved_count"
                 :link="route('family_units.index')"
                 linkText="View All"
             >
@@ -96,7 +111,21 @@ export default {
         ThisMonthSamurdhiPaymentList,
     },
     props: {
+        gn_division: Object,
         payment_requests: Array,
+        family_units_count: Number,
+        samurdhi_approved_count: Number,
+    },
+    methods: {
+        getUserFullName(user) {
+            let name = user.first_name;
+
+            if (user.last_name) {
+                name += " " + user.last_name;
+            }
+
+            return name;
+        },
     },
     layout: Layout,
 };

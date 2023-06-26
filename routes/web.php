@@ -42,8 +42,10 @@ Route::middleware('auth')->group(function () {
     // Family Units
     Route::get('/family-units', [FamilyUnitController::class, 'index'])->name('family_units.index');
     Route::get('/family-units/create', [FamilyUnitController::class, 'create'])->name('family_units.create');
-    Route::get('/family-units/{family_unit_id}/', [FamilyUnitController::class, 'show'])->name('family_units.show');
-    Route::post('/family-units/', [FamilyUnitController::class, 'store'])->name('family_units.store');
+    Route::get('/family-units/{id}', [FamilyUnitController::class, 'show'])->name('family_units.show');
+    Route::get('/family-units/{id}/edit', [FamilyUnitController::class, 'edit'])->name('family_units.edit');
+    Route::put('/family-units/{id}', [FamilyUnitController::class, 'update'])->name('family_units.update');
+    Route::post('/family-units', [FamilyUnitController::class, 'store'])->name('family_units.store');
 
     // Member Routes
     Route::get('/family-units/{family_unit_id}/members/create', [MemberController::class, 'create'])->name('members.create');

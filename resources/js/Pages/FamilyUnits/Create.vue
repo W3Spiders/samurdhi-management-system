@@ -1,6 +1,8 @@
 <template>
     <div>
-        <Head title="Create Family Unit" />
+        <Head
+            :title="family_unit ? 'Edit Family Unit' : 'Create Family Unit'"
+        />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
@@ -65,13 +67,17 @@
                 <div
                     class="flex items-center gap-4 justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
                 >
-                    <loading-button
-                        :loading="false"
+                    <a
+                        :href="
+                            family_unit
+                                ? route('family_units.show', {
+                                      id: family_unit.id,
+                                  })
+                                : route('family_units.index')
+                        "
                         class="btn btn-secondary-outline"
-                        type="reset"
+                        >Cancel</a
                     >
-                        Cancel
-                    </loading-button>
                     <loading-button
                         :loading="form.processing"
                         class="btn btn-primary"
@@ -105,18 +111,19 @@ export default {
     layout: Layout,
     props: {
         gn_division: Object,
-        family_units: Object,
+        family_unit: Object,
     },
     remember: "form",
     data() {
         return {
             form: this.$inertia.form({
+                primary_member_id: this.family_unit?.primary_member?.id || null,
                 gn_division_id: this.gn_division?.id,
-                house_no: "",
-                address_line_1: "",
-                address_line_2: "",
-                city: "",
-                postal_code: "",
+                house_no: this.family_unit?.house_no || "",
+                address_line_1: this.family_unit?.address_line_1 || "",
+                address_line_2: this.family_unit?.address_line_2 || "",
+                city: this.family_unit?.city || "",
+                postal_code: this.family_unit?.postal_code || "",
             }),
 
             breadcrumb_items: [
