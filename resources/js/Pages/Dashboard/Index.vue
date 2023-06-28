@@ -3,7 +3,7 @@
 
     <h1 class="mb-8 text-3xl font-medium">Dashboard</h1>
 
-    <div>
+    <div v-if="auth.user.user_type === 'gn' || auth.user.user_type === 'sn'">
         <h2
             class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
         >
@@ -115,6 +115,7 @@ export default {
         payment_requests: Array,
         family_units_count: Number,
         samurdhi_approved_count: Number,
+        auth: Object, // globally shared one
     },
     methods: {
         getUserFullName(user) {
