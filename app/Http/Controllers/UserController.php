@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,31 +13,40 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
+        $search = $request->input('search');
 
-        $users = User::with(['gn_division'])->where('id', '!=', Auth::user()->id)->get();
+        $users = User::with(['gn_division'])->where(function (Builder $query) use ($search) {
+            return $query->where('first_name', 'like', "%{$search}%")
+                ->orWhere('last_name', 'like', "%{$search}%"); // Search by first name, last name.
+        })->where('user_type', '!=', 'admin')->paginate(10); // Exclude admin user
 
-        return Inertia::render('User/Index',['filters' => $request->all('search', 'trashed'), 'users' => $users]);
+        return Inertia::render('User/Index', ['filters' => $request->all('search', 'trashed'), 'users' => $users]);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $user = User::with('gn_division')->find($id);
 
         return Inertia::render('User/Show', ['user' => $user]);
     }
 
-    public function create() {
+    public function create()
+    {
         return Inertia::render('User/Create');
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
 
         $user = User::with('gn_division')->find($id);
 
         return Inertia::render('User/Create', ['user' => $user]);
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'username' => 'required|max:15',
             'email' => 'required|max:50',
@@ -49,7 +59,7 @@ class UserController extends Controller
         if ($validator->fails()) {
             return Redirect::back()->withErrors($validator)->withInput();
         }
-        
+
         $new_user = new User();
         $new_user->user_type = $request['user_type'];
         $new_user->username = $request['username'];
@@ -63,10 +73,10 @@ class UserController extends Controller
         if ($result) {
             return Redirect::route('users.show', ['id' => $new_user->id])->with('success', 'User was created successfully');
         }
-
     }
 
-    public function update($id, Request $request) {
+    public function update($id, Request $request)
+    {
         $user = User::find($id);
 
         if (!$user) {
@@ -90,7 +100,7 @@ class UserController extends Controller
         $user->email = $request['email'];
         $user->first_name = $request['first_name'];
         $user->last_name = $request['last_name'];
-        
+
         if (isset($request['password'])) { // Update password only if provided
             $user->password = Hash::make($request['password']);
         }
