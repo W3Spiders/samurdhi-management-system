@@ -34,11 +34,11 @@
         <div class="mb-4 border-b border-slate-700">
             <Link
                 class="group flex items-center py-3"
-                :href="route('family_units.index')"
+                :href="route('samurdhi_payment_requests.index')"
             >
                 <div
                     :class="
-                        isUrl('family-units')
+                        isUrl('samurdhi_payment_requests.index')
                             ? 'text-white'
                             : 'text-slate-400 group-hover:text-white'
                     "
@@ -81,6 +81,26 @@
                 </div>
             </Link>
         </div>
+
+        <div
+            v-if="auth.user.user_type == 'admin'"
+            class="mb-4 border-b border-slate-700"
+        >
+            <Link
+                class="group flex items-center py-3"
+                :href="route('users.index')"
+            >
+                <div
+                    :class="
+                        isUrl('users')
+                            ? 'text-white'
+                            : 'text-slate-400 group-hover:text-white'
+                    "
+                >
+                    Users
+                </div>
+            </Link>
+        </div>
     </div>
 </template>
 
@@ -92,6 +112,9 @@ export default {
     components: {
         Icon,
         Link,
+    },
+    props: {
+        auth: Object,
     },
     methods: {
         isUrl(...urls) {

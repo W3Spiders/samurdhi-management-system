@@ -8,6 +8,8 @@ use App\Http\Controllers\GnDivisionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SamurdhiPaymentRequestController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WardController;
 
 /*
@@ -57,6 +59,21 @@ Route::middleware('auth')->group(function () {
 
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+
+    // Samurdhi Management
+    Route::get('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'index'])->name('samurdhi_payment_requests.index');
+    Route::get('/samurdhi-payment-requests/create', [SamurdhiPaymentRequestController::class, 'create'])->name('samurdhi_payment_requests.create');
+    Route::get('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'show'])->name('samurdhi_payment_requests.show');
+    Route::post('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'store'])->name('samurdhi_payment_requests.store');
+
+    // Users
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

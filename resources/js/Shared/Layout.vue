@@ -87,6 +87,7 @@
                 </div>
                 <div class="md:flex md:flex-grow md:overflow-hidden">
                     <main-menu
+                        :auth="auth"
                         class="hidden flex-shrink-0 p-12 w-56 bg-slate-800 overflow-y-auto md:block"
                     />
                     <div

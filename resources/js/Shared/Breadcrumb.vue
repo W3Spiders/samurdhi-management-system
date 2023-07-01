@@ -4,16 +4,18 @@
             v-for="(item, index) in items"
             :key="`breadcrumb-link-${index}`"
         >
-            <template v-if="!isLastItem(index)">
-                <Link class="breadcrumb-link" :href="item.link">
-                    {{ item.text }}
-                </Link>
-                <span class="breadcrumb-link"> / </span>
-            </template>
+            <template v-if="item">
+                <template v-if="!isLastItem(index)">
+                    <Link class="breadcrumb-link" :href="item.link">
+                        {{ item.text }}
+                    </Link>
+                    <span class="breadcrumb-link"> / </span>
+                </template>
 
-            <!-- Last link -->
-            <template v-if="isLastItem(index)">
-                <span class="breadcrum-current"> {{ item.text }}</span>
+                <!-- Last link -->
+                <template v-if="isLastItem(index)">
+                    <span class="breadcrum-current"> {{ item.text }}</span>
+                </template>
             </template>
         </template>
     </h1>

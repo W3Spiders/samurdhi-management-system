@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Head title="Create Member" />
+        <Head :title="`${member ? 'Edit' : 'Create'} Member`" />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
