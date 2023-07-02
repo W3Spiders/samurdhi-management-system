@@ -101,6 +101,26 @@
                 </div>
             </Link>
         </div>
+
+        <div
+            v-if="auth.user.user_type == 'admin'"
+            class="mb-4 border-b border-slate-700"
+        >
+            <Link
+                class="group flex items-center py-3"
+                :href="route('gn_divisions.index')"
+            >
+                <div
+                    :class="
+                        isUrl('gn_divisions')
+                            ? 'text-white'
+                            : 'text-slate-400 group-hover:text-white'
+                    "
+                >
+                    GN Divisions
+                </div>
+            </Link>
+        </div>
     </div>
 </template>
 

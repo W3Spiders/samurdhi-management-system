@@ -29,7 +29,7 @@ Route::get('/', function () {
 
 
 // Guest Users
-Route::middleware('guest')->group(function() {
+Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'show_login'])->name('login.show');
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 });
@@ -74,6 +74,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
+    // GN Divisions
+    Route::get('/gn-divisions', [GnDivisionController::class, 'index'])->name(('gn_divisions.index'));
+    Route::get('/gn-divisions/create', [GnDivisionController::class, 'create'])->name(('gn_divisions.create'));
+    Route::get('/gn-divisions/{id}', [GnDivisionController::class, 'show'])->name(('gn_divisions.show'));
+    Route::post('/gn_divisions', [GnDivisionController::class, 'store'])->name('gn_divisions.store');
+    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
+    Route::get('/gn-divisions/{id}/edit', [GnDivisionController::class, 'edit'])->name(('gn_divisions.edit'));
+    Route::put('/gn-division/{id}', [GnDivisionController::class, 'update'])->name(('gn_divisions.update'));
+
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -82,5 +91,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/gn-divisions', [PageController::class, 'showGnDivisionManage'])->name(('settings.gnDivisions'));
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
-    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
 });
