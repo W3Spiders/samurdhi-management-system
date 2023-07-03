@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GnDivision;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -27,7 +28,19 @@ class UserController extends Controller
 
     public function show($id)
     {
-        $user = User::with('gn_division')->find($id);
+        $user = User::with('gn_division')->findOrFail($id);
+
+        $assigned_gn_division = null;
+
+        if ($user->user_type === 'gn') {
+            $assigned_gn_division = GnDivision::where('gn_user_id', $id)->first();
+        } else if ($user->user_type === 'sn') {
+            $assigned_gn_division = GnDivision::where('sn_user_id', $id)->first();
+        }
+
+        $user = $user->toArray();
+
+        $user['gn_division'] = $assigned_gn_division;
 
         return Inertia::render('User/Show', ['user' => $user]);
     }
@@ -110,5 +123,20 @@ class UserController extends Controller
         if ($result) {
             return Redirect::route('users.show', $user->id)->with('success', 'User was updated successfully');
         }
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        $gn_division_assigned = GnDivision::where('gn_user_id', $id)->orWhere('sn_user_id', $id)->get();
+
+        if ($gn_division_assigned) {
+            return Redirect::back()->with('error', 'Cant delete User. The user has assigned with a GN Division.');
+        }
+
+        $user->delete();
+
+        return Redirect::route('users.index')->with('success', 'User was deleted successfully.');
     }
 }

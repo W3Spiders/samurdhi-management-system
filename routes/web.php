@@ -79,10 +79,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/gn-divisions/create', [GnDivisionController::class, 'create'])->name(('gn_divisions.create'));
     Route::get('/gn-divisions/{id}', [GnDivisionController::class, 'show'])->name(('gn_divisions.show'));
     Route::post('/gn_divisions', [GnDivisionController::class, 'store'])->name('gn_divisions.store');
-    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
     Route::get('/gn-divisions/{id}/edit', [GnDivisionController::class, 'edit'])->name(('gn_divisions.edit'));
-    Route::put('/gn-division/{id}', [GnDivisionController::class, 'update'])->name(('gn_divisions.update'));
-
+    Route::put('/gn-divisions/{id}', [GnDivisionController::class, 'update'])->name(('gn_divisions.update'));
+    Route::delete('/gn-divisions/{id}', [GnDivisionController::class, 'destroy'])->name('gn_divisions.delete');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

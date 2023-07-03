@@ -96,7 +96,7 @@ export default {
         delete() {
             if (confirm("Are you sure you want to delete this gn_division?")) {
                 this.$inertia.delete(
-                    route("gn_division.delete", { id: this.gn_division.id })
+                    route("gn_divisions.delete", { id: this.gn_division.id })
                 );
             }
         },

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FamilyUnit;
 use App\Models\GnDivision;
+use App\Models\SamurdhiPaymentRequest;
 use App\Models\User;
 use App\Models\Ward;
 use Illuminate\Database\Eloquent\Builder;
@@ -133,5 +135,21 @@ class GnDivisionController extends Controller
         if ($result) {
             return Redirect::route('gn_divisions.show', $gn_division->id)->with('success', 'GN division was updated successfully');
         }
+    }
+
+    public function destroy($id)
+    {
+        $gn_division = GnDivision::findOrFail($id);
+
+        $family_units = FamilyUnit::where('gn_division_id', $id)->get();
+        $samurdhi_payment_requests = SamurdhiPaymentRequest::where('gn_division_id', $id)->get();
+
+        if ($family_units || $samurdhi_payment_requests) {
+            return Redirect::back()->with('error', 'Cant delete GN Division. It has assigned with some other records.');
+        }
+
+        $gn_division->delete();
+
+        return Redirect::route('gn_divisions.index')->with('success', 'GN Division was deleted successfully.');
     }
 }

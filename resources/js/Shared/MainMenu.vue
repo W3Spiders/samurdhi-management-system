@@ -14,7 +14,7 @@
             </Link>
         </div>
 
-        <div class="mb-4 border-b border-slate-700">
+        <div class="mb-4 border-b border-slate-700" v-if="auth.user.user_type !== 'admin'">
             <Link
                 class="group flex items-center py-3"
                 :href="route('family_units.index')"
@@ -31,7 +31,7 @@
             </Link>
         </div>
 
-        <div class="mb-4 border-b border-slate-700">
+        <div class="mb-4 border-b border-slate-700" v-if="auth.user.user_type !== 'admin'">
             <Link
                 class="group flex items-center py-3"
                 :href="route('samurdhi_payment_requests.index')"
@@ -48,7 +48,7 @@
             </Link>
         </div>
 
-        <div class="mb-4 border-b border-slate-700">
+        <div class="mb-4 border-b border-slate-700" v-if="auth.user.user_type !== 'admin'">
             <Link
                 class="group flex items-center py-3"
                 :href="route('family_units.index')"
@@ -65,7 +65,7 @@
             </Link>
         </div>
 
-        <div class="mb-4 border-b border-slate-700">
+        <div class="mb-4 border-b border-slate-700" v-if="auth.user.user_type !== 'admin'">
             <Link
                 class="group flex items-center py-3"
                 :href="route('reports.index')"
