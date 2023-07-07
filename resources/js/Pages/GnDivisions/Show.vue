@@ -31,13 +31,13 @@
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Grama Niladhari</div>
                 <div class="form-input">
-                    {{ gn_division.gn_user?.full_name }}
+                    {{ gn_division.gn_user?.full_name || "-" }}
                 </div>
             </div>
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Samurdhi Niladhari</div>
                 <div class="form-input">
-                    {{ gn_division.sn_user?.full_name }}
+                    {{ gn_division.sn_user?.full_name || "-" }}
                 </div>
             </div>
 
