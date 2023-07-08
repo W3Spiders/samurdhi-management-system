@@ -16,24 +16,27 @@ class MemberController extends Controller
     /**
      * Create member
      */
-    public function create(Request $request) {
+    public function create(Request $request)
+    {
 
         $occupation_types = OccupationType::all();
         $family_unit = FamilyUnit::find($request->family_unit_id);
-        
-        return Inertia::render('Members/Create', ['family_unit' => $family_unit,'family_unit_id' => $request->family_unit_id, 'occupation_types' => $occupation_types]);
+
+        return Inertia::render('Members/Create', ['family_unit' => $family_unit, 'family_unit_id' => $request->family_unit_id, 'occupation_types' => $occupation_types]);
     }
 
-    /** 
+    /**
      * View single member
      */
-    public function show($member_id) {
+    public function show($member_id)
+    {
         $member = Member::with(['family_unit', 'occupation_type'])->find($member_id);
 
         return Inertia::render('Members/Show', ['member' => $member]);
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $member = Member::find($id);
         $family_unit = FamilyUnit::find($member->family_unit_id);
         $occupation_types = OccupationType::all();
@@ -49,7 +52,7 @@ class MemberController extends Controller
 
         $validator = Validator::make($request->all(), [
             'first_name' => 'required',
-            'nic' => ['unique:members','nullable', 'min:10', 'max:12', "regex:/(?:19|20)?\d{2}[0-9]{10}|[0-9]{9}[x|X|v|V]/"],
+            'nic' => ['unique:members', 'nullable', 'min:10', 'max:12', "regex:/(?:19|20)?\d{2}[0-9]{10}|[0-9]{9}[x|X|v|V]/"],
             'marital_status' => 'required',
             'monthly_income' => 'max:10000000',
             'phone' => 'unique:members|min:10|max:10',
@@ -88,7 +91,7 @@ class MemberController extends Controller
         $result = $new_member->save();
 
         if ($result) {
-            return Redirect::route('family_units.show', ['family_unit_id' => $new_member->family_unit_id])->with('success', 'Member added successfully');
+            return Redirect::route('family_units.show', ['id' => $new_member->family_unit_id])->with('success', 'Member added successfully');
         }
     }
 
@@ -146,7 +149,8 @@ class MemberController extends Controller
         }
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $member = Member::find($id);
         $family_unit_id = $member->family_unit_id;
 

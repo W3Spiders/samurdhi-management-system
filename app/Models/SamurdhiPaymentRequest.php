@@ -11,12 +11,25 @@ class SamurdhiPaymentRequest extends Model
 {
     use HasFactory;
 
-    public function items(): HasMany {
+    protected $appends = ['status_string'];
+
+    public function items(): HasMany
+    {
         return $this->hasMany(SamurdhiPaymentRequestItem::class);
     }
 
-    public function gn_division(): BelongsTo{
+    public function gn_division(): BelongsTo
+    {
         return $this->belongsTo(GnDivision::class);
     }
 
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(PaymentRequestStatus::class, 'status_id');
+    }
+
+    public function getStatusStringAttribute()
+    {
+        return $this->belongsTo(PaymentRequestStatus::class, 'status_id')->first()->status_title;
+    }
 }

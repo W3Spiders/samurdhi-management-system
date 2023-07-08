@@ -10,7 +10,7 @@
                     <select-input
                         v-model="form.ward_no"
                         :error="form.errors.ward_id"
-                        class="pb-8 pr-6 w-full lg:w-1"
+                        class="pb-8 pr-6 w-full"
                         label="Ward"
                     >
                         <option :value="null" disabled />
@@ -21,19 +21,19 @@
                     <text-input
                         v-model="form.gn_division_no"
                         :error="form.errors.gn_division_no"
-                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        class="pb-8 pr-6 w-full"
                         label="GN Division No"
                     />
                     <text-input
                         v-model="form.gn_division_name"
                         :error="form.errors.gn_division_name"
-                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        class="pb-8 pr-6 w-full"
                         label="GN Division Name"
                     />
                     <select-input
                         v-model="form.gn_user_id"
                         :error="form.errors.gn_user_id"
-                        class="pb-8 pr-6 w-full lg:w-1"
+                        class="pb-8 pr-6 w-full"
                         label="Grama Niladhari"
                     >
                         <option :value="null" disabled />
@@ -44,7 +44,7 @@
                     <select-input
                         v-model="form.sn_user_id"
                         :error="form.errors.sn_user_id"
-                        class="pb-8 pr-6 w-full lg:w-1"
+                        class="pb-8 pr-6 w-full"
                         label="Samurdhi Niladhari"
                     >
                         <option :value="null" disabled />

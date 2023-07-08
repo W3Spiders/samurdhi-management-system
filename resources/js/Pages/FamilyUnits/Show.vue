@@ -29,10 +29,7 @@
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Address</div>
-                <div
-                    class="form-input"
-                    v-html="family_unit.full_address_html"
-                ></div>
+                <div class="form-input" v-html="family_unit.full_address_html"></div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
@@ -50,8 +47,8 @@
                 <div class="form-input">
                     {{
                         this.family_unit.has_met_samurdhi_eligible_criteria
-                            ? "Yes"
-                            : "No"
+                        ? "Yes"
+                        : "No"
                     }}
                 </div>
             </div>
@@ -64,24 +61,16 @@
             </div>
         </div>
 
-        <div class="form-footer gap-3">
-            <button
-                class="btn btn-danger-outline"
-                type="button"
-                @click="
-                    ($event) => {
-                        this.delete();
-                    }
-                "
-            >
+        <div v-if="auth.user.user_type === 'gn'" class="form-footer gap-3">
+            <button class="btn btn-danger-outline" type="button" @click="($event) => {
+                this.delete();
+            }
+                ">
                 Delete
             </button>
 
-            <Link
-                class="btn btn-primary"
-                :href="route('family_units.edit', { id: family_unit.id })"
-            >
-                <i class="fa-solid fa-pen-to-square"></i> Edit
+            <Link class="btn btn-primary" :href="route('family_units.edit', { id: family_unit.id })">
+            <i class="fa-solid fa-pen-to-square"></i> Edit
             </Link>
         </div>
     </div>
@@ -100,39 +89,30 @@
             You can change house holder by selecting a one from following list.
         </p> -->
 
-        <h3 class="mb-4 text-xl font-bold">Set House Holder</h3>
-        <div class="bg-slate-100 rounded-md p-8 mb-8 border border-slate-300">
-            <form @submit.prevent="submitPrimaryMemberUpdateForm">
-                <div class="flex">
-                    <select-input
-                        v-model="primaryMemberUpdateForm.primary_member_id"
-                        :error="
-                            primaryMemberUpdateForm.errors?.primary_member_id
-                        "
-                        class="pr-6 w-full lg:w-1/2"
-                    >
-                        <option value="null" disabled></option>
-                        <option
-                            v-for="primary_eligible_member in family_unit.primary_eligible_members"
-                            :key="primary_eligible_member.id"
-                            :value="primary_eligible_member.id"
-                        >
-                            {{ primary_eligible_member.full_name }}
-                        </option>
-                    </select-input>
+        <template v-if="auth.user.user_type === 'gn'">
+            <h3 class="mb-4 text-xl font-bold">Set House Holder</h3>
+            <div class="bg-slate-100 rounded-md p-8 mb-8 border border-slate-300">
+                <form @submit.prevent="submitPrimaryMemberUpdateForm">
+                    <div class="flex">
+                        <select-input v-model="primaryMemberUpdateForm.primary_member_id" :error="primaryMemberUpdateForm.errors?.primary_member_id
+                            " class="pr-6 w-full lg:w-1/2">
+                            <option value="null" disabled></option>
+                            <option v-for="primary_eligible_member in family_unit.primary_eligible_members"
+                                :key="primary_eligible_member.id" :value="primary_eligible_member.id">
+                                {{ primary_eligible_member.full_name }}
+                            </option>
+                        </select-input>
 
-                    <div>
-                        <loading-button
-                            :loading="primaryMemberUpdateForm.processing"
-                            class="btn btn-primary"
-                            type="submit"
-                        >
-                            {{ family_unit.primary_member ? "Update" : "Set" }}
-                        </loading-button>
+                        <div>
+                            <loading-button :loading="primaryMemberUpdateForm.processing" class="btn btn-primary"
+                                type="submit">
+                                {{ family_unit.primary_member ? "Update" : "Set" }}
+                            </loading-button>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
+                </form>
+            </div>
+        </template>
 
         <div class="flex flex-wrap">
             <div class="pb-8 pr-6 w-full lg:w-1/2">
@@ -165,13 +145,9 @@
 
     <!-- Table Actions -->
     <div class="flex items-center justify-end mb-6">
-        <Link
-            class="btn btn-primary"
-            :href="
-                route('members.create', { family_unit_id: this.family_unit.id })
-            "
-        >
-            <span>Add</span>
+        <Link class="btn btn-primary" :href="route('members.create', { family_unit_id: this.family_unit.id })
+            ">
+        <span>Add</span>
         </Link>
     </div>
 
@@ -185,22 +161,15 @@
                 <th class="table-header-cell">Occupation Type</th>
             </tr>
 
-            <tr
-                v-for="member in family_unit.members"
-                :key="member.id"
-                class="hover:bg-gray-100 focus-within:bg-gray-100"
-            >
+            <tr v-for="member in family_unit.members" :key="member.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        <Link
-                            :href="
-                                route('members.show', {
-                                    family_unit_id: member.family_unit_id,
-                                    id: member.id,
-                                })
-                            "
-                        >
-                            {{ member.full_name }}
+                        <Link :href="route('members.show', {
+                            family_unit_id: member.family_unit_id,
+                            id: member.id,
+                        })
+                            ">
+                        {{ member.full_name }}
                         </Link>
                     </div>
                 </td>
@@ -240,56 +209,31 @@
         <div class="flex gap-4">
             <!-- This button is visible only for SN -->
             <!-- And only for family units with status "new" -->
-            <loading-button
-                v-if="
-                    (family_unit.status.status_code === 'new' ||
-                        family_unit.status.status_code === 'viewed') &&
-                    auth.user.user_type === 'sn'
-                "
-                :loading="statusUpdateForm.processing"
-                class="btn bg-teal-600 text-white"
-                type="submit"
-                @click="onClickStatusChange('pending_approval')"
-            >
+            <loading-button v-if="(family_unit.status.status_code === 'new' ||
+                family_unit.status.status_code === 'viewed') &&
+                auth.user.user_type === 'sn'
+                " :loading="statusUpdateForm.processing" class="btn bg-teal-600 text-white" type="submit"
+                @click="onClickStatusChange('pending_approval')">
                 Send to Approval
             </loading-button>
 
-            <loading-button
-                v-if="
-                    family_unit.status.status_code === 'new' &&
-                    auth.user.user_type === 'gn'
-                "
-                :loading="statusUpdateForm.processing"
-                class="btn bg-cyan-600 text-white"
-                type="submit"
-                @click="onClickStatusChange('viewed')"
-            >
+            <loading-button v-if="family_unit.status.status_code === 'new'
+                " :loading="statusUpdateForm.processing" class="btn bg-cyan-600 text-white" type="submit"
+                @click="onClickStatusChange('viewed')">
                 Mark as Viewed
             </loading-button>
 
-            <loading-button
-                v-if="
-                    family_unit.status.status_code === 'pending_approval' &&
-                    auth.user.user_type === 'ds'
-                "
-                :loading="statusUpdateForm.processing"
-                class="btn bg-emerald-600 text-white"
-                type="submit"
-                @click="onClickStatusChange('approved')"
-            >
+            <loading-button v-if="family_unit.status.status_code === 'pending_approval' &&
+                auth.user.user_type === 'ds'
+                " :loading="statusUpdateForm.processing" class="btn bg-emerald-600 text-white" type="submit"
+                @click="onClickStatusChange('approved')">
                 Approve
             </loading-button>
 
-            <loading-button
-                v-if="
-                    family_unit.status.status_code === 'new' &&
-                    auth.user.user_type === 'ds'
-                "
-                :loading="statusUpdateForm.processing"
-                class="btn bg-red-800 text-white"
-                type="submit"
-                @click="onClickStatusChange('rejected')"
-            >
+            <loading-button v-if="family_unit.status.status_code === 'new' &&
+                auth.user.user_type === 'ds'
+                " :loading="statusUpdateForm.processing" class="btn bg-red-800 text-white" type="submit"
+                @click="onClickStatusChange('rejected')">
                 Mark as Rejected
             </loading-button>
         </div>
@@ -384,6 +328,14 @@ export default {
         getStatusIdByCode(code) {
             const status = this.status_list.find((s) => s.status_code === code);
             return status?.id || -1;
+        },
+
+        delete() {
+            if (confirm("Are you sure you want to delete this family unit?")) {
+                this.$inertia.delete(
+                    route("family_units.delete", { id: this.family_unit.id })
+                );
+            }
         },
     },
 };

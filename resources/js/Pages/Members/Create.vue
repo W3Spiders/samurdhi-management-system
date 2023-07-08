@@ -59,17 +59,24 @@
                         <label class="form-label" for="birthday-input"
                             >Birthday</label
                         >
-                        <input
+                        <!-- <input
                             class="form-input"
                             id="birthday-input"
                             v-model="form.birthday"
                             type="text"
                             pattern="((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"
+                        /> -->
+
+                        <input
+                            class="form-input"
+                            id="birthday-input"
+                            v-model="form.birthday"
+                            type="date"
                         />
 
-                        <div v-if="!form.errors.birthday" class="form-hint">
+                        <!-- <div v-if="!form.errors.birthday" class="form-hint">
                             Accepted format: YYYY-MM-DD
-                        </div>
+                        </div> -->
 
                         <div v-if="form.errors.birthday" class="form-error">
                             {{ form.errors.birthday }}

@@ -1,12 +1,10 @@
 <template>
     <div>
-        <Head
-            :title="
-                samurdhi_payment_request
-                    ? 'Edit Samurdhi Payment Request'
-                    : 'Create Samurdhi Payment Request'
-            "
-        />
+
+        <Head :title="samurdhi_payment_request
+            ? 'Edit Samurdhi Payment Request'
+            : 'Create Samurdhi Payment Request'
+            " />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
@@ -23,9 +21,7 @@
                             {{ this.gn_division.gn_division_name }}
                         </li>
                         <li class="mt-[10px]">
-                            <span class="font-bold"
-                                >Number of Family Units:</span
-                            >
+                            <span class="font-bold">Number of Family Units:</span>
                             {{ this.form.items.length }}
                         </li>
                         <li>
@@ -55,17 +51,19 @@
                         <label class="form-label" for="payment-date-input">
                             Payment Date
                         </label>
-                        <input
+                        <!-- <input
                             class="form-input"
                             id="payment-date-input"
                             v-model="form.payment_date"
                             type="text"
                             pattern="((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"
-                        />
+                        /> -->
 
-                        <div v-if="!form.errors.payment_date" class="form-hint">
+                        <input class="form-input" id="payment-date-input" v-model="form.payment_date" type="date" />
+
+                        <!-- <div v-if="!form.errors.payment_date" class="form-hint">
                             Accepted format: YYYY-MM-DD
-                        </div>
+                        </div> -->
 
                         <div v-if="form.errors.payment_date" class="form-error">
                             {{ form.errors.payment_date }}
@@ -76,9 +74,7 @@
 
             <form @submit.prevent="submit">
                 <!-- Selected Family Units Table -->
-                <div
-                    class="bg-white rounded-md shadow overflow-x-auto relative max-h-[450px] overflow-auto"
-                >
+                <div class="bg-white rounded-md shadow overflow-x-auto relative max-h-[450px] overflow-auto">
                     <table class="w-full whitespace-nowrap">
                         <tr class="text-left font-bold">
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
@@ -92,11 +88,8 @@
                             </th>
                         </tr>
 
-                        <tr
-                            v-for="item in form.items"
-                            :key="item.family_unit_id"
-                            class="hover:bg-gray-100 focus-within:bg-gray-100"
-                        >
+                        <tr v-for="item in form.items" :key="item.family_unit_id"
+                            class="hover:bg-gray-100 focus-within:bg-gray-100">
                             <td class="border-t">
                                 <div class="table-cell-inner">
                                     {{ item.family_unit.family_unit_ref }}
@@ -122,17 +115,11 @@
                         </tr>
                     </table>
                 </div>
-                <div
-                    class="flex items-center gap-4 justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
-                >
+                <div class="flex items-center gap-4 justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
                     <button class="btn btn-secondary-outline" @click="cancel">
                         Cancel
                     </button>
-                    <loading-button
-                        :loading="form.processing"
-                        class="btn btn-primary"
-                        type="submit"
-                    >
+                    <loading-button :loading="form.processing" class="btn btn-primary" type="submit">
                         {{
                             this.samurdhi_payment_request ? "Update" : "Create"
                         }}
@@ -162,6 +149,7 @@ export default {
     },
     layout: Layout,
     props: {
+        auth: Object,
         gn_division: Object,
         samurdhi_payment_request: Object,
         samurdhi_approved_family_units: Object,

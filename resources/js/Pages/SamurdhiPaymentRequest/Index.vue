@@ -1,22 +1,17 @@
 <template>
     <div>
+
         <Head title="Samurdhi Payment Requests" />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
         <!-- Table Actions -->
         <div class="flex items-center justify-between mb-6">
-            <search-filter
-                v-model="form.search"
-                class="mr-4 w-full max-w-md"
-                @reset="reset"
-            >
+            <search-filter v-model="form.search" class="mr-4 w-full max-w-md" @reset="reset">
             </search-filter>
-            <Link
-                class="btn btn-primary"
-                :href="route('samurdhi_payment_requests.create')"
-            >
-                <span>Add</span>
+            <Link v-if="auth.user.user_type === 'sn'" class="btn btn-primary"
+                :href="route('samurdhi_payment_requests.create')">
+            <span>Add</span>
             </Link>
         </div>
 
@@ -30,22 +25,16 @@
                     <th class="pb-4 pt-6 px-6">Total Amount</th>
                     <th class="pb-4 pt-6 px-6">Status</th>
                 </tr>
-                <tr
-                    v-for="payment_request in samurdhi_payment_requests"
-                    :key="payment_request.id"
-                    class="hover:bg-gray-100 focus-within:bg-gray-100"
-                >
+                <tr v-for="payment_request in samurdhi_payment_requests" :key="payment_request.id"
+                    class="hover:bg-gray-100 focus-within:bg-gray-100">
                     <td class="border-t">
                         <div class="table-cell-inner">
-                            <Link
-                                :href="
-                                    route(
-                                        'samurdhi_payment_requests.show',
-                                        payment_request.id
-                                    )
-                                "
-                            >
-                                {{ payment_request.ref }}
+                            <Link :href="route(
+                                'samurdhi_payment_requests.show',
+                                payment_request.id
+                            )
+                                ">
+                            {{ payment_request.ref }}
                             </Link>
                         </div>
                     </td>
@@ -57,6 +46,19 @@
                     <td class="border-t">
                         <div class="table-cell-inner">
                             {{ payment_request.items.length }}
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div class="table-cell-inner">
+                            Rs. {{ payment_request.total_amount || "0.00" }}
+                        </div>
+                    </td>
+                    <td class="border-t">
+                        <div class="table-cell-inner">
+                            <span :class="`px-4 py-2 rounded-lg text-xs font-medium ${statusColors[payment_request.status_id]
+                                }`">
+                                {{ payment_request.status_string }}
+                            </span>
                         </div>
                     </td>
                 </tr>
@@ -92,6 +94,7 @@ export default {
     },
     layout: Layout,
     props: {
+        auth: Object,
         filters: Object,
         samurdhi_payment_requests: Object,
     },
@@ -107,6 +110,13 @@ export default {
                     link: "",
                 },
             ],
+            statusColors: {
+                1: "bg-blue-200", // New
+                2: "bg-amber-200", // Pending Approval
+                3: "bg-green-200", // Approved
+                4: "bg-red-200", // Rejected
+                5: "bg-lime-200", // Paid
+            },
         };
     },
     watch: {

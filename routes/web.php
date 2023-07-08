@@ -48,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/family-units/{id}/edit', [FamilyUnitController::class, 'edit'])->name('family_units.edit');
     Route::put('/family-units/{id}', [FamilyUnitController::class, 'update'])->name('family_units.update');
     Route::post('/family-units', [FamilyUnitController::class, 'store'])->name('family_units.store');
+    Route::delete('/family-units/{id}', [FamilyUnitController::class, 'destroy'])->name('family_units.delete');
 
     // Member Routes
     Route::get('/family-units/{family_unit_id}/members/create', [MemberController::class, 'create'])->name('members.create');
@@ -64,6 +65,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'index'])->name('samurdhi_payment_requests.index');
     Route::get('/samurdhi-payment-requests/create', [SamurdhiPaymentRequestController::class, 'create'])->name('samurdhi_payment_requests.create');
     Route::get('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'show'])->name('samurdhi_payment_requests.show');
+    Route::get('/samurdhi-payment-requests/{id}/edit', [SamurdhiPaymentRequestController::class, 'edit'])->name('samurdhi_payment_requests.edit');
+    Route::put('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'update'])->name('samurdhi_payment_requests.update');
     Route::post('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'store'])->name('samurdhi_payment_requests.store');
 
     // Users

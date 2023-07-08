@@ -59,24 +59,16 @@
             </div>
         </div>
 
-        <div class="form-footer gap-3">
-            <button
-                class="btn btn-danger-outline"
-                type="button"
-                @click="
-                    ($event) => {
-                        this.delete();
-                    }
-                "
-            >
+        <div v-if="auth.user.user_type === 'gn'" class="form-footer gap-3">
+            <button class="btn btn-danger-outline" type="button" @click="($event) => {
+                this.delete();
+            }
+                ">
                 Delete
             </button>
 
-            <Link
-                class="btn btn-primary"
-                :href="route('members.edit', { id: member.id })"
-            >
-                <i class="fa-solid fa-pen-to-square"></i> Edit
+            <Link class="btn btn-primary" :href="route('members.edit', { id: member.id })">
+            <i class="fa-solid fa-pen-to-square"></i> Edit
             </Link>
         </div>
     </div>
@@ -91,6 +83,7 @@ export default {
     components: { Head, Breadcrumb, Link },
     layout: Layout,
     props: {
+        auth: Object,
         member: Object,
     },
     data() {
