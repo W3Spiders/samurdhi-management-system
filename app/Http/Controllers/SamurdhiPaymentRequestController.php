@@ -107,7 +107,7 @@ class SamurdhiPaymentRequestController extends Controller
 
     public function edit($id)
     {
-        $samurdhi_payment_request = SamurdhiPaymentRequest::with(['gn_division'])->findOrFail($id);
+        $samurdhi_payment_request = SamurdhiPaymentRequest::with(['gn_division', 'items.family_unit.primary_member'])->findOrFail($id);
 
         return Inertia::render('SamurdhiPaymentRequest/Create', [
             'samurdhi_payment_request' => $samurdhi_payment_request,

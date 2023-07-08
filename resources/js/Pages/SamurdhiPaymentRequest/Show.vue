@@ -7,99 +7,134 @@
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
-        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-            <div class="p-8 border-b border-slate-200">
-                <div class="flex flex-wrap justify-between mb-6">
-                    <ul class="flex flex-col gap-y-[5px]">
-                        <li>
-                            <span class="font-bold">Gn Division No:</span>
-                            {{ this.samurdhi_payment_request.gn_division.gn_division_no }}
-                        </li>
-                        <li>
-                            <span class="font-bold">GN Division Name:</span>
-                            {{ this.samurdhi_payment_request.gn_division.gn_division_name }}
-                        </li>
-                        <li class="mt-[10px]">
-                            <span class="font-bold">Number of Family Units:</span>
-                            {{ this.samurdhi_payment_request.items.length }}
-                        </li>
-                        <li>
-                            <span class="font-bold">Total Payment:</span>
-                            {{
-                                getFormattedCurrencyString(
-                                    paymentRequestTotalAmount
-                                )
-                            }}
-                        </li>
-                    </ul>
+        <div class="bg-white rounded-md shadow overflow-hidden p-6 mb-6 flex justify-between items-center">
 
-                    <ul class="flex flex-col gap-y-[5px]">
-                        <li>
-                            <span class="font-bold">Status:</span>
-                            {{ samurdhi_payment_request.status.status_title }}
-                        </li>
-                        <li>
-                            <span class="font-bold">Payment Month:</span>
-                            Jun 2023
-                        </li>
-                        <li>
-                            <span class="font-bold">Payment Date:</span>
-                            {{ samurdhi_payment_request.payment_date }}
-                        </li>
-                    </ul>
-                </div>
+            <div>
+                <span :class="`px-4 py-2 rounded-lg text-xs font-medium ${statusColors[samurdhi_payment_request.status_id]
+                    }`">
+                    {{ samurdhi_payment_request.status_string }}
+                </span>
             </div>
 
-            <div class="mt-6 pb-6 gap-4 px-6 border-b border-slate-200">
-                <loading-button v-if="samurdhi_payment_request.status.status_code === 'new' && auth.user.user_type === 'sn'"
-                    :loading="statusUpdateForm.processing" class="btn bg-cyan-600 text-white" type="submit"
-                    @click="onClickStatusChange('pending_approval')">
-                    Send to Approval
-                </loading-button>
-            </div>
-
-            <!-- Selected Family Units Table -->
-            <div class="bg-white rounded-md shadow overflow-x-auto relative max-h-[450px] overflow-auto">
-                <table class="w-full whitespace-nowrap">
-                    <tr class="text-left font-bold">
-                        <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
-                            Family Unit Ref
-                        </th>
-                        <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
-                            House Holder
-                        </th>
-                        <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
-                            Amount
-                        </th>
-                    </tr>
-
-                    <tr v-for="item in samurdhi_payment_request.items" :key="item.family_unit_id"
-                        class="hover:bg-gray-100 focus-within:bg-gray-100">
-                        <td class="border-t">
-                            <div class="table-cell-inner">
-                                {{ item.family_unit.family_unit_ref }}
-                            </div>
-                        </td>
-
-                        <td class="border-t">
-                            <div class="table-cell-inner">
-                                {{ item.family_unit.primary_member?.full_name }}
-                            </div>
-                        </td>
-
-                        <td class="border-t">
-                            <div class="table-cell-inner">
-                                {{ getFormattedCurrencyString(item.amount) }}
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            <div class="flex items-center gap-4 justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                <a :href="route('samurdhi_payment_requests.edit', samurdhi_payment_request.id)" class="btn btn-primary">
+            <div>
+                <a v-if="samurdhi_payment_request.status_code === 'new' || samurdhi_payment_request.status_code === 'pending_approval'"
+                    :href="route('samurdhi_payment_requests.edit', samurdhi_payment_request.id)" class="btn btn-primary">
                     Edit </a>
             </div>
         </div>
+
+        <div class="grid grid-cols-3 gap-x-[20px]">
+            <div
+                class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-1 px-6 py-6 flex flex-col gap-y-[20px]">
+                <div>
+
+                    <loading-button
+                        v-if="samurdhi_payment_request.status.status_code === 'new' && auth.user.user_type === 'sn'"
+                        :loading="paymentRequestUpdateForm.processing" class="mb-[20px] btn bg-cyan-600 text-white"
+                        type="submit" @click="onClickStatusChange('pending_approval')">
+                        Send to Approval
+                    </loading-button>
+                </div>
+
+                <!-- <div>
+                    <div class="bg-slate-100 rounded-md p-4 border border-slate-300">
+                        <label class="form-label" for="payment-date-input">
+                            Payment Date
+                        </label>
+                        <input class="form-input" id="payment-date-input" v-model="paymentRequestUpdateForm.payment_date"
+                            type="date" />
+
+                        <loading-button :loading="paymentRequestUpdateForm.processing"
+                            class="mt-4 btn btn-primary !px-[10px] !py-[5px]" type="submit">
+                            Update
+                        </loading-button>
+                    </div>
+                </div> -->
+
+                <div>
+                    <div class="form-label">GN Division No</div>
+                    <div class="form-input">
+                        {{ this.samurdhi_payment_request.gn_division.gn_division_no }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">GN Division Name</div>
+                    <div class="form-input">
+                        {{ this.samurdhi_payment_request.gn_division.gn_division_name }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">Number of Family Units</div>
+                    <div class="form-input">
+                        {{ this.samurdhi_payment_request.items.length }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">Total Payment</div>
+                    <div class="form-input">
+                        {{
+                            getFormattedCurrencyString(
+                                paymentRequestTotalAmount
+                            )
+                        }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">Payment Date</div>
+                    <div class="form-input">
+                        {{ samurdhi_payment_request.payment_date }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-2">
+
+                <!-- Selected Family Units Table -->
+                <div class=" relative max-h-[450px] overflow-auto">
+                    <table class="w-full whitespace-nowrap">
+                        <tr class="text-left font-bold">
+                            <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
+                                Family Unit Ref
+                            </th>
+                            <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
+                                House Holder
+                            </th>
+                            <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
+                                Amount
+                            </th>
+                        </tr>
+
+                        <tr v-for="item in samurdhi_payment_request.items" :key="item.family_unit_id"
+                            class="hover:bg-gray-100 focus-within:bg-gray-100">
+                            <td class="border-t">
+                                <div class="table-cell-inner">
+                                    {{ item.family_unit.family_unit_ref }}
+                                </div>
+                            </td>
+
+                            <td class="border-t">
+                                <div class="table-cell-inner">
+                                    {{ item.family_unit.primary_member?.full_name }}
+                                </div>
+                            </td>
+
+                            <td class="border-t">
+                                <div class="table-cell-inner">
+                                    {{ getFormattedCurrencyString(item.amount) }}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
     </div>
 </template>
 
@@ -130,7 +165,7 @@ export default {
     remember: "form",
     data() {
         return {
-            statusUpdateForm: this.$inertia.form({
+            paymentRequestUpdateForm: this.$inertia.form({
                 ...this.samurdhi_payment_request,
                 status_id: null,
             }),
@@ -144,6 +179,13 @@ export default {
                     link: "",
                 },
             ],
+            statusColors: {
+                1: "bg-blue-200", // New
+                2: "bg-amber-200", // Pending Approval
+                3: "bg-green-200", // Approved
+                4: "bg-red-200", // Rejected
+                5: "bg-lime-200", // Paid
+            },
         };
     },
 
@@ -159,13 +201,13 @@ export default {
         onClickStatusChange(next_status_code) {
             const next_status_id = this.getStatusIdByCode(next_status_code);
 
-            this.statusUpdateForm.status_id = next_status_id;
+            this.paymentRequestUpdateForm.status_id = next_status_id;
 
             if (!confirm("Are you sure want to continue?")) {
                 return;
             }
 
-            this.statusUpdateForm.put(
+            this.paymentRequestUpdateForm.put(
                 route("samurdhi_payment_requests.update", { id: this.samurdhi_payment_request.id })
             );
         },

@@ -11,7 +11,7 @@ class SamurdhiPaymentRequest extends Model
 {
     use HasFactory;
 
-    protected $appends = ['status_string'];
+    protected $appends = ['status_string', 'status_code'];
 
     public function items(): HasMany
     {
@@ -31,5 +31,10 @@ class SamurdhiPaymentRequest extends Model
     public function getStatusStringAttribute()
     {
         return $this->belongsTo(PaymentRequestStatus::class, 'status_id')->first()->status_title;
+    }
+
+    public function getStatusCodeAttribute()
+    {
+        return $this->belongsTo(PaymentRequestStatus::class, 'status_id')->first()->status_code;
     }
 }

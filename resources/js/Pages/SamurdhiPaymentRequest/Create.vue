@@ -8,73 +8,81 @@
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
-        <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
-            <div class="p-8 border-b border-slate-200">
-                <div class="flex flex-wrap justify-between mb-6">
-                    <ul class="flex flex-col gap-y-[5px]">
-                        <li>
-                            <span class="font-bold">Gn Division No:</span>
-                            {{ this.gn_division.gn_division_no }}
-                        </li>
-                        <li>
-                            <span class="font-bold">GN Division Name:</span>
-                            {{ this.gn_division.gn_division_name }}
-                        </li>
-                        <li class="mt-[10px]">
-                            <span class="font-bold">Number of Family Units:</span>
-                            {{ this.form.items.length }}
-                        </li>
-                        <li>
-                            <span class="font-bold">Total Payment:</span>
-                            {{
-                                getFormattedCurrencyString(
-                                    paymentRequestTotalAmount
-                                )
-                            }}
-                        </li>
-                    </ul>
+        <div class="bg-white rounded-md shadow overflow-hidden p-6 mb-6 flex justify-between items-center">
+            <div>
+                <span :class="`px-4 py-2 rounded-lg text-xs font-medium ${statusColors[samurdhi_payment_request ? samurdhi_payment_request.status_id : 1]
+                    }`">
+                    {{ samurdhi_payment_request ? samurdhi_payment_request.status_string : 'New' }}
+                </span>
+            </div>
+            <div class="flex gap-x-4">
+                <button class="btn btn-secondary-outline" @click="cancel">
+                    Cancel
+                </button>
+                <loading-button :loading="form.processing" class="btn btn-primary" @click="submit">
+                    {{
+                        this.samurdhi_payment_request ? "Update" : "Create"
+                    }}
+                </loading-button>
+            </div>
+        </div>
 
-                    <ul class="flex flex-col gap-y-[5px]">
-                        <li>
-                            <span class="font-bold">Status:</span>
-                            New
-                        </li>
-                        <li>
-                            <span class="font-bold">Payment Month:</span>
-                            Jun 2023
-                        </li>
-                    </ul>
-                </div>
+        <div class="grid grid-cols-3 gap-x-[20px]">
+
+            <div
+                class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-1 px-6 py-6 flex flex-col gap-y-[20px]">
 
                 <div>
-                    <div class="pb-3 pr-6 w-full lg:w-1/2">
+                    <div class="pb-10 mb-3 border-b border-slate-200">
                         <label class="form-label" for="payment-date-input">
                             Payment Date
                         </label>
-                        <!-- <input
-                            class="form-input"
-                            id="payment-date-input"
-                            v-model="form.payment_date"
-                            type="text"
-                            pattern="((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"
-                        /> -->
 
                         <input class="form-input" id="payment-date-input" v-model="form.payment_date" type="date" />
-
-                        <!-- <div v-if="!form.errors.payment_date" class="form-hint">
-                            Accepted format: YYYY-MM-DD
-                        </div> -->
 
                         <div v-if="form.errors.payment_date" class="form-error">
                             {{ form.errors.payment_date }}
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <div class="form-label">GN Division No</div>
+                    <div class="form-input">
+                        {{ gn_division.gn_division_no }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">GN Division Name</div>
+                    <div class="form-input">
+                        {{ gn_division.gn_division_name }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">Number of Family Units</div>
+                    <div class="form-input">
+                        {{ form.items.length }}
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-label">Total Payment</div>
+                    <div class="form-input">
+                        {{
+                            getFormattedCurrencyString(
+                                paymentRequestTotalAmount
+                            )
+                        }}
+                    </div>
+                </div>
             </div>
 
-            <form @submit.prevent="submit">
+            <div class="max-w-3xl bg-white rounded-md overflow-hidden col-span-2">
+
                 <!-- Selected Family Units Table -->
-                <div class="bg-white rounded-md shadow overflow-x-auto relative max-h-[450px] overflow-auto">
+                <div class="bg-white overflow-x-auto relative max-h-[450px] overflow-auto">
                     <table class="w-full whitespace-nowrap">
                         <tr class="text-left font-bold">
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
@@ -115,17 +123,9 @@
                         </tr>
                     </table>
                 </div>
-                <div class="flex items-center gap-4 justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                    <button class="btn btn-secondary-outline" @click="cancel">
-                        Cancel
-                    </button>
-                    <loading-button :loading="form.processing" class="btn btn-primary" type="submit">
-                        {{
-                            this.samurdhi_payment_request ? "Update" : "Create"
-                        }}
-                    </loading-button>
-                </div>
-            </form>
+
+            </div>
+
         </div>
     </div>
 </template>
@@ -159,9 +159,10 @@ export default {
         return {
             form: this.$inertia.form({
                 gn_division_id: this.gn_division.id,
-                payment_date: null,
-                items: [],
+                payment_date: this.samurdhi_payment_request?.payment_date || null,
+                items: this.samurdhi_payment_request ? this.samurdhi_payment_request.items : [],
                 total_amount: 0,
+                status_id: this.samurdhi_payment_request?.status_id || null
             }),
 
             breadcrumb_items: [
@@ -174,23 +175,37 @@ export default {
                     link: "",
                 },
             ],
+            statusColors: {
+                1: "bg-blue-200", // New
+                2: "bg-amber-200", // Pending Approval
+                3: "bg-green-200", // Approved
+                4: "bg-red-200", // Rejected
+                5: "bg-lime-200", // Paid
+            },
         };
     },
 
     methods: {
         getFormattedCurrencyString(number) {
-            return "Rs. " + number.toFixed(2);
+
+            let number2 = number;
+
+            if (typeof number2 === 'string') {
+                number2 = parseFloat(number2)
+            }
+
+            return "Rs. " + number2.toFixed(2);
         },
 
         submit() {
             this.form.total_amount = this.paymentRequestTotalAmount;
 
             if (this.samurdhi_payment_request) {
-                // this.form.put(
-                //     route("samurdhi_payment_requests.update", {
-                //         id: this.samurdhi_payment_request.id,
-                //     })
-                // );
+                this.form.put(
+                    route("samurdhi_payment_requests.update", {
+                        id: this.samurdhi_payment_request.id,
+                    })
+                );
             } else {
                 this.form.post(route("samurdhi_payment_requests.store"));
             }
@@ -208,9 +223,15 @@ export default {
             let total = 0;
 
             this.form.items.forEach((item) => {
-                total += item.amount;
-            });
 
+                let amount = item.amount;
+
+                if (typeof amount === 'string') {
+                    amount = parseFloat(amount)
+                }
+
+                total += amount;
+            });
             return total;
         },
     },
