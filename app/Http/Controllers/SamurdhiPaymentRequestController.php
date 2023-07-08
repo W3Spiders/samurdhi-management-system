@@ -7,6 +7,7 @@ use App\Models\FamilyUnitStatus;
 use App\Models\PaymentRequestStatus;
 use App\Models\SamurdhiPaymentRequest;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -19,14 +20,43 @@ class SamurdhiPaymentRequestController extends Controller
     public function index(Request $request)
     {
 
+        function search_query($query, $search)
+        {
+            return $query->where('ref', 'like', "%{$search}%");
+        }
+
+        $search = $request->input('search');
+
         $user = Auth::user();
         $user = User::with('gn_division')->find($user->id);
 
-        if ($user->user_type === 'gn' || $user->user_type === 'sn') {
-            $samurdhi_payment_requests = SamurdhiPaymentRequest::with(['items', 'status'])->where('gn_division_id', $user->gn_division->id)->get();
-        } else {
-            $samurdhi_payment_requests = SamurdhiPaymentRequest::with(['items', 'status'])->get();
+        $pending_payment_status = PaymentRequestStatus::where('status_code', 'pending_approval')->first();
+        $approved_payment_status = PaymentRequestStatus::where('status_code', 'pending_approval')->first();
+
+        $samurdhi_payment_requests = [];
+
+        if ($user->user_type === 'ds') {
+            $samurdhi_payment_requests = SamurdhiPaymentRequest::where('status_id', $pending_payment_status->id)
+                ->where(function (Builder $query) use ($search) {
+                    return search_query($query, $search);
+                })
+                ->orderBy('status_id', 'asc')
+                ->paginate(10);
         }
+
+        if ($user->user_type === 'sn' || $user->user_type === 'sn') {
+            $samurdhi_payment_requests = SamurdhiPaymentRequest::orderBy('status_id', 'asc')
+                ->where(function (Builder $query) use ($search) {
+                    return search_query($query, $search);
+                })
+                ->paginate(10);
+        }
+
+        // if ($user->user_type === 'gn' || $user->user_type === 'sn') {
+        //     $samurdhi_payment_requests = SamurdhiPaymentRequest::with(['status'])->where('gn_division_id', $user->gn_division->id)->get();
+        // } else {
+        //     $samurdhi_payment_requests = SamurdhiPaymentRequest::with(['status'])->get();
+        // }
 
 
 
@@ -97,7 +127,7 @@ class SamurdhiPaymentRequestController extends Controller
 
     public function show($id)
     {
-        $samurdhi_payment_request = SamurdhiPaymentRequest::with(['gn_division', 'items.family_unit.primary_member', 'status'])->find($id);
+        $samurdhi_payment_request = SamurdhiPaymentRequest::with(['gn_division', 'items.family_unit.primary_member', 'status'])->findOrFail($id);
 
         return Inertia::render('SamurdhiPaymentRequest/Show', [
             'samurdhi_payment_request' => $samurdhi_payment_request,

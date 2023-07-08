@@ -6,6 +6,7 @@ use App\Models\FamilyUnit;
 use App\Models\FamilyUnitStatus;
 use App\Models\GnDivision;
 use App\Models\User;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
@@ -13,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 use function App\Helpers\generate_family_unit_ref;
+use function App\Http\Controllers\search_query as ControllersSearch_query;
 
 class FamilyUnitController extends Controller
 {
@@ -22,23 +24,49 @@ class FamilyUnitController extends Controller
     public function index(Request $request)
     {
 
+        function search_query($query, $search)
+        {
+            return $query->where('family_unit_ref', 'like', "%{$search}%")
+                ->orWhereHas('primary_member', function ($query) use ($search) {
+                    $query->where('first_name', 'like', "%{$search}%")
+                        ->orWhere('middle_name', 'like', "%{$search}%")
+                        ->orWhere('last_name', 'like', "%{$search}%");
+                });
+        }
+
+        $search = $request->input('search');
+
         $family_units = [];
-        // $family_units = FamilyUnit::with('primary_member')->get();
 
         $user = Auth::user();
         $user = User::with('gn_division.family_units.primary_member')->get()->find($user->id);
 
-        if (isset($user['gn_division']) && isset($user['gn_division']['family_units']) && !is_null($user['gn_division']['family_units'])) {
-            //$family_units = $user['gn_division']['family_units'];
-            $family_units = FamilyUnit::with(['primary_member'])->where('gn_division_id', $user['gn_division']->id)->paginate(10);
-        }
+        $pending_approval_status = FamilyUnitStatus::where('status_code', 'pending_approval')->first();
 
-        $status_list = FamilyUnitStatus::all();
+        if (isset($user['gn_division']) && isset($user['gn_division']['family_units']) && !is_null($user['gn_division']['family_units'])) {
+            $family_units = FamilyUnit::with(['primary_member'])
+                ->where('gn_division_id', $user['gn_division']->id)
+                ->where(function (Builder $query) use ($search) {
+                    return search_query($query, $search);
+                })
+                ->orderBy('status_id', 'asc')
+                ->paginate(10);
+        } else if ($user['user_type'] === 'ds') {
+            $family_units = FamilyUnit::with(['primary_member'])
+                ->where('status_id', $pending_approval_status->id)
+                ->where(function (Builder $query) use ($search) {
+                    return search_query($query, $search);
+                })
+                ->orderBy('status_id', 'asc')
+                ->paginate(10);
+        } else {
+            // Don't show family units for other user types
+            $family_units = FamilyUnit::with(['primary_member'])->where('gn_division_id', -1)->paginate(10);
+        }
 
         return Inertia::render('FamilyUnits/Index', [
             'filters' => $request->all('search', 'trashed'),
             'family_units' => $family_units,
-            'status_list' => $status_list
         ]);
     }
 

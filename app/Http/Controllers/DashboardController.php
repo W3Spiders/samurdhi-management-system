@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PaymentRequestStatus;
+use App\Models\SamurdhiPaymentRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +18,7 @@ class DashboardController extends Controller
         // $family_units = FamilyUnit::with('primary_member')->get();
 
         $user = Auth::user();
-        $user = User::with(['gn_division.sn_user', 'gn_division.gn_user' ,'gn_division.family_units.primary_member'])->get()->find($user->id);
+        $user = User::with(['gn_division.sn_user', 'gn_division.gn_user', 'gn_division.family_units.primary_member'])->get()->find($user->id);
 
         if (isset($user['gn_division']) && isset($user['gn_division']['family_units']) && !is_null($user['gn_division']['family_units'])) {
             $family_units = $user['gn_division']['family_units'];
@@ -24,7 +26,7 @@ class DashboardController extends Controller
 
         $samurdhi_approved_count = 0;
 
-        foreach($family_units as $family_unit) {
+        foreach ($family_units as $family_unit) {
             if ($family_unit['status']['status_code'] === 'approved') {
                 $samurdhi_approved_count++;
             }
@@ -68,6 +70,27 @@ class DashboardController extends Controller
             ]
         ];
 
-        return Inertia::render('Dashboard/Index', ['payment_requests' => $payment_requests, 'family_units_count' => count($family_units), 'samurdhi_approved_count' => $samurdhi_approved_count, 'gn_division' => $user['gn_division']]);
+        $pending_payment_status = PaymentRequestStatus::where('status_code', 'pending_approval')->first();
+        $approved_payment_status = PaymentRequestStatus::where('status_code', 'approved')->first();
+
+        $pending_samurdhi_payment_requests = [];
+        $approved_samurdhi_payment_requests = [];
+
+        if ($user->user_type === 'ds') {
+            $pending_samurdhi_payment_requests = SamurdhiPaymentRequest::where('status_id', $pending_payment_status->id)->get();
+        }
+
+        if ($user->user_type === 'sn') {
+            $approved_samurdhi_payment_requests = SamurdhiPaymentRequest::where('status_id', $approved_payment_status->id)->get();
+        }
+
+        return Inertia::render('Dashboard/Index', [
+            'payment_requests' => $payment_requests,
+            'pending_samurdhi_payment_requests' => $pending_samurdhi_payment_requests,
+            'approved_samurdhi_payment_requests' => $approved_samurdhi_payment_requests,
+            'family_units_count' => count($family_units),
+            'samurdhi_approved_count' => $samurdhi_approved_count,
+            'gn_division' => $user['gn_division']
+        ]);
     }
 }

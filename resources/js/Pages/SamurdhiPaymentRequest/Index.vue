@@ -25,11 +25,11 @@
                     <th class="pb-4 pt-6 px-6">Total Amount</th>
                     <th class="pb-4 pt-6 px-6">Status</th>
                 </tr>
-                <tr v-for="payment_request in samurdhi_payment_requests" :key="payment_request.id"
+                <tr v-for="payment_request in samurdhi_payment_requests.data" :key="payment_request.id"
                     class="hover:bg-gray-100 focus-within:bg-gray-100">
                     <td class="border-t">
                         <div class="table-cell-inner">
-                            <Link :href="route(
+                            <Link class="link" :href="route(
                                 'samurdhi_payment_requests.show',
                                 payment_request.id
                             )
@@ -45,7 +45,7 @@
                     </td>
                     <td class="border-t">
                         <div class="table-cell-inner">
-                            {{ payment_request.items.length }}
+                            {{ payment_request.item_count }}
                         </div>
                     </td>
                     <td class="border-t">
@@ -62,13 +62,15 @@
                         </div>
                     </td>
                 </tr>
-                <tr v-if="samurdhi_payment_requests.length === 0">
+                <tr v-if="samurdhi_payment_requests.data.length === 0">
                     <td class="px-6 py-4 border-t" colspan="4">
                         No samurdhi payment requests found.
                     </td>
                 </tr>
             </table>
         </div>
+
+        <pagination class="mt-6" :links="samurdhi_payment_requests.links" />
     </div>
 </template>
 

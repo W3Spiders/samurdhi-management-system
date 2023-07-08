@@ -123,7 +123,7 @@ export default {
         form: {
             deep: true,
             handler: throttle(function () {
-                this.$inertia.get("/family-unis", pickBy(this.form), {
+                this.$inertia.get("/family-units", pickBy(this.form), {
                     preserveState: true,
                 });
             }, 150),

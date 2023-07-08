@@ -4,9 +4,7 @@
     <h1 class="mb-8 text-3xl font-medium">Dashboard</h1>
 
     <div v-if="auth.user.user_type === 'gn' || auth.user.user_type === 'sn'">
-        <h2
-            class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
-        >
+        <h2 class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4">
             Grama Niladhari Division Summary
         </h2>
 
@@ -59,41 +57,41 @@
         </div>
 
         <div class="mt-8 grid grid-cols-3 gap-8">
-            <dash-card
-                primaryText="Total Family Units"
-                :secondaryText="family_units_count"
-                :link="route('family_units.index')"
-                linkText="View All"
-            >
+            <dash-card primaryText="Total Family Units" :secondaryText="family_units_count"
+                :link="route('family_units.index')" linkText="View All">
             </dash-card>
 
-            <dash-card
-                primaryText="Total Samurdhi Approved Family Units"
-                :secondaryText="samurdhi_approved_count"
-                :link="route('family_units.index')"
-                linkText="View All"
-            >
+            <dash-card primaryText="Total Samurdhi Approved Family Units" :secondaryText="samurdhi_approved_count"
+                :link="route('family_units.index')" linkText="View All">
             </dash-card>
 
-            <dash-card
-                primaryText="Total Elder Allowance Eligible Members"
-                secondaryText="20"
-                :link="route('family_units.index')"
-                linkText="View All"
-            >
+            <dash-card primaryText="Total Elder Allowance Eligible Members" secondaryText="20"
+                :link="route('family_units.index')" linkText="View All">
             </dash-card>
         </div>
     </div>
 
+    <div v-if="auth.user.user_type === 'ds'" class="mt-12">
+        <h2 class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4">
+            Required Approval Samurdhi Payment Requests
+        </h2>
+        <samurdhi-payment-request-list
+            :payment_requests="pending_samurdhi_payment_requests"></samurdhi-payment-request-list>
+    </div>
+
+    <div v-if="auth.user.user_type === 'sn'" class="mt-12">
+        <h2 class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4">
+            Approved Samurdhi Payment Requests
+        </h2>
+        <samurdhi-payment-request-list
+            :payment_requests="approved_samurdhi_payment_requests"></samurdhi-payment-request-list>
+    </div>
+
     <div class="mt-12">
-        <h2
-            class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
-        >
+        <h2 class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4">
             Samurdhi Payment List of This Month
         </h2>
-        <this-month-samurdhi-payment-list
-            :payment_requests="payment_requests"
-        ></this-month-samurdhi-payment-list>
+        <this-month-samurdhi-payment-list :payment_requests="payment_requests"></this-month-samurdhi-payment-list>
     </div>
 </template>
 
@@ -102,6 +100,7 @@ import { Head, Link } from "@inertiajs/vue3";
 import Layout from "@/Shared/Layout";
 import DashCard from "@/Shared/DashCard";
 import ThisMonthSamurdhiPaymentList from "./Components/ThisMonthSamurdhiPaymentList.vue";
+import SamurdhiPaymentRequestList from "./Components/SamurdhiPaymentRequestList.vue";
 
 export default {
     components: {
@@ -109,6 +108,7 @@ export default {
         Link,
         DashCard,
         ThisMonthSamurdhiPaymentList,
+        SamurdhiPaymentRequestList
     },
     props: {
         gn_division: Object,
@@ -116,6 +116,8 @@ export default {
         family_units_count: Number,
         samurdhi_approved_count: Number,
         auth: Object, // globally shared one
+        pending_samurdhi_payment_requests: Array,
+        approved_samurdhi_payment_requests: Array
     },
     methods: {
         getUserFullName(user) {

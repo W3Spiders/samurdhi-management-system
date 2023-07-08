@@ -26,13 +26,34 @@
         <div class="grid grid-cols-3 gap-x-[20px]">
             <div
                 class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-1 px-6 py-6 flex flex-col gap-y-[20px]">
-                <div>
+                <div class="flex gap-x-[15px]">
 
                     <loading-button
                         v-if="samurdhi_payment_request.status.status_code === 'new' && auth.user.user_type === 'sn'"
                         :loading="paymentRequestUpdateForm.processing" class="mb-[20px] btn bg-cyan-600 text-white"
                         type="submit" @click="onClickStatusChange('pending_approval')">
                         Send to Approval
+                    </loading-button>
+
+                    <loading-button
+                        v-if="samurdhi_payment_request.status.status_code === 'pending_approval' && auth.user.user_type === 'ds'"
+                        :loading="paymentRequestUpdateForm.processing" class="mb-[20px] btn bg-green-700 text-white"
+                        type="submit" @click="onClickStatusChange('approved')">
+                        Approve
+                    </loading-button>
+
+                    <loading-button
+                        v-if="samurdhi_payment_request.status.status_code === 'pending_approval' && auth.user.user_type === 'ds'"
+                        :loading="paymentRequestUpdateForm.processing" class="mb-[20px] btn btn-danger text-white"
+                        type="submit" @click="onClickStatusChange('rejected')">
+                        Reject
+                    </loading-button>
+
+                    <loading-button
+                        v-if="samurdhi_payment_request.status.status_code === 'approved' && auth.user.user_type === 'sn'"
+                        :loading="paymentRequestUpdateForm.processing" class="mb-[20px] btn bg-teal-600 text-white"
+                        type="submit" @click="onClickStatusChange('paid')">
+                        Mark as Paid
                     </loading-button>
                 </div>
 
