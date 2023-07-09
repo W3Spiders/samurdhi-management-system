@@ -13,3 +13,8 @@
 .p-0 {
     padding: 0;
 }
+
+.link {
+    @apply underline text-sky-600;
+    cursor: pointer;
+}

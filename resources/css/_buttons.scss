@@ -1,10 +1,24 @@
 .btn {
     @apply px-6 py-3 rounded;
+    cursor: pointer;
+}
+
+.btn-primary-outline {
+    @apply text-sky-600 border-sky-600 border  hover:border-sky-700 focus:border-sky-700;
 }
 
 .btn-primary {
     color: #ffffff;
     @apply border-sky-600 border bg-sky-600 hover:bg-sky-700 focus:bg-sky-700;
+}
+
+.btn-danger {
+    color: #ffffff;
+    @apply border-red-700 border bg-red-700 hover:bg-red-900 focus:bg-red-900;
+}
+
+.btn-secondary-outline {
+    @apply text-slate-600 border-slate-600 border  hover:border-slate-700 focus:border-slate-700 hover:bg-slate-100;
 }
 
 .btn-danger-outline {

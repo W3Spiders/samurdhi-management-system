@@ -7,14 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class FamilyUnit extends Model
 {
     use HasFactory;
 
     protected $appends = [
-        'full_address_html'
+        'full_address_html', 'member_count', 'status_string'
     ];
 
     protected $fillable = [
@@ -27,7 +26,7 @@ class FamilyUnit extends Model
         'postal_code'
     ];
 
-    
+
     /**
      * Get the members for the family unit.
      */
@@ -37,10 +36,11 @@ class FamilyUnit extends Model
     }
 
     /**
-     * 
+     * Get primary eligible members
      */
-    public function adult_members(): HasMany {
-        $marginalDate = Carbon::now()->subYears(40);
+    public function primary_eligible_members(): HasMany
+    {
+        $marginalDate = Carbon::now()->subYears(18);
 
         return $this->hasMany(Member::class)->where('birthday', '<=', $marginalDate);
     }
@@ -48,20 +48,27 @@ class FamilyUnit extends Model
     /**
      * Get the gn division that owns the family unit
      */
-    public function gn_division(): BelongsTo {
+    public function gn_division(): BelongsTo
+    {
 
         return $this->belongsTo(GnDivision::class);
-        
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(FamilyUnitStatus::class);
     }
 
     /**
      * Get the linked primary member
      */
-    public function primary_member(): BelongsTo {
+    public function primary_member(): BelongsTo
+    {
         return $this->belongsTo(Member::class, 'primary_member_id');
     }
 
-    public function getFullAddressHtmlAttribute() {
+    public function getFullAddressHtmlAttribute()
+    {
 
         $address_html = $this->address_line_1 . '<br />';
 
@@ -76,7 +83,13 @@ class FamilyUnit extends Model
         return $address_html;
     }
 
-    public function getHasMetSamurdhiEligibleCriteriaAttribute() {
+    public function getMemberCountAttribute()
+    {
+        return count($this->hasMany(Member::class)->get());
+    }
+
+    public function getHasMetSamurdhiEligibleCriteriaAttribute()
+    {
 
         $total_income = 0;
 
@@ -88,7 +101,7 @@ class FamilyUnit extends Model
             return false;
         });
 
-        foreach($members_with_income as $member) {
+        foreach ($members_with_income as $member) {
             $total_income += $member->monthly_income;
         }
 
@@ -98,5 +111,10 @@ class FamilyUnit extends Model
         }
 
         return false;
+    }
+
+    public function getStatusStringAttribute()
+    {
+        return $this->belongsTo(FamilyUnitStatus::class, 'status_id')->first()->status_title;
     }
 }

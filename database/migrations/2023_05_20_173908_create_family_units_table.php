@@ -17,14 +17,16 @@ return new class extends Migration
             $table->id();
             $table->integer('gn_division_id')->references('id')->on('gn_divisions');
             $table->string('family_unit_ref')->unique();
+            $table->string('house_no', 8);
             $table->integer('primary_member_id')->unique()->nullable();
             $table->string('address_line_1', 50);
             $table->string('address_line_2',50)->nullable();
             $table->string('city');
             $table->string('postal_code', 5);
+            $table->integer('status_id')->references('id')->on('family_unit_statuses')->default(1);
             $table->timestamps();
         });
-    }
+    }  
 
     /**
      * Reverse the migrations.

@@ -8,6 +8,8 @@ use App\Http\Controllers\GnDivisionController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\SamurdhiPaymentRequestController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WardController;
 
 /*
@@ -27,7 +29,7 @@ Route::get('/', function () {
 
 
 // Guest Users
-Route::middleware('guest')->group(function() {
+Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'show_login'])->name('login.show');
     Route::post('/login', [AuthController::class, 'login'])->name('login.attempt');
 });
@@ -42,8 +44,12 @@ Route::middleware('auth')->group(function () {
     // Family Units
     Route::get('/family-units', [FamilyUnitController::class, 'index'])->name('family_units.index');
     Route::get('/family-units/create', [FamilyUnitController::class, 'create'])->name('family_units.create');
-    Route::get('/family-units/{family_unit_id}/', [FamilyUnitController::class, 'show'])->name('family_units.show');
-    
+    Route::get('/family-units/{id}', [FamilyUnitController::class, 'show'])->name('family_units.show');
+    Route::get('/family-units/{id}/edit', [FamilyUnitController::class, 'edit'])->name('family_units.edit');
+    Route::put('/family-units/{id}', [FamilyUnitController::class, 'update'])->name('family_units.update');
+    Route::post('/family-units', [FamilyUnitController::class, 'store'])->name('family_units.store');
+    Route::delete('/family-units/{id}', [FamilyUnitController::class, 'destroy'])->name('family_units.delete');
+
     // Member Routes
     Route::get('/family-units/{family_unit_id}/members/create', [MemberController::class, 'create'])->name('members.create');
     Route::get('/members/{id}/', [MemberController::class, 'show'])->name('members.show');
@@ -55,6 +61,31 @@ Route::middleware('auth')->group(function () {
     // Reports
     Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
 
+    // Samurdhi Management
+    Route::get('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'index'])->name('samurdhi_payment_requests.index');
+    Route::get('/samurdhi-payment-requests/create', [SamurdhiPaymentRequestController::class, 'create'])->name('samurdhi_payment_requests.create');
+    Route::get('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'show'])->name('samurdhi_payment_requests.show');
+    Route::get('/samurdhi-payment-requests/{id}/edit', [SamurdhiPaymentRequestController::class, 'edit'])->name('samurdhi_payment_requests.edit');
+    Route::put('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'update'])->name('samurdhi_payment_requests.update');
+    Route::post('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'store'])->name('samurdhi_payment_requests.store');
+
+    // Users
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::get('/users/{id}', [UserController::class, 'show'])->name('users.show');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+    // GN Divisions
+    Route::get('/gn-divisions', [GnDivisionController::class, 'index'])->name(('gn_divisions.index'));
+    Route::get('/gn-divisions/create', [GnDivisionController::class, 'create'])->name(('gn_divisions.create'));
+    Route::get('/gn-divisions/{id}', [GnDivisionController::class, 'show'])->name(('gn_divisions.show'));
+    Route::post('/gn_divisions', [GnDivisionController::class, 'store'])->name('gn_divisions.store');
+    Route::get('/gn-divisions/{id}/edit', [GnDivisionController::class, 'edit'])->name(('gn_divisions.edit'));
+    Route::put('/gn-divisions/{id}', [GnDivisionController::class, 'update'])->name(('gn_divisions.update'));
+    Route::delete('/gn-divisions/{id}', [GnDivisionController::class, 'destroy'])->name('gn_divisions.delete');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     // Settings Pages
@@ -62,5 +93,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/settings/gn-divisions', [PageController::class, 'showGnDivisionManage'])->name(('settings.gnDivisions'));
 
     Route::post('/ward', [WardController::class, 'store'])->name(('ward'));
-    Route::post('/gn-division', [GnDivisionController::class, 'store'])->name(('gnDivision'));
 });
