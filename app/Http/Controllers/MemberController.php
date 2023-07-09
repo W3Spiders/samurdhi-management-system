@@ -87,6 +87,7 @@ class MemberController extends Controller
         $new_member->marital_status = $request->marital_status;
         $new_member->occupation_type_id = $request->occupation_type;
         $new_member->occupation = $request->occupation;
+        $new_member->bank_account_number = $request->bank_account_number;
 
         $result = $new_member->save();
 
@@ -141,6 +142,7 @@ class MemberController extends Controller
         $member->marital_status = $request->marital_status;
         $member->occupation_type_id = $request->occupation_type;
         $member->occupation = $request->occupation;
+        $member->bank_account_number = $request->bank_account_number;
 
         $result = $member->save();
 

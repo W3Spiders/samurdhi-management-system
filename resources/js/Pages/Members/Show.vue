@@ -57,6 +57,11 @@
                 <div class="form-label">Monthly Income</div>
                 <div class="form-input">{{ member.monthly_income || "-" }}</div>
             </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Bank Account Number</div>
+                <div class="form-input">{{ member.bank_account_number || "-" }}</div>
+            </div>
         </div>
 
         <div v-if="auth.user.user_type === 'gn'" class="form-footer gap-3">

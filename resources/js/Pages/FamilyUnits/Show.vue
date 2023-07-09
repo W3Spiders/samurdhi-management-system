@@ -230,6 +230,13 @@
                 Approve
             </loading-button>
 
+            <loading-button v-if="family_unit.status.status_code === 'pending_approval' &&
+                auth.user.user_type === 'ds'
+                " :loading="statusUpdateForm.processing" class="btn btn-danger" type="submit"
+                @click="onClickStatusChange('rejected')">
+                Reject
+            </loading-button>
+
             <loading-button v-if="family_unit.status.status_code === 'new' &&
                 auth.user.user_type === 'ds'
                 " :loading="statusUpdateForm.processing" class="btn bg-red-800 text-white" type="submit"
