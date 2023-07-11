@@ -112,7 +112,7 @@
     </div>
 
     <h2
-        class="mt-12 mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
+        class="hidden mt-12 mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
     >
         Last Month Elder Allowance Allocation by GN Division
     </h2>
