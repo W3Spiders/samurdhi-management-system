@@ -50,6 +50,7 @@ class FamilyUnitController extends Controller
                     return search_query($query, $search);
                 })
                 ->orderBy('status_id', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
         } else if ($user['user_type'] === 'ds') {
             $family_units = FamilyUnit::with(['primary_member'])
@@ -58,6 +59,7 @@ class FamilyUnitController extends Controller
                     return search_query($query, $search);
                 })
                 ->orderBy('status_id', 'asc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
         } else {
             // Don't show family units for other user types
