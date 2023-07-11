@@ -60,20 +60,63 @@
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Bank Account Number</div>
-                <div class="form-input">{{ member.bank_account_number || "-" }}</div>
+                <div class="form-input">
+                    {{ member.bank_account_number || "-" }}
+                </div>
+            </div>
+        </div>
+
+        <hr class="mt-4 mb-2" />
+
+        <div class="p-8 pb-0">
+            <h2 class="text-xl font-bold">Bank Account Details</h2>
+        </div>
+
+        <div class="flex flex-wrap -mb-8 -mr-6 p-8">
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Bank Account Number</div>
+                <div class="form-input">
+                    {{ member.bank_account?.account_number || "-" }}
+                </div>
+            </div>
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Holder's Name</div>
+                <div class="form-input">
+                    {{ member.bank_account?.holder_name || "-" }}
+                </div>
+            </div>
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Bank Name</div>
+                <div class="form-input">
+                    {{ member.bank_account?.name || "-" }}
+                </div>
+            </div>
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">Branch</div>
+                <div class="form-input">
+                    {{ member.bank_account?.branch || "-" }}
+                </div>
             </div>
         </div>
 
         <div v-if="auth.user.user_type === 'gn'" class="form-footer gap-3">
-            <button class="btn btn-danger-outline" type="button" @click="($event) => {
-                this.delete();
-            }
-                ">
+            <button
+                class="btn btn-danger-outline"
+                type="button"
+                @click="
+                    ($event) => {
+                        this.delete();
+                    }
+                "
+            >
                 Delete
             </button>
 
-            <Link class="btn btn-primary" :href="route('members.edit', { id: member.id })">
-            <i class="fa-solid fa-pen-to-square"></i> Edit
+            <Link
+                class="btn btn-primary"
+                :href="route('members.edit', { id: member.id })"
+            >
+                <i class="fa-solid fa-pen-to-square"></i> Edit
             </Link>
         </div>
     </div>

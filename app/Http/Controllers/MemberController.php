@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BankAccount;
 use App\Models\FamilyUnit;
 use App\Models\Member;
 use App\Models\OccupationType;
@@ -30,14 +31,14 @@ class MemberController extends Controller
      */
     public function show($member_id)
     {
-        $member = Member::with(['family_unit', 'occupation_type'])->find($member_id);
+        $member = Member::with(['family_unit', 'occupation_type', 'bank_account'])->find($member_id);
 
         return Inertia::render('Members/Show', ['member' => $member]);
     }
 
     public function edit($id)
     {
-        $member = Member::find($id);
+        $member = Member::with('bank_account')->find($id);
         $family_unit = FamilyUnit::find($member->family_unit_id);
         $occupation_types = OccupationType::all();
 
@@ -71,6 +72,18 @@ class MemberController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
+        $bank_account = null;
+
+        if ($request['bank_account'] && $request['bank_account_number']) {
+            // Create a bank account if provided
+            $bank_account = new BankAccount();
+            $bank_account->account_number = $request['bank_account']['account_number'];
+            $bank_account->holder_name = $request['bank_account']['holder_name'];
+            $bank_account->name = $request['bank_account']['name'];
+            $bank_account->branch = $request['bank_account']['branch'];
+            $bank_account->save();
+        }
+
         // Create new member
         $new_member = new Member();
 
@@ -87,7 +100,10 @@ class MemberController extends Controller
         $new_member->marital_status = $request->marital_status;
         $new_member->occupation_type_id = $request->occupation_type;
         $new_member->occupation = $request->occupation;
-        $new_member->bank_account_number = $request->bank_account_number;
+
+        if ($bank_account) {
+            $new_member->bank_account_id = $bank_account->id;
+        }
 
         $result = $new_member->save();
 
@@ -129,6 +145,26 @@ class MemberController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
 
+        $bank_account = null;
+
+        if ($member->bank_account_id) {
+            // Update existing account
+            $bank_account = BankAccount::find($member->bank_account_id);
+
+        } else if ($request['bank_account'] && $request['bank_account']['account_number']) {
+            // Create new account
+            $bank_account = new BankAccount();
+        }
+
+        if ($bank_account) {
+            $bank_account->account_number = $request['bank_account']['account_number'];
+            $bank_account->holder_name = $request['bank_account']['holder_name'];
+            $bank_account->name = $request['bank_account']['name'];
+            $bank_account->branch = $request['bank_account']['branch'];
+            $bank_account->save();
+        }
+
+
         $member->family_unit_id = $request->family_unit_id;
         $member->first_name = $request->first_name;
         $member->last_name = $request->last_name;
@@ -142,7 +178,10 @@ class MemberController extends Controller
         $member->marital_status = $request->marital_status;
         $member->occupation_type_id = $request->occupation_type;
         $member->occupation = $request->occupation;
-        $member->bank_account_number = $request->bank_account_number;
+
+        if ($bank_account) {
+            $member->bank_account_id = $bank_account->id;
+        }
 
         $result = $member->save();
 

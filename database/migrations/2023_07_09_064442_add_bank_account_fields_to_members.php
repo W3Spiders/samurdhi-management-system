@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('members', function (Blueprint $table) {
-            $table->string('bank_account_number', 50);
+            $table->integer('bank_account_id')->references('id')->on('bank_accounts')->nullable();
         });
     }
 

@@ -66,4 +66,8 @@ class Member extends Model
             return 'Other';
         }
     }
+
+    public function bank_account(): BelongsTo {
+        return $this->belongsTo(BankAccount::class);
+    }
 }
