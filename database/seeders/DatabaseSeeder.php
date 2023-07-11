@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FamilyUnitSeeder::class);
         $this->call(MemberSeeder::class);
         $this->call(PaymentRequestStatusSeeder::class);
+        $this->call(MemberStatusSeeder::class);
 
         $this->select_primary_member_for_each_family_unit();
     }

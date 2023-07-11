@@ -117,6 +117,7 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
+                gn_division_no: this.gn_division?.gn_division_no,
                 primary_member_id: this.family_unit?.primary_member?.id || null,
                 gn_division_id: this.gn_division?.id,
                 house_no: this.family_unit?.house_no || "",

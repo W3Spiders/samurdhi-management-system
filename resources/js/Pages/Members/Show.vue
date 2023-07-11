@@ -59,9 +59,15 @@
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
-                <div class="form-label">Bank Account Number</div>
+                <div class="form-label">Elder Allowance Status</div>
                 <div class="form-input">
-                    {{ member.bank_account_number || "-" }}
+                    <span
+                        :class="`px-4 py-2 rounded-lg text-xs font-medium ${
+                            statusColors[member.status_id]
+                        }`"
+                    >
+                        {{ member.status_string }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -120,6 +126,52 @@
             </Link>
         </div>
     </div>
+
+    <!-- Actions -->
+    <h2 class="mt-12 text-2xl font-bold">Actions</h2>
+    <div class="max-w-3xl mt-6 bg-white rounded-md shadow overflow-x-auto p-8">
+        <div class="flex gap-[10px]">
+            <loading-button
+                v-if="
+                    member.status_code === 'new' && auth.user.user_type === 'gn'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-teal-600 text-white"
+                type="submit"
+                @click="onClickStatusChange('pending_approval')"
+            >
+                Send to Approval
+            </loading-button>
+
+            <loading-button
+                v-if="
+                    auth.user.user_type === 'ds' &&
+                    member.status_code === 'pending_approval'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-green-700 text-white"
+                type="submit"
+                @click="onClickStatusChange('approved')"
+            >
+                Approve
+            </loading-button>
+
+            <loading-button
+                v-if="
+                    (auth.user.user_type === 'gn' &&
+                        member.status_code === 'new') ||
+                    (auth.user.user_type === 'ds' &&
+                        member.status_code === 'pending_approval')
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-red-700 text-white"
+                type="submit"
+                @click="onClickStatusChange('rejected')"
+            >
+                Reject
+            </loading-button>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -133,9 +185,15 @@ export default {
     props: {
         auth: Object,
         member: Object,
+        status_list: Object,
     },
     data() {
         return {
+            statusUpdateForm: this.$inertia.form({
+                ...this.member,
+                occupation_type: this.member.occupation_type.id,
+                status_id: null,
+            }),
             breadcrumb_items: [
                 {
                     text: "Family Units",
@@ -153,9 +211,32 @@ export default {
                     link: "",
                 },
             ],
+            statusColors: {
+                1: "bg-blue-200", // New
+                2: "bg-amber-200", // Pending Approval
+                3: "bg-green-200", // Approved
+                4: "bg-red-200", // Rejected
+            },
         };
     },
     methods: {
+        onClickStatusChange(next_status_code) {
+            const next_status_id = this.getStatusIdByCode(next_status_code);
+
+            this.statusUpdateForm.status_id = next_status_id;
+
+            if (!confirm("Are you sure want to continue?")) {
+                return;
+            }
+
+            this.statusUpdateForm.put(
+                route("members.update", { id: this.member.id })
+            );
+        },
+        getStatusIdByCode(code) {
+            const status = this.status_list.find((s) => s.status_code === code);
+            return status?.id || -1;
+        },
         delete() {
             if (confirm("Are you sure you want to delete this member?")) {
                 this.$inertia.delete(

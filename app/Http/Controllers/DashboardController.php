@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\PaymentRequestStatus;
 use App\Models\SamurdhiPaymentRequest;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -84,13 +86,45 @@ class DashboardController extends Controller
             $approved_samurdhi_payment_requests = SamurdhiPaymentRequest::where('status_id', $approved_payment_status->id)->get();
         }
 
+        $new_elder_members = [];
+        $pending_elder_members = [];
+
+        if ($user->user_type === 'gn') {
+
+            $birthdate = Carbon::now()->subYears(60)->format('Y-m-d');
+
+            $new_elder_members = Member::with('occupation_type')->whereDate('birthday', '<=', $birthdate)
+            ->whereHas('status', function($query) {
+                $query->where('status_code', 'new');
+            })
+            ->whereHas('family_unit', function($query) use($user) {
+                $query->where('gn_division_id', $user->gn_division->id);
+            })->get();
+
+        }
+
+        if ($user->user_type === 'ds') {
+
+            $birthdate = Carbon::now()->subYears(60)->format('Y-m-d');
+
+            $pending_elder_members = Member::with('occupation_type')->whereDate('birthday', '<=', $birthdate)
+            ->whereHas('status', function($query) {
+                $query->where('status_code', 'pending_approval');
+            })->get();
+
+        }
+
+        
+
         return Inertia::render('Dashboard/Index', [
             'payment_requests' => $payment_requests,
             'pending_samurdhi_payment_requests' => $pending_samurdhi_payment_requests,
             'approved_samurdhi_payment_requests' => $approved_samurdhi_payment_requests,
             'family_units_count' => count($family_units),
             'samurdhi_approved_count' => $samurdhi_approved_count,
-            'gn_division' => $user['gn_division']
+            'gn_division' => $user['gn_division'],
+            'new_elder_members' => $new_elder_members,
+            'pending_elder_members' => $pending_elder_members
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -15,7 +16,7 @@ class Member extends Model
      */
     protected $appends = [
         'full_name',
-         'gender_string',
+         'gender_string', 'status_string', 'status_code', 'is_elder'
     ];
 
 
@@ -69,5 +70,26 @@ class Member extends Model
 
     public function bank_account(): BelongsTo {
         return $this->belongsTo(BankAccount::class);
+    }
+
+    public function status(): BelongsTo {
+        return $this->belongsTo(MemberStatus::class);
+    }
+
+    public function getIsElderAttribute() {
+        $date = Carbon::create($this->birthday);
+        $age = $date->diffInYears(Carbon::now());
+
+        return $age >= 60;
+    }
+
+    public function getStatusStringAttribute()
+    {
+        return $this->belongsTo(MemberStatus::class, 'status_id')->first()->status_title;
+    }
+
+    public function getStatusCodeAttribute()
+    {
+        return $this->belongsTo(MemberStatus::class, 'status_id')->first()->status_code;
     }
 }

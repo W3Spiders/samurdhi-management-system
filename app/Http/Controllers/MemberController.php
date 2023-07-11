@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BankAccount;
 use App\Models\FamilyUnit;
 use App\Models\Member;
+use App\Models\MemberStatus;
 use App\Models\OccupationType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -32,8 +33,9 @@ class MemberController extends Controller
     public function show($member_id)
     {
         $member = Member::with(['family_unit', 'occupation_type', 'bank_account'])->find($member_id);
+        $status_list = MemberStatus::all();
 
-        return Inertia::render('Members/Show', ['member' => $member]);
+        return Inertia::render('Members/Show', ['member' => $member, 'status_list' => $status_list]);
     }
 
     public function edit($id)
@@ -178,6 +180,10 @@ class MemberController extends Controller
         $member->marital_status = $request->marital_status;
         $member->occupation_type_id = $request->occupation_type;
         $member->occupation = $request->occupation;
+
+        if ($request['status_id']) {
+            $member->status_id = $request['status_id'];
+        }
 
         if ($bank_account) {
             $member->bank_account_id = $bank_account->id;
