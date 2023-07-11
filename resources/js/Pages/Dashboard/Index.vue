@@ -96,6 +96,17 @@
         ></samurdhi-payment-request-list>
     </div>
 
+    <div v-if="auth.user.user_type === 'ds'" class="mt-12">
+        <h2
+            class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
+        >
+            Pending Monthly Elder Allowance Payment Request Approvals
+        </h2>
+        <samurdhi-payment-request-list
+            :payment_requests="pending_elder_allowance_payment_requests"
+        ></samurdhi-payment-request-list>
+    </div>
+
     <div v-if="auth.user.user_type === 'sn'" class="mt-12">
         <h2
             class="mb-8 text-xl font-medium underline decoration-sky-500 underline-offset-4"
@@ -163,6 +174,7 @@ export default {
         samurdhi_approved_count: Number,
         auth: Object, // globally shared one
         pending_samurdhi_payment_requests: Array,
+        pending_elder_allowance_payment_requests: Array,
         approved_samurdhi_payment_requests: Array,
         new_elder_members: Array,
         pending_elder_members: Array,

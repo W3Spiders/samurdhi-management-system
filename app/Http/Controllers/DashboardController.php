@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ElderAllowancePaymentRequest;
 use App\Models\Member;
 use App\Models\PaymentRequestStatus;
 use App\Models\SamurdhiPaymentRequest;
@@ -76,10 +77,12 @@ class DashboardController extends Controller
         $approved_payment_status = PaymentRequestStatus::where('status_code', 'approved')->first();
 
         $pending_samurdhi_payment_requests = [];
+        $pending_elder_allowance_payment_requests = [];
         $approved_samurdhi_payment_requests = [];
 
         if ($user->user_type === 'ds') {
             $pending_samurdhi_payment_requests = SamurdhiPaymentRequest::where('status_id', $pending_payment_status->id)->get();
+            $pending_elder_allowance_payment_requests = ElderAllowancePaymentRequest::where('status_id', $pending_payment_status->id)->get();
         }
 
         if ($user->user_type === 'sn') {
@@ -119,6 +122,7 @@ class DashboardController extends Controller
         return Inertia::render('Dashboard/Index', [
             'payment_requests' => $payment_requests,
             'pending_samurdhi_payment_requests' => $pending_samurdhi_payment_requests,
+            'pending_elder_allowance_payment_requests' => $pending_elder_allowance_payment_requests,
             'approved_samurdhi_payment_requests' => $approved_samurdhi_payment_requests,
             'family_units_count' => count($family_units),
             'samurdhi_approved_count' => $samurdhi_approved_count,

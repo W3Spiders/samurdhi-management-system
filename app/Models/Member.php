@@ -16,7 +16,7 @@ class Member extends Model
      */
     protected $appends = [
         'full_name',
-         'gender_string', 'status_string', 'status_code', 'is_elder'
+         'gender_string', 'status_string', 'status_code', 'is_elder', 'age'
     ];
 
 
@@ -74,6 +74,13 @@ class Member extends Model
 
     public function status(): BelongsTo {
         return $this->belongsTo(MemberStatus::class);
+    }
+
+    public function getAgeAttribute() {
+        $date = Carbon::create($this->birthday);
+        $age = $date->diffInYears(Carbon::now());
+
+        return $age;
     }
 
     public function getIsElderAttribute() {
