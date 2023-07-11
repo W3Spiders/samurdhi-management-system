@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('ref', 15)->unique();
             $table->integer('gn_division_id')->references('id')->on('gn_divisions');
+            $table->decimal('payment_amount', $precision = 8, $scale = 2);
             $table->date('payment_date');
             $table->integer('status_id')->references('id')->on('payment_request_statuses')->default(1);
             $table->decimal('total_amount', $precision = 8, $scale = 2);

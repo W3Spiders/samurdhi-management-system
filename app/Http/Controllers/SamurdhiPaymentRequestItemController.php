@@ -15,4 +15,15 @@ class SamurdhiPaymentRequestItemController extends Controller
 
             $new_item->save();
     }
+
+    public function update($id, Request $request) {
+
+        $item = SamurdhiPaymentRequestItem::findOrFail($id);
+
+        $item->samurdhi_payment_request_id = $request['samurdhi_payment_request_id'];
+        $item->family_unit_id = $request['family_unit_id'];
+        $item->amount = $request['amount'];
+
+        $item->save();
+}
 }

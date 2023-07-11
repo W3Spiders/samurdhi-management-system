@@ -88,6 +88,7 @@ class SamurdhiPaymentRequestController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'payment_date' => 'required',
+            'payment_amount' => 'required|max:20000',
             'total_amount' => 'required|min:0',
         ]);
 
@@ -106,6 +107,7 @@ class SamurdhiPaymentRequestController extends Controller
         $new_request = new SamurdhiPaymentRequest();
 
         $new_request->gn_division_id = $request['gn_division_id'];
+        $new_request->payment_amount = $request['payment_amount'];
         $new_request->payment_date = $request['payment_date'];
         $new_request->total_amount = $request['total_amount'];
         $new_request->ref = 'SPR_' . str_pad($ref_id + 1, 8, '0', STR_PAD_LEFT);
@@ -149,6 +151,7 @@ class SamurdhiPaymentRequestController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'payment_date' => 'required',
+            'payment_amount' => 'required|max:20000',
             'status_id' => 'required'
         ]);
 
@@ -158,7 +161,9 @@ class SamurdhiPaymentRequestController extends Controller
 
         $samurdhi_payment_request = SamurdhiPaymentRequest::findOrFail($id);
 
+        $samurdhi_payment_request->payment_amount = $request['payment_amount'];
         $samurdhi_payment_request->payment_date = $request['payment_date'];
+        $samurdhi_payment_request->total_amount = $request['total_amount'];
         $samurdhi_payment_request->status_id = $request['status_id'];
 
         $result = $samurdhi_payment_request->save();

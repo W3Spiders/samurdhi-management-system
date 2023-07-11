@@ -1,47 +1,83 @@
 <template>
     <div>
-
-        <Head :title="samurdhi_payment_request
-            ? 'Edit Samurdhi Payment Request'
-            : 'Create Samurdhi Payment Request'
-            " />
+        <Head
+            :title="
+                samurdhi_payment_request
+                    ? 'Edit Samurdhi Payment Request'
+                    : 'Create Samurdhi Payment Request'
+            "
+        />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
 
-        <div class="bg-white rounded-md shadow overflow-hidden p-6 mb-6 flex justify-between items-center">
+        <div
+            class="bg-white rounded-md shadow overflow-hidden p-6 mb-6 flex justify-between items-center"
+        >
             <div>
-                <span :class="`px-4 py-2 rounded-lg text-xs font-medium ${statusColors[samurdhi_payment_request ? samurdhi_payment_request.status_id : 1]
-                    }`">
-                    {{ samurdhi_payment_request ? samurdhi_payment_request.status_string : 'New' }}
+                <span
+                    :class="`px-4 py-2 rounded-lg text-xs font-medium ${
+                        statusColors[
+                            samurdhi_payment_request
+                                ? samurdhi_payment_request.status_id
+                                : 1
+                        ]
+                    }`"
+                >
+                    {{
+                        samurdhi_payment_request
+                            ? samurdhi_payment_request.status_string
+                            : "New"
+                    }}
                 </span>
             </div>
             <div class="flex gap-x-4">
                 <button class="btn btn-secondary-outline" @click="cancel">
                     Cancel
                 </button>
-                <loading-button :loading="form.processing" class="btn btn-primary" @click="submit">
-                    {{
-                        this.samurdhi_payment_request ? "Update" : "Create"
-                    }}
+                <loading-button
+                    :loading="form.processing"
+                    class="btn btn-primary"
+                    @click="submit"
+                >
+                    {{ this.samurdhi_payment_request ? "Update" : "Create" }}
                 </loading-button>
             </div>
         </div>
 
         <div class="grid grid-cols-3 gap-x-[20px]">
-
             <div
-                class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-1 px-6 py-6 flex flex-col gap-y-[20px]">
-
+                class="max-w-3xl bg-white rounded-md shadow overflow-hidden col-span-1 px-6 py-6 flex flex-col gap-y-[20px]"
+            >
                 <div>
                     <div class="pb-10 mb-3 border-b border-slate-200">
-                        <label class="form-label" for="payment-date-input">
-                            Payment Date
-                        </label>
+                        <div>
+                            <label class="form-label" for="payment-date-input">
+                                Payment Date
+                            </label>
 
-                        <input class="form-input" id="payment-date-input" v-model="form.payment_date" type="date" />
+                            <input
+                                class="form-input"
+                                id="payment-date-input"
+                                v-model="form.payment_date"
+                                type="date"
+                            />
 
-                        <div v-if="form.errors.payment_date" class="form-error">
-                            {{ form.errors.payment_date }}
+                            <div
+                                v-if="form.errors.payment_date"
+                                class="form-error"
+                            >
+                                {{ form.errors.payment_date }}
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <text-input
+                                v-model="form.payment_amount"
+                                :error="form.errors.payment_amount"
+                                label="Payment Amount"
+                                type="number"
+                                @keyup="onPaymentAmountKeyup"
+                            />
                         </div>
                     </div>
                 </div>
@@ -79,10 +115,11 @@
                 </div>
             </div>
 
-            <div class="max-w-3xl bg-white rounded-md overflow-hidden col-span-2">
-
+            <div
+                class="max-w-3xl bg-white rounded-md overflow-hidden col-span-2"
+            >
                 <!-- Selected Family Units Table -->
-                <div class="bg-white overflow-x-auto relative max-h-[450px] overflow-auto">
+                <div class="bg-white overflow-x-auto relative overflow-auto">
                     <table class="w-full whitespace-nowrap">
                         <tr class="text-left font-bold">
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
@@ -96,8 +133,11 @@
                             </th>
                         </tr>
 
-                        <tr v-for="item in form.items" :key="item.family_unit_id"
-                            class="hover:bg-gray-100 focus-within:bg-gray-100">
+                        <tr
+                            v-for="item in form.items"
+                            :key="item.family_unit_id"
+                            class="hover:bg-gray-100 focus-within:bg-gray-100"
+                        >
                             <td class="border-t">
                                 <div class="table-cell-inner">
                                     {{ item.family_unit.family_unit_ref }}
@@ -123,9 +163,7 @@
                         </tr>
                     </table>
                 </div>
-
             </div>
-
         </div>
     </div>
 </template>
@@ -157,12 +195,19 @@ export default {
     remember: "form",
     data() {
         return {
+            paymentAmountKeyupTimer: null,
             form: this.$inertia.form({
                 gn_division_id: this.gn_division.id,
-                payment_date: this.samurdhi_payment_request?.payment_date || null,
-                items: this.samurdhi_payment_request ? this.samurdhi_payment_request.items : [],
+                payment_amount: this.samurdhi_payment_request
+                    ? this.samurdhi_payment_request.payment_amount
+                    : null,
+                payment_date:
+                    this.samurdhi_payment_request?.payment_date || null,
+                items: this.samurdhi_payment_request
+                    ? this.samurdhi_payment_request.items
+                    : [],
                 total_amount: 0,
-                status_id: this.samurdhi_payment_request?.status_id || null
+                status_id: this.samurdhi_payment_request?.status_id || null,
             }),
 
             breadcrumb_items: [
@@ -187,14 +232,29 @@ export default {
 
     methods: {
         getFormattedCurrencyString(number) {
-
             let number2 = number;
 
-            if (typeof number2 === 'string') {
-                number2 = parseFloat(number2)
+            if (typeof number2 === "string") {
+                number2 = parseFloat(number2);
             }
 
             return "Rs. " + number2.toFixed(2);
+        },
+
+        onPaymentAmountKeyup(event) {
+            const value = event.target.value;
+
+            clearTimeout(this.paymentAmountKeyupTimer);
+
+            this.paymentAmountKeyupTimer = setTimeout(() => {
+                this.form.items.forEach((item) => {
+                    if (parseInt(value) >= 0) {
+                        item.amount = value;
+                    } else {
+                        item.amount = 0;
+                    }
+                });
+            }, 500);
         },
 
         submit() {
@@ -220,19 +280,20 @@ export default {
 
     computed: {
         paymentRequestTotalAmount() {
-            let total = 0;
+            //let total = 0;
 
-            this.form.items.forEach((item) => {
+            // this.form.items.forEach((item) => {
+            //     let amount = item.amount;
 
-                let amount = item.amount;
+            //     if (typeof amount === "string") {
+            //         amount = parseFloat(amount);
+            //     }
 
-                if (typeof amount === 'string') {
-                    amount = parseFloat(amount)
-                }
+            //     total += amount;
+            // });
+            // return total;
 
-                total += amount;
-            });
-            return total;
+            return this.form.items.length * this.form.payment_amount;
         },
     },
 
@@ -255,6 +316,6 @@ class RequestItem {
     is_new = true;
     family_unit_id = null;
     family_unit = null;
-    amount = 20000;
+    amount = 0;
 }
 </script>
