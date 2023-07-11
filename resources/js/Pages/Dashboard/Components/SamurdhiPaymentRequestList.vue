@@ -18,10 +18,15 @@
                     <div class="table-cell-inner">
                         <Link
                             :href="
-                                route(
-                                    'samurdhi_payment_requests.show',
-                                    payment_request.id
-                                )
+                                type === 'samurdhi'
+                                    ? route(
+                                          'samurdhi_payment_requests.show',
+                                          payment_request.id
+                                      )
+                                    : route(
+                                          'elder_allowance_payment_requests.show',
+                                          payment_request.id
+                                      )
                             "
                             class="link"
                         >
@@ -81,6 +86,7 @@ export default {
         Link,
     },
     props: {
+        type: String,
         payment_requests: Array,
     },
     data() {

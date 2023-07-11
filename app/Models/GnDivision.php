@@ -11,6 +11,8 @@ class GnDivision extends Model
 {
     use HasFactory;
 
+    protected $appends = ['family_units_count'];
+
     protected $fillable = [
         'ward_no',
         'gn_division_id',
@@ -43,8 +45,20 @@ class GnDivision extends Model
         return $this->hasMany(FamilyUnit::class);
     }
 
+
     public function ward(): BelongsTo
     {
         return $this->belongsTo(Ward::class, 'ward_no');
     }
+
+    public function samurdhi_payment_requests(): HasMany {
+        return $this->hasMany(SamurdhiPaymentRequest::class);
+    }
+
+    public function getFamilyUnitsCountAttribute()
+    {
+        return count($this->hasMany(FamilyUnit::class)->get());
+    }
+
+    
 }

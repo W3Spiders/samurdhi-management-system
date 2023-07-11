@@ -13,7 +13,7 @@
             <tr class="text-left font-bold">
                 <th class="pb-4 pt-6 px-6">GN Division No</th>
                 <th class="pb-4 pt-6 px-6">GN Division Name</th>
-                <th class="pb-4 pt-6 px-6">Amount</th>
+                <th class="pb-4 pt-6 px-6">Count</th>
             </tr>
             <tr
                 v-for="data_row in gn_wise_samurdhi_registered_family_data"
@@ -27,12 +27,12 @@
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.gn_division }}
+                        {{ data_row.gn_division_name }}
                     </div>
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.family_unit_count }}
+                        {{ data_row.family_units_count }}
                     </div>
                 </td>
             </tr>
@@ -49,10 +49,10 @@
             <tr class="text-left font-bold">
                 <th class="pb-4 pt-6 px-6">GN Division No</th>
                 <th class="pb-4 pt-6 px-6">GN Division Name</th>
-                <th class="pb-4 pt-6 px-6">Amount</th>
+                <th class="pb-4 pt-6 px-6">Count</th>
             </tr>
             <tr
-                v-for="data_row in gn_wise_elder_allowance_registered_member_data"
+                v-for="data_row in gn_wise_elder_allowance_registered_members"
                 :key="data_row.id"
                 class="hover:bg-gray-100 focus-within:bg-gray-100"
             >
@@ -63,12 +63,12 @@
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.gn_division }}
+                        {{ data_row.gn_division_name }}
                     </div>
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.member_count }}
+                        {{ data_row.approved_member_count }}
                     </div>
                 </td>
             </tr>
@@ -88,7 +88,7 @@
                 <th class="pb-4 pt-6 px-6">Amount</th>
             </tr>
             <tr
-                v-for="data_row in gn_wise_samurdhi_payment_allocation_last_month"
+                v-for="data_row in gn_wise_samurdhi_payment_allocation_items"
                 :key="data_row.id"
                 class="hover:bg-gray-100 focus-within:bg-gray-100"
             >
@@ -99,12 +99,12 @@
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.gn_division }}
+                        {{ data_row.gn_division_name }}
                     </div>
                 </td>
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        {{ data_row.member_count }}
+                        Rs. {{ getFormattedPrice(data_row.total_amount) }}
                     </div>
                 </td>
             </tr>
@@ -157,6 +157,14 @@ export default {
         Head,
         Link,
     },
+    data() {
+        return {
+            gn_wise_elder_allowance_registered_members:
+                this.gn_wise_elder_allowance_registered_member_data,
+            gn_wise_samurdhi_payment_allocation_items:
+                this.gn_wise_samurdhi_payment_allocation_last_month,
+        };
+    },
     props: {
         gn_wise_samurdhi_registered_family_data: Array,
         gn_wise_elder_allowance_registered_member_data: Array,
@@ -164,5 +172,65 @@ export default {
         gn_wise_elder_allowance_payment_allocation_last_month: Array,
     },
     layout: Layout,
+    methods: {
+        getFormattedPrice(price) {
+            let price2;
+
+            if (typeof price === "string") {
+                price2 = parseInt(price);
+            } else if (typeof price !== "number") {
+                return "0.00";
+            }
+
+            return price
+                .toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                })
+                .replace(/[^0-9.,]/g, "");
+        },
+    },
+    mounted() {
+        this.gn_wise_elder_allowance_registered_members =
+            this.gn_wise_elder_allowance_registered_members.map((data_item) => {
+                let approvedMemberCount = 0;
+
+                data_item.family_units.forEach((family_unit) => {
+                    family_unit.members.forEach((member) => {
+                        if (member.is_elder && member.status_id === 3) {
+                            approvedMemberCount++;
+                        }
+                    });
+                });
+
+                return {
+                    ...data_item,
+                    approved_member_count: approvedMemberCount,
+                };
+            });
+
+        this.gn_wise_samurdhi_payment_allocation_items =
+            this.gn_wise_samurdhi_payment_allocation_last_month.map(
+                (data_item) => {
+                    let total = 0;
+
+                    data_item.samurdhi_payment_requests.forEach(
+                        (payment_request) => {
+                            if (payment_request.status_id === 3) {
+                                total += parseInt(
+                                    payment_request.payment_amount
+                                );
+                            }
+                        }
+                    );
+
+                    return {
+                        ...data_item,
+                        total_amount: total,
+                    };
+                }
+            );
+    },
 };
 </script>

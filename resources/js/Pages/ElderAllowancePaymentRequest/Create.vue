@@ -190,7 +190,7 @@ export default {
     props: {
         auth: Object,
         gn_division: Object,
-        elder_allowance_request: Object,
+        elder_allowance_payment_request: Object,
         elder_allowance_approved_members: Object,
     },
     remember: "form",

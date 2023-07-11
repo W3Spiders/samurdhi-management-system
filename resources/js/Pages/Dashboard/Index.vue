@@ -103,6 +103,7 @@
             Pending Monthly Elder Allowance Payment Request Approvals
         </h2>
         <samurdhi-payment-request-list
+            :type="elder_allowance"
             :payment_requests="pending_elder_allowance_payment_requests"
         ></samurdhi-payment-request-list>
     </div>

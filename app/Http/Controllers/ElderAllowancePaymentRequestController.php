@@ -141,7 +141,7 @@ class ElderAllowancePaymentRequestController extends Controller
 
     public function edit($id)
     {
-        $elder_allowance_payment_request = ElderAllowancePaymentRequest::with(['gn_division', 'items.members.occupation_type', 'status'])->findOrFail($id);
+        $elder_allowance_payment_request = ElderAllowancePaymentRequest::with(['gn_division', 'items.member.occupation_type', 'status'])->findOrFail($id);
 
         return Inertia::render('ElderAllowancePaymentRequest/Create', [
             'elder_allowance_payment_request' => $elder_allowance_payment_request,
