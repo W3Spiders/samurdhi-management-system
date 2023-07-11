@@ -28,8 +28,16 @@
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">House No</div>
+                <div class="form-input">{{ family_unit.house_no }}</div>
+            </div>
+
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Address</div>
-                <div class="form-input" v-html="family_unit.full_address_html"></div>
+                <div
+                    class="form-input"
+                    v-html="family_unit.full_address_html"
+                ></div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
@@ -39,38 +47,43 @@
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Total Income</div>
-                <div class="form-input">{{ this.totalMonthlyIncome }}</div>
-            </div>
-
-            <div class="pb-8 pr-6 w-full lg:w-1/2">
-                <div class="form-label">Has Met Samurdhi Eligible Criteria</div>
                 <div class="form-input">
-                    {{
-                        this.family_unit.has_met_samurdhi_eligible_criteria
-                        ? "Yes"
-                        : "No"
-                    }}
+                    Rs. {{ getFormattedPrice(this.totalMonthlyIncome) }}
                 </div>
             </div>
 
             <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Status</div>
                 <div class="form-input">
-                    {{ this.family_unit.status.status_title }}
+                    <span
+                        :class="`px-4 py-2 rounded-lg text-xs font-medium ${
+                            statusColors[family_unit.status_id]
+                        }`"
+                    >
+                        {{ family_unit.status_string }}
+                    </span>
                 </div>
             </div>
         </div>
 
         <div v-if="auth.user.user_type === 'gn'" class="form-footer gap-3">
-            <button class="btn btn-danger-outline" type="button" @click="($event) => {
-                this.delete();
-            }
-                ">
+            <button
+                class="btn btn-danger-outline"
+                type="button"
+                @click="
+                    ($event) => {
+                        this.delete();
+                    }
+                "
+            >
                 Delete
             </button>
 
-            <Link class="btn btn-primary" :href="route('family_units.edit', { id: family_unit.id })">
-            <i class="fa-solid fa-pen-to-square"></i> Edit
+            <Link
+                class="btn btn-primary"
+                :href="route('family_units.edit', { id: family_unit.id })"
+            >
+                <i class="fa-solid fa-pen-to-square"></i> Edit
             </Link>
         </div>
     </div>
@@ -91,22 +104,40 @@
 
         <template v-if="auth.user.user_type === 'gn'">
             <h3 class="mb-4 text-xl font-bold">Set House Holder</h3>
-            <div class="bg-slate-100 rounded-md p-8 mb-8 border border-slate-300">
+            <div
+                class="bg-slate-100 rounded-md p-8 mb-8 border border-slate-300"
+            >
                 <form @submit.prevent="submitPrimaryMemberUpdateForm">
                     <div class="flex">
-                        <select-input v-model="primaryMemberUpdateForm.primary_member_id" :error="primaryMemberUpdateForm.errors?.primary_member_id
-                            " class="pr-6 w-full lg:w-1/2">
+                        <select-input
+                            v-model="primaryMemberUpdateForm.primary_member_id"
+                            :error="
+                                primaryMemberUpdateForm.errors
+                                    ?.primary_member_id
+                            "
+                            class="pr-6 w-full lg:w-1/2"
+                        >
                             <option value="null" disabled></option>
-                            <option v-for="primary_eligible_member in family_unit.primary_eligible_members"
-                                :key="primary_eligible_member.id" :value="primary_eligible_member.id">
+                            <option
+                                v-for="primary_eligible_member in family_unit.primary_eligible_members"
+                                :key="primary_eligible_member.id"
+                                :value="primary_eligible_member.id"
+                            >
                                 {{ primary_eligible_member.full_name }}
                             </option>
                         </select-input>
 
                         <div>
-                            <loading-button :loading="primaryMemberUpdateForm.processing" class="btn btn-primary"
-                                type="submit">
-                                {{ family_unit.primary_member ? "Update" : "Set" }}
+                            <loading-button
+                                :loading="primaryMemberUpdateForm.processing"
+                                class="btn btn-primary"
+                                type="submit"
+                            >
+                                {{
+                                    family_unit.primary_member
+                                        ? "Update"
+                                        : "Set"
+                                }}
                             </loading-button>
                         </div>
                     </div>
@@ -145,9 +176,13 @@
 
     <!-- Table Actions -->
     <div class="flex items-center justify-end mb-6">
-        <Link class="btn btn-primary" :href="route('members.create', { family_unit_id: this.family_unit.id })
-            ">
-        <span>Add</span>
+        <Link
+            class="btn btn-primary"
+            :href="
+                route('members.create', { family_unit_id: this.family_unit.id })
+            "
+        >
+            <span>Add</span>
         </Link>
     </div>
 
@@ -161,15 +196,22 @@
                 <th class="table-header-cell">Occupation Type</th>
             </tr>
 
-            <tr v-for="member in family_unit.members" :key="member.id" class="hover:bg-gray-100 focus-within:bg-gray-100">
+            <tr
+                v-for="member in family_unit.members"
+                :key="member.id"
+                class="hover:bg-gray-100 focus-within:bg-gray-100"
+            >
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        <Link :href="route('members.show', {
-                            family_unit_id: member.family_unit_id,
-                            id: member.id,
-                        })
-                            ">
-                        {{ member.full_name }}
+                        <Link
+                            :href="
+                                route('members.show', {
+                                    family_unit_id: member.family_unit_id,
+                                    id: member.id,
+                                })
+                            "
+                        >
+                            {{ member.full_name }}
                         </Link>
                     </div>
                 </td>
@@ -209,38 +251,66 @@
         <div class="flex gap-4">
             <!-- This button is visible only for SN -->
             <!-- And only for family units with status "new" -->
-            <loading-button v-if="(family_unit.status.status_code === 'new' ||
-                family_unit.status.status_code === 'viewed') &&
-                auth.user.user_type === 'sn'
-                " :loading="statusUpdateForm.processing" class="btn bg-teal-600 text-white" type="submit"
-                @click="onClickStatusChange('pending_approval')">
+            <loading-button
+                v-if="
+                    (family_unit.status.status_code === 'new' ||
+                        family_unit.status.status_code === 'viewed') &&
+                    auth.user.user_type === 'sn'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-teal-600 text-white"
+                type="submit"
+                @click="onClickStatusChange('pending_approval')"
+            >
                 Send to Approval
             </loading-button>
 
-            <loading-button v-if="family_unit.status.status_code === 'new'
-                " :loading="statusUpdateForm.processing" class="btn bg-cyan-600 text-white" type="submit"
-                @click="onClickStatusChange('viewed')">
+            <loading-button
+                v-if="family_unit.status.status_code === 'new'"
+                :loading="statusUpdateForm.processing"
+                class="btn bg-cyan-600 text-white"
+                type="submit"
+                @click="onClickStatusChange('viewed')"
+            >
                 Mark as Viewed
             </loading-button>
 
-            <loading-button v-if="family_unit.status.status_code === 'pending_approval' &&
-                auth.user.user_type === 'ds'
-                " :loading="statusUpdateForm.processing" class="btn bg-emerald-600 text-white" type="submit"
-                @click="onClickStatusChange('approved')">
+            <loading-button
+                v-if="
+                    family_unit.status.status_code === 'pending_approval' &&
+                    auth.user.user_type === 'ds'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-emerald-600 text-white"
+                type="submit"
+                @click="onClickStatusChange('approved')"
+            >
                 Approve
             </loading-button>
 
-            <loading-button v-if="family_unit.status.status_code === 'pending_approval' &&
-                auth.user.user_type === 'ds'
-                " :loading="statusUpdateForm.processing" class="btn btn-danger" type="submit"
-                @click="onClickStatusChange('rejected')">
+            <loading-button
+                v-if="
+                    family_unit.status.status_code === 'pending_approval' &&
+                    auth.user.user_type === 'ds'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn btn-danger"
+                type="submit"
+                @click="onClickStatusChange('rejected')"
+            >
                 Reject
             </loading-button>
 
-            <loading-button v-if="family_unit.status.status_code === 'new' &&
-                auth.user.user_type === 'ds'
-                " :loading="statusUpdateForm.processing" class="btn bg-red-800 text-white" type="submit"
-                @click="onClickStatusChange('rejected')">
+            <loading-button
+                v-if="
+                    family_unit.status.status_code === 'new' &&
+                    auth.user.user_type === 'ds'
+                "
+                :loading="statusUpdateForm.processing"
+                class="btn bg-red-800 text-white"
+                type="submit"
+                @click="onClickStatusChange('rejected')"
+            >
                 Mark as Rejected
             </loading-button>
         </div>
@@ -287,6 +357,13 @@ export default {
                     link: "",
                 },
             ],
+            statusColors: {
+                1: "bg-blue-200", // New
+                2: "bg-blue-200", // Viewed
+                3: "bg-amber-200", // Pending Approval
+                4: "bg-green-200", // Approved
+                5: "bg-red-200", // Rejected
+            },
         };
     },
     computed: {
@@ -335,6 +412,24 @@ export default {
         getStatusIdByCode(code) {
             const status = this.status_list.find((s) => s.status_code === code);
             return status?.id || -1;
+        },
+
+        getFormattedPrice(price) {
+            let price2;
+
+            if (typeof price === "string") {
+                price2 = parseInt(price);
+            } else if (typeof price !== "number") {
+                return "0.00";
+            }
+
+            return price
+                .toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                })
+                .replace(/[^0-9.,]/g, "");
         },
 
         delete() {
