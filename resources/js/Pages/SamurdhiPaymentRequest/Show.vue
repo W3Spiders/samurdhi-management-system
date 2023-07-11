@@ -21,7 +21,7 @@
                 </span>
             </div>
 
-            <div>
+            <div class="flex gap-[10px]">
                 <a
                     v-if="
                         samurdhi_payment_request.status_code === 'new' ||
@@ -37,6 +37,38 @@
                     class="btn btn-primary"
                 >
                     Edit
+                </a>
+
+                <a
+                    v-if="
+                        samurdhi_payment_request.status_code === 'approved' ||
+                        samurdhi_payment_request.status_code === 'paid'
+                    "
+                    :href="
+                        route(
+                            'samurdhi_payment_requests.export_payment_list',
+                            samurdhi_payment_request.id
+                        )
+                    "
+                    class="btn btn-primary"
+                >
+                    Export Excel
+                </a>
+
+                <a
+                    v-if="
+                        samurdhi_payment_request.status_code === 'approved' ||
+                        samurdhi_payment_request.status_code === 'paid'
+                    "
+                    :href="
+                        route(
+                            'samurdhi_payment_requests.print_payment_list',
+                            samurdhi_payment_request.id
+                        )
+                    "
+                    class="btn btn-primary"
+                >
+                    Download PDF
                 </a>
             </div>
         </div>

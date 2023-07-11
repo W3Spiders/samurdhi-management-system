@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use App\Exports\SamurdhiPaymentListExport;
+use Maatwebsite\Excel\Facades\Excel;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class SamurdhiPaymentRequestController extends Controller
 {
@@ -171,5 +176,29 @@ class SamurdhiPaymentRequestController extends Controller
         if ($result) {
             return Redirect::route('samurdhi_payment_requests.show', $samurdhi_payment_request->id)->with('success', 'Samurdhi payment request was updated successfully');
         }
+    }
+
+    public function export_payment_list($id)
+    {
+        return Excel::download(new SamurdhiPaymentListExport(['payment_request_id' => $id]), 'samurdhi_payment_list.xlsx');
+    }
+
+    public function print_payment_list($id)
+    {
+        $payment_request = SamurdhiPaymentRequest::with('gn_division','items.family_unit.primary_member.bank_account')->findOrFail($id);
+
+        $date = Carbon::create($payment_request->payment_date);
+        $date_string =  $date->format('F Y');
+
+        $data = [
+            'heading' => 'Samurdhi Payment List for ' . $date_string,
+            'amount' => $payment_request->payment_amount,
+            'total_amount' => $payment_request->total_amount,
+            'items' => $payment_request->items,
+            'gn_division' => $payment_request->gn_division
+        ];
+
+        $pdf = Pdf::loadView('exports.samurdhi_payment_list', $data)->setPaper('a4', 'landscape');
+        return $pdf->download('samurdhi_payment_list.pdf');
     }
 }

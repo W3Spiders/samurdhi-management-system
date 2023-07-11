@@ -68,6 +68,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/samurdhi-payment-requests/{id}/edit', [SamurdhiPaymentRequestController::class, 'edit'])->name('samurdhi_payment_requests.edit');
     Route::put('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'update'])->name('samurdhi_payment_requests.update');
     Route::post('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'store'])->name('samurdhi_payment_requests.store');
+    Route::get('/samurdhi-payment-requests/download_payment_list/{id}', [SamurdhiPaymentRequestController::class, 'export_payment_list'])->name('samurdhi_payment_requests.export_payment_list');
+    Route::get('/samurdhi-payment-requests/print_payment_list/{id}', [SamurdhiPaymentRequestController::class, 'print_payment_list'])->name('samurdhi_payment_requests.print_payment_list');
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
