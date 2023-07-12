@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('members', function (Blueprint $table) {
-            $table->string('bank_account_number', 50);
+        Schema::create('member_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('status_code');
+            $table->string('status_title');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('members', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('member_statuses');
     }
 };

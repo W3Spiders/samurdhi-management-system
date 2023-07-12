@@ -2,7 +2,7 @@
     <div>
         <Head
             title="
-                View Samurdhi Payment Request
+                View Elder Allowance Payment Request
             "
         />
 
@@ -14,24 +14,24 @@
             <div>
                 <span
                     :class="`px-4 py-2 rounded-lg text-xs font-medium ${
-                        statusColors[samurdhi_payment_request.status_id]
+                        statusColors[elder_allowance_payment_request.status_id]
                     }`"
                 >
-                    {{ samurdhi_payment_request.status_string }}
+                    {{ elder_allowance_payment_request.status_string }}
                 </span>
             </div>
 
             <div class="flex gap-[10px]">
                 <a
                     v-if="
-                        samurdhi_payment_request.status_code === 'new' ||
-                        samurdhi_payment_request.status_code ===
+                        elder_allowance_payment_request.status_code === 'new' ||
+                        elder_allowance_payment_request.status_code ===
                             'pending_approval'
                     "
                     :href="
                         route(
-                            'samurdhi_payment_requests.edit',
-                            samurdhi_payment_request.id
+                            'elder_allowance_payment_requests.edit',
+                            elder_allowance_payment_request.id
                         )
                     "
                     class="btn btn-primary"
@@ -41,13 +41,14 @@
 
                 <a
                     v-if="
-                        samurdhi_payment_request.status_code === 'approved' ||
-                        samurdhi_payment_request.status_code === 'paid'
+                        elder_allowance_payment_request.status_code ===
+                            'approved' ||
+                        elder_allowance_payment_request.status_code === 'paid'
                     "
                     :href="
                         route(
-                            'samurdhi_payment_requests.export_payment_list',
-                            samurdhi_payment_request.id
+                            'elder_allowance_payment_requests.export_payment_list',
+                            elder_allowance_payment_request.id
                         )
                     "
                     class="btn btn-primary"
@@ -57,13 +58,14 @@
 
                 <a
                     v-if="
-                        samurdhi_payment_request.status_code === 'approved' ||
-                        samurdhi_payment_request.status_code === 'paid'
+                        elder_allowance_payment_request.status_code ===
+                            'approved' ||
+                        elder_allowance_payment_request.status_code === 'paid'
                     "
                     :href="
                         route(
-                            'samurdhi_payment_requests.print_payment_list',
-                            samurdhi_payment_request.id
+                            'elder_allowance_payment_requests.print_payment_list',
+                            elder_allowance_payment_request.id
                         )
                     "
                     class="btn btn-primary"
@@ -80,8 +82,9 @@
                 <div class="flex gap-x-[15px]">
                     <loading-button
                         v-if="
-                            samurdhi_payment_request.status.status_code ===
-                                'new' && auth.user.user_type === 'sn'
+                            elder_allowance_payment_request.status
+                                .status_code === 'new' &&
+                            auth.user.user_type === 'gn'
                         "
                         :loading="paymentRequestUpdateForm.processing"
                         class="mb-[20px] btn bg-cyan-600 text-white"
@@ -93,8 +96,8 @@
 
                     <loading-button
                         v-if="
-                            samurdhi_payment_request.status.status_code ===
-                                'pending_approval' &&
+                            elder_allowance_payment_request.status
+                                .status_code === 'pending_approval' &&
                             auth.user.user_type === 'ds'
                         "
                         :loading="paymentRequestUpdateForm.processing"
@@ -107,8 +110,8 @@
 
                     <loading-button
                         v-if="
-                            samurdhi_payment_request.status.status_code ===
-                                'pending_approval' &&
+                            elder_allowance_payment_request.status
+                                .status_code === 'pending_approval' &&
                             auth.user.user_type === 'ds'
                         "
                         :loading="paymentRequestUpdateForm.processing"
@@ -121,8 +124,9 @@
 
                     <loading-button
                         v-if="
-                            samurdhi_payment_request.status.status_code ===
-                                'approved' && auth.user.user_type === 'sn'
+                            elder_allowance_payment_request.status
+                                .status_code === 'approved' &&
+                            auth.user.user_type === 'sn'
                         "
                         :loading="paymentRequestUpdateForm.processing"
                         class="mb-[20px] btn bg-teal-600 text-white"
@@ -137,7 +141,7 @@
                     <div class="form-label">GN Division No</div>
                     <div class="form-input">
                         {{
-                            this.samurdhi_payment_request.gn_division
+                            this.elder_allowance_payment_request.gn_division
                                 .gn_division_no
                         }}
                     </div>
@@ -147,7 +151,7 @@
                     <div class="form-label">GN Division Name</div>
                     <div class="form-input">
                         {{
-                            this.samurdhi_payment_request.gn_division
+                            this.elder_allowance_payment_request.gn_division
                                 .gn_division_name
                         }}
                     </div>
@@ -156,21 +160,21 @@
                 <div>
                     <div class="form-label">Payment Date</div>
                     <div class="form-input">
-                        {{ samurdhi_payment_request.payment_date }}
+                        {{ elder_allowance_payment_request.payment_date }}
                     </div>
                 </div>
 
                 <div>
                     <div class="form-label">Payment Amount(Per Unit)</div>
                     <div class="form-input">
-                        {{ samurdhi_payment_request.payment_amount }}
+                        {{ elder_allowance_payment_request.payment_amount }}
                     </div>
                 </div>
 
                 <div>
                     <div class="form-label">Number of Family Units</div>
                     <div class="form-input">
-                        {{ this.samurdhi_payment_request.items.length }}
+                        {{ this.elder_allowance_payment_request.items.length }}
                     </div>
                 </div>
 
@@ -204,22 +208,19 @@
                         </tr>
 
                         <tr
-                            v-for="item in samurdhi_payment_request.items"
-                            :key="item.family_unit_id"
+                            v-for="item in elder_allowance_payment_request.items"
+                            :key="item.member_id"
                             class="hover:bg-gray-100 focus-within:bg-gray-100"
                         >
                             <td class="border-t">
                                 <div class="table-cell-inner">
-                                    {{ item.family_unit.family_unit_ref }}
+                                    {{ item.member.full_name }}
                                 </div>
                             </td>
 
                             <td class="border-t">
                                 <div class="table-cell-inner">
-                                    {{
-                                        item.family_unit.primary_member
-                                            ?.full_name
-                                    }}
+                                    {{ item.member.age }}
                                 </div>
                             </td>
 
@@ -227,7 +228,7 @@
                                 <div class="table-cell-inner">
                                     {{
                                         getFormattedCurrencyString(
-                                            samurdhi_payment_request.payment_amount
+                                            elder_allowance_payment_request.payment_amount
                                         )
                                     }}
                                 </div>
@@ -261,23 +262,23 @@ export default {
     props: {
         auth: Object,
         gn_division: Object,
-        samurdhi_payment_request: Object,
+        elder_allowance_payment_request: Object,
         status_list: Object,
     },
     remember: "form",
     data() {
         return {
             paymentRequestUpdateForm: this.$inertia.form({
-                ...this.samurdhi_payment_request,
+                ...this.elder_allowance_payment_request,
                 status_id: null,
             }),
             breadcrumb_items: [
                 {
-                    text: "Samurdhi Payment Requests",
-                    link: route("samurdhi_payment_requests.index"),
+                    text: "Elder Allowance Payment Requests",
+                    link: route("elder_allowance_payment_requests.index"),
                 },
                 {
-                    text: this.samurdhi_payment_request.ref,
+                    text: this.elder_allowance_payment_request.ref,
                     link: "",
                 },
             ],
@@ -310,8 +311,8 @@ export default {
             }
 
             this.paymentRequestUpdateForm.put(
-                route("samurdhi_payment_requests.update", {
-                    id: this.samurdhi_payment_request.id,
+                route("elder_allowance_payment_requests.update", {
+                    id: this.elder_allowance_payment_request.id,
                 })
             );
         },
@@ -326,7 +327,7 @@ export default {
         paymentRequestTotalAmount() {
             // let total = 0;
 
-            // this.samurdhi_payment_request.items.forEach((item) => {
+            // this.elder_allowance_payment_request.items.forEach((item) => {
             //     let amount = item.amount;
 
             //     if (typeof amount === "string") {
@@ -338,8 +339,8 @@ export default {
 
             // return total;
             return (
-                this.samurdhi_payment_request.items.length *
-                this.samurdhi_payment_request.payment_amount
+                this.elder_allowance_payment_request.items.length *
+                this.elder_allowance_payment_request.payment_amount
             );
         },
     },
@@ -347,8 +348,8 @@ export default {
 
 class RequestItem {
     is_new = true;
-    family_unit_id = null;
-    family_unit = null;
+    member_id = null;
+    member = null;
     amount = 20000;
 }
 </script>

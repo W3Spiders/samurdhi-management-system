@@ -2,9 +2,9 @@
     <div>
         <Head
             :title="
-                samurdhi_payment_request
-                    ? 'Edit Samurdhi Payment Request'
-                    : 'Create Samurdhi Payment Request'
+                elder_allowance_payment_request
+                    ? 'Edit Elder Allowance Payment Request'
+                    : 'Create Elder Allowance Payment Request'
             "
         />
 
@@ -17,15 +17,15 @@
                 <span
                     :class="`px-4 py-2 rounded-lg text-xs font-medium ${
                         statusColors[
-                            samurdhi_payment_request
-                                ? samurdhi_payment_request.status_id
+                            elder_allowance_payment_request
+                                ? elder_allowance_payment_request.status_id
                                 : 1
                         ]
                     }`"
                 >
                     {{
-                        samurdhi_payment_request
-                            ? samurdhi_payment_request.status_string
+                        elder_allowance_payment_request
+                            ? elder_allowance_payment_request.status_string
                             : "New"
                     }}
                 </span>
@@ -39,7 +39,11 @@
                     class="btn btn-primary"
                     @click="submit"
                 >
-                    {{ this.samurdhi_payment_request ? "Update" : "Create" }}
+                    {{
+                        this.elder_allowance_payment_request
+                            ? "Update"
+                            : "Create"
+                    }}
                 </loading-button>
             </div>
         </div>
@@ -97,7 +101,7 @@
                 </div>
 
                 <div>
-                    <div class="form-label">Number of Family Units</div>
+                    <div class="form-label">Number of Members</div>
                     <div class="form-input">
                         {{ form.items.length }}
                     </div>
@@ -118,15 +122,15 @@
             <div
                 class="max-w-3xl bg-white rounded-md overflow-hidden col-span-2"
             >
-                <!-- Selected Family Units Table -->
+                <!-- Selected members Table -->
                 <div class="bg-white overflow-x-auto relative overflow-auto">
                     <table class="w-full whitespace-nowrap">
                         <tr class="text-left font-bold">
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
-                                Family Unit Ref
+                                Member Name
                             </th>
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
-                                House Holder
+                                Age
                             </th>
                             <th class="pb-4 pt-6 px-6 sticky top-0 bg-white">
                                 Amount
@@ -135,21 +139,18 @@
 
                         <tr
                             v-for="item in form.items"
-                            :key="item.family_unit_id"
+                            :key="item.member_id"
                             class="hover:bg-gray-100 focus-within:bg-gray-100"
                         >
                             <td class="border-t">
                                 <div class="table-cell-inner">
-                                    {{ item.family_unit.family_unit_ref }}
+                                    {{ item.member.full_name }}
                                 </div>
                             </td>
 
                             <td class="border-t">
                                 <div class="table-cell-inner">
-                                    {{
-                                        item.family_unit.primary_member
-                                            ?.full_name
-                                    }}
+                                    {{ item.member.age }}
                                 </div>
                             </td>
 
@@ -189,8 +190,8 @@ export default {
     props: {
         auth: Object,
         gn_division: Object,
-        samurdhi_payment_request: Object,
-        samurdhi_approved_family_units: Object,
+        elder_allowance_payment_request: Object,
+        elder_allowance_approved_members: Object,
     },
     remember: "form",
     data() {
@@ -198,25 +199,28 @@ export default {
             paymentAmountKeyupTimer: null,
             form: this.$inertia.form({
                 gn_division_id: this.gn_division.id,
-                payment_amount: this.samurdhi_payment_request
-                    ? this.samurdhi_payment_request.payment_amount
+                payment_amount: this.elder_allowance_payment_request
+                    ? this.elder_allowance_payment_request.payment_amount
                     : null,
                 payment_date:
-                    this.samurdhi_payment_request?.payment_date || null,
-                items: this.samurdhi_payment_request
-                    ? this.samurdhi_payment_request.items
+                    this.elder_allowance_payment_request?.payment_date || null,
+                items: this.elder_allowance_payment_request
+                    ? this.elder_allowance_payment_request.items
                     : [],
                 total_amount: 0,
-                status_id: this.samurdhi_payment_request?.status_id || null,
+                status_id:
+                    this.elder_allowance_payment_request?.status_id || null,
             }),
 
             breadcrumb_items: [
                 {
-                    text: "Samurdhi Payment Requests",
-                    link: route("samurdhi_payment_requests.index"),
+                    text: "Elder Allowance Payment Requests",
+                    link: route("elder_allowance_payment_requests.index"),
                 },
                 {
-                    text: this.samurdhi_payment_request ? "Edit" : "Create",
+                    text: this.elder_allowance_payment_request
+                        ? "Edit"
+                        : "Create",
                     link: "",
                 },
             ],
@@ -260,51 +264,49 @@ export default {
         submit() {
             this.form.total_amount = this.paymentRequestTotalAmount;
 
-            if (this.samurdhi_payment_request) {
+            if (this.elder_allowance_payment_request) {
+                if (typeof this.form.payment_amount === "string") {
+                    this.form.payment_amount = parseFloat(
+                        this.form.payment_amount
+                    );
+                }
+
                 this.form.put(
-                    route("samurdhi_payment_requests.update", {
-                        id: this.samurdhi_payment_request.id,
+                    route("elder_allowance_payment_requests.update", {
+                        id: this.elder_allowance_payment_request.id,
                     })
                 );
             } else {
-                this.form.post(route("samurdhi_payment_requests.store"));
+                if (typeof this.form.payment_amount === "string") {
+                    this.form.payment_amount = parseFloat(
+                        this.form.payment_amount
+                    );
+                }
+                this.form.post(route("elder_allowance_payment_requests.store"));
             }
         },
 
         cancel() {
             if (confirm("Are you sure want to cancel changes?")) {
-                this.$inertia.visit(route("samurdhi_payment_requests.index"));
+                this.$inertia.visit(
+                    route("elder_allowance_payment_requests.index")
+                );
             }
         },
     },
 
     computed: {
         paymentRequestTotalAmount() {
-            //let total = 0;
-
-            // this.form.items.forEach((item) => {
-            //     let amount = item.amount;
-
-            //     if (typeof amount === "string") {
-            //         amount = parseFloat(amount);
-            //     }
-
-            //     total += amount;
-            // });
-            // return total;
-
             return this.form.items.length * this.form.payment_amount;
         },
     },
 
     mounted() {
-        if (!this.samurdhi_payment_request) {
-            this.samurdhi_approved_family_units.forEach((family_unit) => {
-                //console.log("family unit: ", family_unit);
-
+        if (!this.elder_allowance_payment_request) {
+            this.elder_allowance_approved_members.forEach((member) => {
                 const requestItem = new RequestItem();
-                requestItem.family_unit = family_unit;
-                requestItem.family_unit_id = family_unit.id;
+                requestItem.member = member;
+                requestItem.member_id = member.id;
 
                 this.form.items.push(requestItem);
             });
@@ -314,8 +316,8 @@ export default {
 
 class RequestItem {
     is_new = true;
-    family_unit_id = null;
-    family_unit = null;
+    member_id = null;
+    member = null;
     amount = 0;
 }
 </script>

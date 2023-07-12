@@ -19,6 +19,12 @@
                 <div class="form-input">{{ user.username }}</div>
             </div>
             <div class="pb-8 pr-6 w-full lg:w-1/2">
+                <div class="form-label">User Type</div>
+                <div class="form-input">
+                    {{ getUserTypeTitle(user.user_type) }}
+                </div>
+            </div>
+            <div class="pb-8 pr-6 w-full lg:w-1/2">
                 <div class="form-label">Email</div>
                 <div class="form-input">{{ user.email }}</div>
             </div>
@@ -86,6 +92,19 @@ export default {
         };
     },
     methods: {
+        getUserTypeTitle(code) {
+            if (code === "gn") {
+                return "Grama Niladhari";
+            } else if (code === "sn") {
+                return "Samurdhi Niladhari";
+            } else if (code === "ds") {
+                return "Divisional Secretariat";
+            } else if (code === "admin") {
+                return "Admin User";
+            }
+
+            return "No Title";
+        },
         delete() {
             if (confirm("Are you sure you want to delete this user?")) {
                 this.$inertia.delete(

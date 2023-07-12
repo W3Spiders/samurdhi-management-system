@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('samurdhi_payment_requests', function (Blueprint $table) {
+        Schema::create('elder_allowance_payment_requests', function (Blueprint $table) {
             $table->id();
             $table->string('ref', 15)->unique();
             $table->integer('gn_division_id')->references('id')->on('gn_divisions');
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('samurdhi_payment_requests');
+        Schema::dropIfExists('elder_allowance_payment_requests');
     }
 };

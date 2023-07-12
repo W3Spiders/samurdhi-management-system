@@ -5,17 +5,32 @@
             <tr class="text-left font-bold">
                 <th class="pb-4 pt-6 px-6">Reference ID</th>
                 <th class="pb-4 pt-6 px-6">Payment Date</th>
-                <th class="pb-4 pt-6 px-6">No. of Family Units</th>
+                <th class="pb-4 pt-6 px-6">No. of Units</th>
                 <th class="pb-4 pt-6 px-6">Total Amount</th>
                 <th class="pb-4 pt-6 px-6">Status</th>
             </tr>
-            <tr v-for="payment_request in payment_requests" :key="payment_request.id"
-                class="hover:bg-gray-100 focus-within:bg-gray-100">
-
+            <tr
+                v-for="payment_request in payment_requests"
+                :key="payment_request.id"
+                class="hover:bg-gray-100 focus-within:bg-gray-100"
+            >
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        <Link :href="route('samurdhi_payment_requests.show', payment_request.id)" class="link">
-                        {{ payment_request.ref }}
+                        <Link
+                            :href="
+                                type === 'samurdhi'
+                                    ? route(
+                                          'samurdhi_payment_requests.show',
+                                          payment_request.id
+                                      )
+                                    : route(
+                                          'elder_allowance_payment_requests.show',
+                                          payment_request.id
+                                      )
+                            "
+                            class="link"
+                        >
+                            {{ payment_request.ref }}
                         </Link>
                     </div>
                 </td>
@@ -36,16 +51,19 @@
                     <div class="table-cell-inner">
                         {{
                             payment_request.total_amount
-                            ? `Rs. ${payment_request.total_amount}`
-                            : "-"
+                                ? `Rs. ${payment_request.total_amount}`
+                                : "-"
                         }}
                     </div>
                 </td>
 
                 <td class="border-t">
                     <div class="table-cell-inner">
-                        <span :class="`px-4 py-2 rounded-lg text-xs font-medium ${statusColors[payment_request.status_id]
-                                }`">
+                        <span
+                            :class="`px-4 py-2 rounded-lg text-xs font-medium ${
+                                statusColors[payment_request.status_id]
+                            }`"
+                        >
                             {{ payment_request.status_string }}
                         </span>
                     </div>
@@ -61,14 +79,14 @@
 </template>
 
 <script>
-
 import { Head, Link } from "@inertiajs/vue3";
 
 export default {
     components: {
-        Link
+        Link,
     },
     props: {
+        type: String,
         payment_requests: Array,
     },
     data() {

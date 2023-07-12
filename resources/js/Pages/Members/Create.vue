@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <Head :title="`${member ? 'Edit' : 'Create'} Member`" />
 
         <breadcrumb :items="breadcrumb_items"></breadcrumb>
@@ -8,28 +7,58 @@
         <div class="max-w-3xl bg-white rounded-md shadow overflow-hidden">
             <form @submit.prevent="submit">
                 <div class="flex flex-wrap -mb-8 -mr-6 p-8">
-                    <text-input v-model="form.first_name" :error="form.errors.first_name" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="First name" />
-                    <text-input v-model="form.middle_name" :error="form.errors.middle_name"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Middle name" />
-                    <text-input v-model="form.last_name" :error="form.errors.last_name" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Last name" />
-                    <text-input v-model="form.email" :error="form.errors.email" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Email" />
-                    <text-input v-model="form.nic" :error="form.errors.nic" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="National ID" />
-                    <text-input v-model="form.phone" :error="form.errors.phone" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Phone" />
+                    <text-input
+                        v-model="form.first_name"
+                        :error="form.errors.first_name"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="First name"
+                    />
+                    <text-input
+                        v-model="form.middle_name"
+                        :error="form.errors.middle_name"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Middle name"
+                    />
+                    <text-input
+                        v-model="form.last_name"
+                        :error="form.errors.last_name"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Last name"
+                    />
+                    <text-input
+                        v-model="form.email"
+                        :error="form.errors.email"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Email"
+                    />
+                    <text-input
+                        v-model="form.nic"
+                        :error="form.errors.nic"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="National ID"
+                    />
+                    <text-input
+                        v-model="form.phone"
+                        :error="form.errors.phone"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Phone"
+                    />
 
-                    <select-input v-model="form.gender" :error="form.errors.gender" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Gender">
+                    <select-input
+                        v-model="form.gender"
+                        :error="form.errors.gender"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Gender"
+                    >
                         <option :value="null" disabled />
                         <option value="m">Male</option>
                         <option value="f">Female</option>
                     </select-input>
 
                     <div class="pb-8 pr-6 w-full lg:w-1/2">
-                        <label class="form-label" for="birthday-input">Birthday</label>
+                        <label class="form-label" for="birthday-input"
+                            >Birthday</label
+                        >
                         <!-- <input
                             class="form-input"
                             id="birthday-input"
@@ -38,7 +67,12 @@
                             pattern="((?:19|20)[0-9][0-9])-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])"
                         /> -->
 
-                        <input class="form-input" id="birthday-input" v-model="form.birthday" type="date" />
+                        <input
+                            class="form-input"
+                            id="birthday-input"
+                            v-model="form.birthday"
+                            type="date"
+                        />
 
                         <!-- <div v-if="!form.errors.birthday" class="form-hint">
                             Accepted format: YYYY-MM-DD
@@ -49,31 +83,95 @@
                         </div>
                     </div>
 
-                    <select-input v-model="form.marital_status" :error="form.errors.marital_status"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Marital Status">
+                    <select-input
+                        v-model="form.marital_status"
+                        :error="form.errors.marital_status"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Marital Status"
+                    >
                         <option :value="null" disabled />
                         <option value="single">Single</option>
                         <option value="married">Married</option>
                     </select-input>
 
-                    <select-input v-model="form.occupation_type" :error="form.errors.occupation_type"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Occupation Type">
-                        <option v-for="occupation_type in occupation_types" :value="occupation_type.id">
+                    <select-input
+                        v-model="form.occupation_type"
+                        :error="form.errors.occupation_type"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Occupation Type"
+                    >
+                        <option
+                            v-for="occupation_type in occupation_types"
+                            :value="occupation_type.id"
+                        >
                             {{ occupation_type.name }}
                         </option>
                     </select-input>
 
-                    <text-input v-model="form.occupation" :error="form.errors.occupation" class="pb-8 pr-6 w-full lg:w-1/2"
-                        label="Occupation" />
+                    <text-input
+                        v-model="form.occupation"
+                        :error="form.errors.occupation"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Occupation"
+                    />
 
-                    <text-input v-model="form.monthly_income" :error="form.errors.monthly_income"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Monthly Income" type="number" />
-
-                    <text-input v-model="form.bank_account_number" :error="form.errors.bank_account_number"
-                        class="pb-8 pr-6 w-full lg:w-1/2" label="Bank Account Number" type="text" />
+                    <text-input
+                        v-model="form.monthly_income"
+                        :error="form.errors.monthly_income"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Monthly Income"
+                        type="number"
+                    />
                 </div>
-                <div class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100">
-                    <loading-button :loading="form.processing" class="btn btn-primary" type="submit">
+
+                <hr class="mt-4 mb-2" />
+
+                <div class="p-8 pb-0">
+                    <h2 class="text-xl font-bold">Bank Account Details</h2>
+                </div>
+
+                <div class="flex flex-wrap -mb-8 -mr-6 p-8">
+                    <text-input
+                        v-model="form.bank_account.holder_name"
+                        :error="form.errors.bank_account_holder_name"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Account Holder's Name"
+                        type="text"
+                    />
+
+                    <text-input
+                        v-model="form.bank_account.account_number"
+                        :error="form.errors.bank_account_number"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Bank Account Number"
+                        type="text"
+                    />
+
+                    <text-input
+                        v-model="form.bank_account.name"
+                        :error="form.errors.bank_name"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Bank Name"
+                        type="text"
+                    />
+
+                    <text-input
+                        v-model="form.bank_account.branch"
+                        :error="form.errors.bank_branch"
+                        class="pb-8 pr-6 w-full lg:w-1/2"
+                        label="Brank Branch"
+                        type="text"
+                    />
+                </div>
+
+                <div
+                    class="flex items-center justify-end px-8 py-4 bg-gray-50 border-t border-gray-100"
+                >
+                    <loading-button
+                        :loading="form.processing"
+                        class="btn btn-primary"
+                        type="submit"
+                    >
                         {{ this.member ? "Update" : "Create" }}
                     </loading-button>
                 </div>
@@ -127,7 +225,14 @@ export default {
                     ? this.member.occupation_type_id
                     : "",
                 occupation: this.member ? this.member.occupation : "",
-                bank_account_number: this.member ? this.member.bank_account_number : "",
+                bank_account: this.member.bank_account
+                    ? this.member.bank_account
+                    : {
+                          account_number: "",
+                          name: "",
+                          holder_name: "",
+                          branch: "",
+                      },
             }),
 
             breadcrumb_items: [

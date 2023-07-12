@@ -28,8 +28,8 @@ return new class extends Migration
             $table->enum('marital_status', ['married', 'single']);
             $table->integer('occupation_type_id')->references('id')->on('occupation_types');
             $table->string('occupation', 100)->nullable();
+            $table->integer('status_id')->references('id')->on('member_statuses')->default(1);
             $table->timestamps();
-
         });
     }
 

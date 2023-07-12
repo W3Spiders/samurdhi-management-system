@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ElderAllowancePaymentRequestController;
 use App\Http\Controllers\FamilyUnitController;
 use App\Http\Controllers\GnDivisionController;
 use App\Http\Controllers\MemberController;
@@ -68,6 +69,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/samurdhi-payment-requests/{id}/edit', [SamurdhiPaymentRequestController::class, 'edit'])->name('samurdhi_payment_requests.edit');
     Route::put('/samurdhi-payment-requests/{id}', [SamurdhiPaymentRequestController::class, 'update'])->name('samurdhi_payment_requests.update');
     Route::post('/samurdhi-payment-requests', [SamurdhiPaymentRequestController::class, 'store'])->name('samurdhi_payment_requests.store');
+    Route::get('/samurdhi-payment-requests/download_payment_list/{id}', [SamurdhiPaymentRequestController::class, 'export_payment_list'])->name('samurdhi_payment_requests.export_payment_list');
+    Route::get('/samurdhi-payment-requests/print_payment_list/{id}', [SamurdhiPaymentRequestController::class, 'print_payment_list'])->name('samurdhi_payment_requests.print_payment_list');
+
+    // Elder Allowance Management
+    Route::get('/elder-allowance-payment-requests', [ElderAllowancePaymentRequestController::class, 'index'])->name('elder_allowance_payment_requests.index');
+    Route::get('/elder-allowance-payment-requests/create', [ElderAllowancePaymentRequestController::class, 'create'])->name('elder_allowance_payment_requests.create');
+    Route::get('/elder-allowance-payment-requests/{id}', [ElderAllowancePaymentRequestController::class, 'show'])->name('elder_allowance_payment_requests.show');
+    Route::get('/elder-allowance-payment-requests/{id}/edit', [ElderAllowancePaymentRequestController::class, 'edit'])->name('elder_allowance_payment_requests.edit');
+    Route::put('/elder-allowance-payment-requests/{id}', [ElderAllowancePaymentRequestController::class, 'update'])->name('elder_allowance_payment_requests.update');
+    Route::post('/elder-allowance-payment-requests', [ElderAllowancePaymentRequestController::class, 'store'])->name('elder_allowance_payment_requests.store');
+    Route::get('/elder-allowance-payment-requests/download_payment_list/{id}', [ElderAllowancePaymentRequestController::class, 'export_payment_list'])->name('elder_allowance_payment_requests.export_payment_list');
+    Route::get('/elder-allowance-payment-requests/print_payment_list/{id}', [ElderAllowancePaymentRequestController::class, 'print_payment_list'])->name('elder_allowance_payment_requests.print_payment_list');
 
     // Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');

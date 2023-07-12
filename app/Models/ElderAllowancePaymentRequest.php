@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class SamurdhiPaymentRequest extends Model
+class ElderAllowancePaymentRequest extends Model
 {
     use HasFactory;
 
@@ -15,7 +15,7 @@ class SamurdhiPaymentRequest extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(SamurdhiPaymentRequestItem::class);
+        return $this->hasMany(ElderAllowancePaymentRequestItem::class);
     }
 
     public function gn_division(): BelongsTo
@@ -40,6 +40,6 @@ class SamurdhiPaymentRequest extends Model
 
     public function getItemCountAttribute()
     {
-        return count($this->hasMany(SamurdhiPaymentRequestItem::class)->get());
+        return count($this->hasMany(ElderAllowancePaymentRequestItem::class)->get());
     }
 }
